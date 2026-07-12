@@ -1,0 +1,214 @@
+﻿{% extends "base.html" %}
+
+{% block title %}
+    Gestión de actas
+{% endblock %}
+
+{% block page_title %}
+    Gestión de actas
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card">
+
+    <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+
+        <div>
+
+            <h1 class="text-2xl font-bold">
+                Gestión de actas
+            </h1>
+
+            <p class="mt-1 text-sm text-slate-500">
+                Crea, genera, revisa y descarga las actas
+                de titulación.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'documentos:crear_acta' %}"
+            class="btn-primary"
+        >
+            Nueva acta
+        </a>
+
+    </div>
+
+
+    <form
+        method="get"
+        class="mb-6 grid gap-3 md:grid-cols-4"
+    >
+
+        <input
+            type="search"
+            name="q"
+            value="{{ consulta }}"
+            placeholder="Número, cédula, estudiante o programa"
+            class="rounded-lg border border-slate-300 px-3 py-2 md:col-span-2"
+        >
+
+
+        <select
+            name="estado"
+            class="rounded-lg border border-slate-300 px-3 py-2"
+        >
+
+            <option value="">
+                Todos los estados
+            </option>
+
+            {% for valor, etiqueta in estados %}
+
+                <option
+                    value="{{ valor }}"
+                    {% if estado_seleccionado == valor %}
+                        selected
+                    {% endif %}
+                >
+                    {{ etiqueta }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+
+        <button
+            type="submit"
+            class="btn-secondary"
+        >
+            Buscar
+        </button>
+
+    </form>
+
+
+    <div class="overflow-x-auto">
+
+        <table class="w-full border-collapse">
+
+            <thead>
+
+                <tr class="bg-slate-100 text-left text-sm">
+
+                    <th class="p-3">
+                        Número
+                    </th>
+
+                    <th class="p-3">
+                        Estudiante
+                    </th>
+
+                    <th class="p-3">
+                        Cédula
+                    </th>
+
+                    <th class="p-3">
+                        Tipo
+                    </th>
+
+                    <th class="p-3">
+                        Estado
+                    </th>
+
+                    <th class="p-3">
+                        Generación
+                    </th>
+
+                    <th class="p-3">
+                        Acciones
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for acta in actas %}
+
+                    <tr class="border-t border-slate-200">
+
+                        <td class="p-3 font-semibold">
+                            {{ acta.numero_acta }}
+                        </td>
+
+                        <td class="p-3">
+                            {{ acta.registro.nombres_completos }}
+                        </td>
+
+                        <td class="p-3">
+                            {{ acta.registro.cedula }}
+                        </td>
+
+                        <td class="p-3">
+                            {{ acta.get_tipo_acta_display }}
+                        </td>
+
+                        <td class="p-3">
+
+                            <span
+                                class="
+                                    rounded-full bg-slate-200
+                                    px-3 py-1 text-xs font-semibold
+                                "
+                            >
+                                {{ acta.get_estado_display }}
+                            </span>
+
+                        </td>
+
+                        <td class="p-3">
+                            {{ acta.fecha_generacion|date:"d/m/Y H:i"|default:"Pendiente" }}
+                        </td>
+
+                        <td class="p-3 whitespace-nowrap">
+
+                            <a
+                                href="{% url 'documentos:detalle_acta' acta.pk %}"
+                                class="font-semibold text-blue-700"
+                            >
+                                Ver
+                            </a>
+
+                            <a
+                                href="{% url 'documentos:editar_acta' acta.pk %}"
+                                class="ml-3 font-semibold text-amber-700"
+                            >
+                                Editar
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="p-8 text-center text-slate-500"
+                        >
+                            Todavía no existen actas.
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

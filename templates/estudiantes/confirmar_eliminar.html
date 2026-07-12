@@ -1,0 +1,56 @@
+﻿{% extends "base.html" %}
+
+{% block page_title %}
+    Eliminar registro
+{% endblock %}
+
+
+{% block content %}
+
+<div class="mx-auto max-w-xl">
+
+    <div class="card">
+
+        <h1 class="text-xl font-bold text-red-700">
+            Confirmar eliminación
+        </h1>
+
+        <p class="mt-4">
+
+            ¿Deseas eliminar permanentemente el registro de
+
+            <strong>
+                {{ registro.nombres_completos }}
+            </strong>?
+
+        </p>
+
+
+        <form
+            method="post"
+            class="mt-6 flex justify-end gap-3"
+        >
+
+            {% csrf_token %}
+
+            <a
+                href="{% url 'estudiantes:detalle' registro.pk %}"
+                class="btn-secondary"
+            >
+                Cancelar
+            </a>
+
+            <button
+                type="submit"
+                class="rounded-lg bg-red-700 px-4 py-2 font-semibold text-white"
+            >
+                Eliminar
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

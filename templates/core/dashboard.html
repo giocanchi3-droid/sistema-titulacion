@@ -1,0 +1,97 @@
+﻿{% extends "base.html" %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+
+{% block page_title %}
+    Panel de control
+{% endblock %}
+
+
+{% block content %}
+
+<div class="mb-6">
+
+    <h1 class="text-2xl font-bold">
+        Bienvenido, {{ user.username }}
+    </h1>
+
+    <p class="mt-1 text-slate-500">
+        Resumen general del proceso de titulación.
+    </p>
+
+</div>
+
+
+<div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+
+    <div class="card">
+
+        <p class="text-sm text-slate-500">
+            Estudiantes
+        </p>
+
+        <p class="mt-2 text-3xl font-bold">
+            {{ total_estudiantes }}
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <p class="text-sm text-slate-500">
+            Procesos activos
+        </p>
+
+        <p class="mt-2 text-3xl font-bold">
+            {{ procesos_activos }}
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <p class="text-sm text-slate-500">
+            Procesos aprobados
+        </p>
+
+        <p class="mt-2 text-3xl font-bold">
+            {{ procesos_aprobados }}
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <p class="text-sm text-slate-500">
+            Actas generadas
+        </p>
+
+        <p class="mt-2 text-3xl font-bold">
+            {{ actas_generadas }}
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="card mt-6">
+
+    <h2 class="text-lg font-bold">
+        Módulos del sistema
+    </h2>
+
+    <p class="mt-2 text-slate-500">
+        En los siguientes pasos agregaremos estudiantes,
+        procesos de titulación, documentos, actas, reportes
+        e importación de archivos Excel.
+    </p>
+
+</div>
+
+{% endblock %}

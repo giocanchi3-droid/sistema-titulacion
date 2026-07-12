@@ -1,0 +1,369 @@
+﻿{% extends "base.html" %}
+
+{% block title %}
+    {{ acta.numero_acta }}
+{% endblock %}
+
+{% block page_title %}
+    Vista previa del acta
+{% endblock %}
+
+
+{% block content %}
+
+<div class="mx-auto max-w-6xl">
+
+    <div class="mb-6 flex flex-wrap items-start justify-between gap-4">
+
+        <div>
+
+            <p class="text-sm font-semibold text-blue-700">
+                {{ acta.numero_acta }}
+            </p>
+
+            <h1 class="text-2xl font-bold">
+                {{ registro.nombres_completos }}
+            </h1>
+
+            <p class="mt-1 text-slate-500">
+                {{ registro.cedula }} ·
+                {{ acta.get_tipo_acta_display }}
+            </p>
+
+        </div>
+
+
+        <div class="flex flex-wrap gap-2">
+
+            <a
+                href="{% url 'documentos:lista_actas' %}"
+                class="btn-secondary"
+            >
+                Volver
+            </a>
+
+            <a
+                href="{% url 'documentos:editar_acta' acta.pk %}"
+                class="btn-secondary"
+            >
+                Editar
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="grid gap-6 lg:grid-cols-3">
+
+        <section class="card lg:col-span-2">
+
+            <div class="border-b pb-5 text-center">
+
+                <p class="font-bold">
+                    PONTIFICIA UNIVERSIDAD CATÓLICA DEL ECUADOR
+                </p>
+
+                <p class="mt-1 text-sm font-semibold">
+                    UNIDAD ACADÉMICA DE FORMACIÓN
+                    TÉCNICA Y TECNOLÓGICA – PUCE TEC
+                </p>
+
+                <h2 class="mt-6 text-2xl font-bold">
+                    ACTA DE TITULACIÓN
+                </h2>
+
+                <p class="mt-2 font-semibold">
+                    N.º {{ acta.numero_acta }}
+                </p>
+
+            </div>
+
+
+            <dl class="mt-6 grid gap-4 md:grid-cols-2">
+
+                <div class="rounded-lg bg-slate-50 p-4">
+                    <dt class="text-xs font-bold uppercase text-slate-500">
+                        ID Banner
+                    </dt>
+                    <dd class="mt-2">
+                        {{ registro.id_banner|default:"—" }}
+                    </dd>
+                </div>
+
+                <div class="rounded-lg bg-slate-50 p-4">
+                    <dt class="text-xs font-bold uppercase text-slate-500">
+                        Cédula
+                    </dt>
+                    <dd class="mt-2">
+                        {{ registro.cedula }}
+                    </dd>
+                </div>
+
+                <div class="rounded-lg bg-slate-50 p-4">
+                    <dt class="text-xs font-bold uppercase text-slate-500">
+                        Programa
+                    </dt>
+                    <dd class="mt-2">
+                        {{ registro.programa }}
+                    </dd>
+                </div>
+
+                <div class="rounded-lg bg-slate-50 p-4">
+                    <dt class="text-xs font-bold uppercase text-slate-500">
+                        Modalidad
+                    </dt>
+                    <dd class="mt-2">
+                        {{ registro.get_modalidad_titulacion_display|default:"—" }}
+                    </dd>
+                </div>
+
+                <div class="rounded-lg bg-slate-50 p-4 md:col-span-2">
+                    <dt class="text-xs font-bold uppercase text-slate-500">
+                        Tema
+                    </dt>
+                    <dd class="mt-2">
+                        {{ registro.tema|default:"—" }}
+                    </dd>
+                </div>
+
+                <div class="rounded-lg bg-slate-50 p-4">
+                    <dt class="text-xs font-bold uppercase text-slate-500">
+                        Tutor
+                    </dt>
+                    <dd class="mt-2">
+                        {{ registro.nombres_completos_tutor|default:"—" }}
+                    </dd>
+                </div>
+
+                <div class="rounded-lg bg-slate-50 p-4">
+                    <dt class="text-xs font-bold uppercase text-slate-500">
+                        Fecha de grado
+                    </dt>
+                    <dd class="mt-2">
+                        {{ registro.fecha_grado|date:"d/m/Y"|default:"—" }}
+                    </dd>
+                </div>
+
+            </dl>
+
+
+            <h3 class="mt-8 text-lg font-bold">
+                Tribunal
+            </h3>
+
+            <div class="mt-4 overflow-x-auto">
+
+                <table class="w-full border-collapse">
+
+                    <thead>
+
+                        <tr class="bg-slate-100 text-left">
+                            <th class="border p-3">Cargo</th>
+                            <th class="border p-3">Docente</th>
+                            <th class="border p-3">Identificación</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td class="border p-3">Primer miembro</td>
+                            <td class="border p-3">{{ registro.primer_miembro_tribunal|default:"—" }}</td>
+                            <td class="border p-3">{{ registro.primer_miembro_id_docente|default:"—" }}</td>
+                        </tr>
+
+                        <tr>
+                            <td class="border p-3">Segundo miembro</td>
+                            <td class="border p-3">{{ registro.segundo_miembro_tribunal|default:"—" }}</td>
+                            <td class="border p-3">{{ registro.segundo_miembro_id_docente|default:"—" }}</td>
+                        </tr>
+
+                        <tr>
+                            <td class="border p-3">Tercer miembro</td>
+                            <td class="border p-3">{{ registro.tercer_miembro_tribunal|default:"—" }}</td>
+                            <td class="border p-3">{{ registro.tercer_miembro_id_docente|default:"—" }}</td>
+                        </tr>
+
+                        <tr>
+                            <td class="border p-3">Cuarto miembro</td>
+                            <td class="border p-3">{{ registro.cuarto_miembro_tribunal|default:"—" }}</td>
+                            <td class="border p-3">{{ registro.cuarto_miembro_id_docente|default:"—" }}</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div class="mt-8">
+
+                <h3 class="font-bold">
+                    Observaciones
+                </h3>
+
+                <p class="mt-2 whitespace-pre-wrap">
+                    {{ acta.observaciones|default:"Sin observaciones." }}
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <aside class="space-y-6">
+
+            <section class="card">
+
+                <h2 class="text-lg font-bold">
+                    Estado del acta
+                </h2>
+
+                <p class="mt-3">
+
+                    <span class="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-800">
+                        {{ acta.get_estado_display }}
+                    </span>
+
+                </p>
+
+                <dl class="mt-5 space-y-3 text-sm">
+
+                    <div>
+                        <dt class="font-semibold">Creada por</dt>
+                        <dd>{{ acta.creado_por|default:"—" }}</dd>
+                    </div>
+
+                    <div>
+                        <dt class="font-semibold">Fecha de creación</dt>
+                        <dd>{{ acta.fecha_creacion|date:"d/m/Y H:i" }}</dd>
+                    </div>
+
+                    <div>
+                        <dt class="font-semibold">Fecha de generación</dt>
+                        <dd>{{ acta.fecha_generacion|date:"d/m/Y H:i"|default:"Pendiente" }}</dd>
+                    </div>
+
+                </dl>
+
+            </section>
+
+
+            <section class="card">
+
+                <h2 class="text-lg font-bold">
+                    Generar documentos
+                </h2>
+
+                <p class="mt-2 text-sm text-slate-500">
+                    Al regenerar, se reemplazarán los archivos
+                    anteriores.
+                </p>
+
+                <form
+                    method="post"
+                    action="{% url 'documentos:generar_acta' acta.pk %}"
+                    class="mt-4"
+                >
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="btn-primary w-full"
+                    >
+                        Generar Word y PDF
+                    </button>
+
+                </form>
+
+
+                {% if acta.archivo_word %}
+
+                    <a
+                        href="{{ acta.archivo_word.url }}"
+                        class="btn-secondary mt-3 block text-center"
+                    >
+                        Descargar Word
+                    </a>
+
+                {% endif %}
+
+
+                {% if acta.archivo_pdf %}
+
+                    <a
+                        href="{{ acta.archivo_pdf.url }}"
+                        target="_blank"
+                        class="btn-secondary mt-3 block text-center"
+                    >
+                        Abrir PDF
+                    </a>
+
+                {% endif %}
+
+            </section>
+
+
+            <section class="card">
+
+                <h2 class="text-lg font-bold">
+                    Acciones
+                </h2>
+
+
+                <form
+                    method="post"
+                    action="{% url 'documentos:aprobar_acta' acta.pk %}"
+                    class="mt-4"
+                >
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="w-full rounded-lg bg-green-700 px-4 py-2 font-semibold text-white"
+                    >
+                        Aprobar acta
+                    </button>
+
+                </form>
+
+
+                <form
+                    method="post"
+                    action="{% url 'documentos:anular_acta' acta.pk %}"
+                    class="mt-3"
+                >
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="w-full rounded-lg bg-amber-600 px-4 py-2 font-semibold text-white"
+                    >
+                        Anular acta
+                    </button>
+
+                </form>
+
+
+                <a
+                    href="{% url 'documentos:eliminar_acta' acta.pk %}"
+                    class="mt-4 block text-center font-semibold text-red-700"
+                >
+                    Eliminar acta
+                </a>
+
+            </section>
+
+        </aside>
+
+    </div>
+
+</div>
+
+{% endblock %}

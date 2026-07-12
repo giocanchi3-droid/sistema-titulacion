@@ -1,0 +1,187 @@
+﻿{% extends "base.html" %}
+
+{% block title %}
+    Gestión de estudiantes
+{% endblock %}
+
+{% block page_title %}
+    Registros de titulación
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card">
+
+    <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+
+        <div>
+
+            <h1 class="text-2xl font-bold">
+                Gestión de estudiantes
+            </h1>
+
+            <p class="mt-1 text-sm text-slate-500">
+                Administra la información personal, académica y de titulación de los estudiantes.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'estudiantes:crear' %}"
+            class="btn-primary"
+        >
+            Nuevo registro
+        </a>
+
+    </div>
+
+
+    <form
+        method="get"
+        class="mb-6 flex gap-2"
+    >
+
+        <input
+            type="search"
+            name="q"
+            value="{{ consulta }}"
+            placeholder="Buscar por cédula, nombre, ID Banner, programa o tutor"
+            class="w-full max-w-2xl rounded-lg border border-slate-300 px-3 py-2"
+        >
+
+        <button
+            type="submit"
+            class="btn-secondary"
+        >
+            Buscar
+        </button>
+
+    </form>
+
+
+    <div class="overflow-x-auto">
+
+        <table class="w-full border-collapse">
+
+            <thead>
+
+                <tr class="bg-slate-100 text-left text-sm">
+
+                    <th class="p-3">
+                        ID Banner
+                    </th>
+
+                    <th class="p-3">
+                        Cédula
+                    </th>
+
+                    <th class="p-3">
+                        Nombres completos
+                    </th>
+
+                    <th class="p-3">
+                        Programa
+                    </th>
+
+                    <th class="p-3">
+                        Modalidad
+                    </th>
+
+                    <th class="p-3">
+                        Estado
+                    </th>
+
+                    <th class="p-3">
+                        Fecha de grado
+                    </th>
+
+                    <th class="p-3">
+                        Acciones
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for registro in registros %}
+
+                    <tr class="border-t border-slate-200">
+
+                        <td class="p-3">
+                            {{ registro.id_banner|default:"—" }}
+                        </td>
+
+                        <td class="p-3">
+                            {{ registro.cedula }}
+                        </td>
+
+                        <td class="p-3 font-semibold">
+                            {{ registro.nombres_completos }}
+                        </td>
+
+                        <td class="p-3">
+                            {{ registro.programa }}
+                        </td>
+
+                        <td class="p-3">
+                            {{ registro.get_modalidad_titulacion_display|default:"—" }}
+                        </td>
+
+                        <td class="p-3">
+                            {{ registro.get_estado_display|default:"—" }}
+                        </td>
+
+                        <td class="p-3">
+                            {{ registro.fecha_grado|date:"d/m/Y"|default:"—" }}
+                        </td>
+
+                        <td class="p-3 whitespace-nowrap">
+
+                            <a
+                                href="{% url 'estudiantes:detalle' registro.pk %}"
+                                class="font-semibold text-blue-700"
+                            >
+                                Ver
+                            </a>
+
+                            <a
+                                href="{% url 'estudiantes:editar' registro.pk %}"
+                                class="ml-3 font-semibold text-amber-700"
+                            >
+                                Editar
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="8"
+                            class="p-8 text-center text-slate-500"
+                        >
+                            Todavía no existen registros.
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
