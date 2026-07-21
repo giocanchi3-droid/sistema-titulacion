@@ -1,0 +1,819 @@
+﻿{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    Expediente de {{ registro.nombres_completos }}
+{% endblock %}
+
+{% block page_title %}
+    Expediente digital
+{% endblock %}
+
+{% block extra_css %}
+    <link
+        rel="stylesheet"
+        href="{% static 'css/expediente.css' %}"
+    >
+{% endblock %}
+
+{% block content %}
+
+<div class="expediente">
+
+    <section class="expediente-header">
+
+        <div class="expediente-profile">
+
+            <div class="expediente-avatar">
+                {{ registro.nombres_completos|slice:":1" }}
+            </div>
+
+            <div>
+
+                <h1 class="expediente-name">
+                    {{ registro.nombres_completos }}
+                </h1>
+
+                <p class="expediente-meta">
+                    {{ registro.cedula }}
+                    ·
+                    {{ registro.programa|default:"Programa no registrado" }}
+                </p>
+
+                <div class="expediente-badges">
+
+                    <span class="expediente-badge">
+                        {{ registro.get_modalidad_titulacion_display|default:"Modalidad pendiente" }}
+                    </span>
+
+                    {% if registro.estado == "APROBADO" or registro.estado == "GRADUADO" %}
+
+                        <span class="expediente-badge expediente-badge-success">
+                            {{ registro.get_estado_display }}
+                        </span>
+
+                    {% elif registro.estado %}
+
+                        <span class="expediente-badge expediente-badge-warning">
+                            {{ registro.get_estado_display }}
+                        </span>
+
+                    {% else %}
+
+                        <span class="expediente-badge expediente-badge-warning">
+                            Sin estado
+                        </span>
+
+                    {% endif %}
+
+                    <span class="expediente-badge">
+                        {{ avance.porcentaje }} % completado
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="expediente-actions">
+
+            <a
+                href="{% url 'estudiantes:lista' %}"
+                class="expediente-button"
+            >
+                Volver
+            </a>
+
+            <a
+                href="{% url 'estudiantes:editar' registro.pk %}"
+                class="expediente-button"
+            >
+                Editar expediente
+            </a>
+
+            {% if avance.puede_generar_acta %}
+
+                <a
+                    href="{% url 'documentos:crear_acta' %}?registro={{ registro.pk }}"
+                    class="expediente-button expediente-button-primary"
+                >
+                    Generar acta
+                </a>
+
+            {% else %}
+
+                <span
+                    class="expediente-button"
+                    title="Complete los requisitos pendientes"
+                >
+                    Acta bloqueada
+                </span>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+    <div class="expediente-grid">
+
+        <main class="expediente-main">
+
+            <section class="expediente-card">
+
+                <div class="expediente-card-header">
+
+                    <div>
+                        <h2 class="expediente-card-title">
+                            Datos personales y académicos
+                        </h2>
+
+                        <p class="expediente-card-description">
+                            Información principal del estudiante.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="expediente-information-grid">
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">ID Banner</p>
+
+                        <p class="expediente-value">
+                            {{ registro.id_banner|default:"No registrado" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Cédula</p>
+
+                        <p class="expediente-value">
+                            {{ registro.cedula|default:"No registrada" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Correo personal</p>
+
+                        <p class="expediente-value">
+                            {{ registro.correo_personal|default:"No registrado" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Correo institucional</p>
+
+                        <p class="expediente-value">
+                            {{ registro.correo_instituc|default:"No registrado" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Celular</p>
+
+                        <p class="expediente-value">
+                            {{ registro.celular|default:"No registrado" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Sede</p>
+
+                        <p class="expediente-value">
+                            {{ registro.sede|default:"No registrada" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Programa</p>
+
+                        <p class="expediente-value">
+                            {{ registro.programa|default:"No registrado" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Cohorte</p>
+
+                        <p class="expediente-value">
+                            {{ registro.numero_cohorte|default:"No registrada" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Período de ingreso</p>
+
+                        <p class="expediente-value">
+                            {{ registro.periodo_ingreso|default:"No registrado" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Período de titulación</p>
+
+                        <p class="expediente-value">
+                            {{ registro.periodo_titulacion_senescyt|default:"No registrado" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information expediente-information-full">
+                        <p class="expediente-label">Tema</p>
+
+                        <p class="expediente-value">
+                            {{ registro.tema|default:"Tema no registrado" }}
+                        </p>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="expediente-card">
+
+                <div class="expediente-card-header">
+
+                    <div>
+                        <h2 class="expediente-card-title">
+                            Tutor y tribunal
+                        </h2>
+
+                        <p class="expediente-card-description">
+                            Responsables académicos del proceso.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="expediente-information-grid">
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Tutor</p>
+
+                        <p class="expediente-value">
+                            {{ registro.nombres_completos_tutor|default:"No asignado" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">ID del tutor</p>
+
+                        <p class="expediente-value">
+                            {{ registro.id_tutor|default:"No registrado" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Primer miembro</p>
+
+                        <p class="expediente-value">
+                            {{ registro.primer_miembro_tribunal|default:"No registrado" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Segundo miembro</p>
+
+                        <p class="expediente-value">
+                            {{ registro.segundo_miembro_tribunal|default:"No registrado" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Tercer miembro</p>
+
+                        <p class="expediente-value">
+                            {{ registro.tercer_miembro_tribunal|default:"No registrado" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Cuarto miembro</p>
+
+                        <p class="expediente-value">
+                            {{ registro.cuarto_miembro_tribunal|default:"No registrado" }}
+                        </p>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="expediente-card">
+
+                <div class="expediente-card-header">
+
+                    <div>
+                        <h2 class="expediente-card-title">
+                            Calificaciones
+                        </h2>
+
+                        <p class="expediente-card-description">
+                            Resultados del proceso de titulación.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="expediente-information-grid">
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Proyecto escrito</p>
+
+                        <p class="expediente-value">
+                            {{ registro.proyecto_escrito|default:"Pendiente" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Defensa oral</p>
+
+                        <p class="expediente-value">
+                            {{ registro.defensa_oral|default:"Pendiente" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Nota final</p>
+
+                        <p class="expediente-value">
+                            {{ registro.nota_final|default:"Pendiente" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Examen teórico</p>
+
+                        <p class="expediente-value">
+                            {{ registro.examen_teorico_complexivo|default:"Pendiente" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Examen práctico</p>
+
+                        <p class="expediente-value">
+                            {{ registro.examen_teorico_practico|default:"Pendiente" }}
+                        </p>
+                    </div>
+
+                    <div class="expediente-information">
+                        <p class="expediente-label">Nota final complexivo</p>
+
+                        <p class="expediente-value">
+                            {{ registro.nota_final2|default:"Pendiente" }}
+                        </p>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="expediente-card">
+
+                <div class="expediente-card-header">
+
+                    <div>
+                        <h2 class="expediente-card-title">
+                            Actas generadas
+                        </h2>
+
+                        <p class="expediente-card-description">
+                            Documentos oficiales relacionados.
+                        </p>
+                    </div>
+
+                    <span class="expediente-badge">
+                        {{ actas|length }}
+                    </span>
+
+                </div>
+
+                {% if actas %}
+
+                    <div class="expediente-table-wrapper">
+
+                        <table class="expediente-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Número</th>
+                                    <th>Tipo</th>
+                                    <th>Estado</th>
+                                    <th>Fecha</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for acta in actas %}
+
+                                    <tr>
+                                        <td>
+                                            {{ acta.numero_acta|default:"—" }}
+                                        </td>
+
+                                        <td>
+                                            {{ acta.get_tipo_acta_display|default:"Acta" }}
+                                        </td>
+
+                                        <td>
+                                            {{ acta.get_estado_display|default:acta.estado }}
+                                        </td>
+
+                                        <td>
+                                            {{ acta.fecha_creacion|date:"d/m/Y H:i"|default:"—" }}
+                                        </td>
+
+                                        <td>
+                                            <a
+                                                href="{% url 'documentos:detalle_acta' acta.pk %}"
+                                                class="expediente-button"
+                                            >
+                                                Ver
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="expediente-empty">
+                        Todavía no existen actas asociadas con este estudiante.
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+            <section class="expediente-card">
+
+                <div class="expediente-card-header">
+
+                    <div>
+                        <h2 class="expediente-card-title">
+                            Archivos adjuntos
+                        </h2>
+
+                        <p class="expediente-card-description">
+                            Documentos almacenados en el expediente.
+                        </p>
+                    </div>
+
+                    <span class="expediente-badge">
+                        {{ archivos|length }}
+                    </span>
+
+                </div>
+
+                {% if archivos %}
+
+                    <div class="expediente-table-wrapper">
+
+                        <table class="expediente-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Documento</th>
+                                    <th>Tipo</th>
+                                    <th>Versión</th>
+                                    <th>Estado</th>
+                                    <th>Descarga</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for archivo in archivos %}
+
+                                    <tr>
+                                        <td>
+                                            {{ archivo.nombre|default:archivo.archivo.name }}
+                                        </td>
+
+                                        <td>
+                                            {{ archivo.get_tipo_display|default:archivo.tipo }}
+                                        </td>
+
+                                        <td>
+                                            {{ archivo.version|default:"1" }}
+                                        </td>
+
+                                        <td>
+                                            {{ archivo.get_estado_display|default:archivo.estado }}
+                                        </td>
+
+                                        <td>
+                                            {% if archivo.archivo %}
+                                                <a
+                                                    href="{{ archivo.archivo.url }}"
+                                                    class="expediente-button"
+                                                    download
+                                                >
+                                                    Descargar
+                                                </a>
+                                            {% else %}
+                                                —
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="expediente-empty">
+                        El centro documental se habilitará en el punto 5.
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+            <section class="expediente-card">
+
+                <div class="expediente-card-header">
+
+                    <div>
+                        <h2 class="expediente-card-title">
+                            Historial de cambios
+                        </h2>
+
+                        <p class="expediente-card-description">
+                            Actividad reciente del expediente.
+                        </p>
+                    </div>
+
+                </div>
+
+                {% if historial %}
+
+                    <div class="expediente-table-wrapper">
+
+                        <table class="expediente-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Responsable</th>
+                                    <th>Acción</th>
+                                    <th>Observación</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for movimiento in historial %}
+
+                                    <tr>
+                                        <td>
+                                            {{ movimiento.fecha|date:"d/m/Y H:i"|default:"—" }}
+                                        </td>
+
+                                        <td>
+                                            {{ movimiento.responsable|default:"Sistema" }}
+                                        </td>
+
+                                        <td>
+                                            {{ movimiento.accion|default:movimiento.estado_nuevo }}
+                                        </td>
+
+                                        <td>
+                                            {{ movimiento.observacion|default:"Sin observación" }}
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="expediente-empty">
+                        La línea de tiempo se habilitará en el punto 2.
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+            <section class="expediente-card">
+
+                <div class="expediente-card-header">
+
+                    <div>
+                        <h2 class="expediente-card-title">
+                            Observaciones
+                        </h2>
+
+                        <p class="expediente-card-description">
+                            Información administrativa registrada.
+                        </p>
+                    </div>
+
+                </div>
+
+                <p class="expediente-label">
+                    Observación PUCE TEC
+                </p>
+
+                <div class="observacion-box">
+                    {{ registro.observacion_puce_tec|default:"Sin observaciones." }}
+                </div>
+
+                <p
+                    class="expediente-label"
+                    style="margin-top:1rem;"
+                >
+                    Observación de Secretaría
+                </p>
+
+                <div class="observacion-box">
+                    {{ registro.observacion_secretaria|default:"Sin observaciones." }}
+                </div>
+
+                <p
+                    class="expediente-label"
+                    style="margin-top:1rem;"
+                >
+                    Secretaría General
+                </p>
+
+                <div class="observacion-box">
+                    {{ registro.observaciones_secretaria_general|default:"Sin observaciones." }}
+                </div>
+
+            </section>
+
+        </main>
+
+        <aside class="expediente-sidebar">
+
+            <section class="expediente-card">
+
+                <div class="expediente-card-header">
+
+                    <div>
+                        <h2 class="expediente-card-title">
+                            Avance del expediente
+                        </h2>
+
+                        <p class="expediente-card-description">
+                            Cumplimiento de requisitos.
+                        </p>
+                    </div>
+
+                </div>
+
+                <p class="expediente-progress-value">
+                    {{ avance.porcentaje }} %
+                </p>
+
+                <p class="expediente-meta">
+                    {{ avance.completados }} de
+                    {{ avance.total }} requisitos completados
+                </p>
+
+                <div class="expediente-progress">
+
+                    <div
+                        class="expediente-progress-bar"
+                        style="width:{{ avance.porcentaje }}%;"
+                    ></div>
+
+                </div>
+
+                {% if avance.puede_generar_acta %}
+
+                    <div class="expediente-alert">
+                        El estudiante cumple todos los requisitos revisados.
+                    </div>
+
+                {% else %}
+
+                    <div class="expediente-alert">
+                        El acta permanece bloqueada hasta completar
+                        los requisitos pendientes.
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+            <section class="expediente-card">
+
+                <div class="expediente-card-header">
+
+                    <div>
+                        <h2 class="expediente-card-title">
+                            Lista de requisitos
+                        </h2>
+
+                        <p class="expediente-card-description">
+                            Validación automática del expediente.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="requisitos-list">
+
+                    {% for requisito in avance.requisitos %}
+
+                        <div class="requisito-item">
+
+                            <div
+                                class="
+                                    requisito-icon
+                                    {% if not requisito.cumplido %}
+                                        requisito-icon-pending
+                                    {% endif %}
+                                "
+                            >
+                                {% if requisito.cumplido %}
+                                    ✓
+                                {% else %}
+                                    ✕
+                                {% endif %}
+                            </div>
+
+                            <div>
+
+                                <p class="requisito-name">
+                                    {{ requisito.nombre }}
+                                </p>
+
+                                <p class="requisito-detail">
+                                    {{ requisito.detalle }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+            {% if avance.pendientes %}
+
+                <section class="expediente-card">
+
+                    <div class="expediente-card-header">
+
+                        <div>
+                            <h2 class="expediente-card-title">
+                                Alertas pendientes
+                            </h2>
+
+                            <p class="expediente-card-description">
+                                Información que debe completarse.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    {% for pendiente in avance.pendientes %}
+
+                        <div class="expediente-alert">
+                            <strong>
+                                {{ pendiente.nombre }}:
+                            </strong>
+
+                            {{ pendiente.detalle }}
+                        </div>
+
+                    {% endfor %}
+
+                </section>
+
+            {% endif %}
+
+        </aside>
+
+    </div>
+
+</div>
+
+{% endblock %}

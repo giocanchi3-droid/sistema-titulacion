@@ -83,6 +83,14 @@
                 Nueva acta
             </a>
 
+
+            <a
+                href="{% url 'estudiantes:importar' %}"
+                class="menu-link"
+            >
+                Importar Excel
+            </a>
+
             {% if user.is_staff %}
                 <a
                     href="/admin/"
@@ -167,6 +175,7 @@
 
 </body>
 </html>
+
 
 
 

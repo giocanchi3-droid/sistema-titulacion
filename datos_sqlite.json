@@ -1,0 +1,19 @@
+[
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$AI6d63KO2a4XFIXrA1jlVJ$tEOvpOvx/PeIvY/BOsTZfUtwHoZGJ8TaFxtDpVFh8Sk=",
+    "last_login": "2026-07-21T00:06:09.252Z",
+    "is_superuser": true,
+    "username": "Giovanny",
+    "first_name": "",
+    "last_name": "",
+    "email": "giocanchi3@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-07-12T03:59:48.108Z",
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]
