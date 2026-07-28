@@ -1,0 +1,157 @@
+﻿/* =========================================================
+   ESCALA GLOBAL AMPLIADA PUCE TEC
+
+   Navegador al 75 %:
+   0.75 x 1.35 = 1.0125
+   El sistema se verá aproximadamente como al 100 %.
+
+   Navegador al 100 %:
+   El sistema se mostrará un 35 % más grande.
+   ========================================================= */
+
+@media (min-width: 1000px) {
+
+    html {
+        overflow-x: hidden !important;
+    }
+
+    body.app-authenticated,
+    body.system-page {
+        overflow-x: hidden !important;
+    }
+
+    /*
+     * Escala principal del contenido.
+     * El ancho se reduce proporcionalmente para que después
+     * del zoom ocupe exactamente el espacio disponible.
+     */
+
+    body.app-authenticated .puce-content-scale,
+    body.system-page .puce-content-scale {
+        width: 74.074074% !important;
+        min-width: 74.074074% !important;
+        max-width: none !important;
+
+        min-height: 74.074074vh !important;
+
+        zoom: 1.35 !important;
+        transform-origin: top left !important;
+    }
+
+    /*
+     * Compatibilidad con clases utilizadas por versiones
+     * anteriores del sistema.
+     */
+
+    body.app-authenticated .puce-ui-scaled,
+    body.app-authenticated .puce-main-scaled,
+    body.system-page .puce-ui-scaled,
+    body.system-page .puce-main-scaled {
+        width: 74.074074% !important;
+        min-width: 74.074074% !important;
+        max-width: none !important;
+
+        min-height: 74.074074vh !important;
+
+        zoom: 1.35 !important;
+        transform-origin: top left !important;
+    }
+
+    /*
+     * Permitir que cada módulo aproveche todo el espacio
+     * del contenedor principal ampliado.
+     */
+
+    body.app-authenticated .dashboard-pro,
+    body.app-authenticated .students-page,
+    body.app-authenticated .acta-form-page,
+    body.app-authenticated .new-acta-page,
+    body.app-authenticated .ga-page,
+    body.app-authenticated .excel-import-pro,
+    body.app-authenticated .expediente,
+    body.app-authenticated .acta-detail,
+    body.app-authenticated .actas-management-page,
+    body.system-page .dashboard-pro,
+    body.system-page .students-page,
+    body.system-page .acta-form-page,
+    body.system-page .new-acta-page,
+    body.system-page .ga-page,
+    body.system-page .excel-import-pro,
+    body.system-page .expediente,
+    body.system-page .acta-detail,
+    body.system-page .actas-management-page {
+        width: 100% !important;
+        max-width: none !important;
+    }
+
+    /*
+     * Evitar que formularios y tablas conserven dimensiones
+     * demasiado pequeñas por estilos anteriores.
+     */
+
+    body.app-authenticated .puce-content-scale input,
+    body.app-authenticated .puce-content-scale select,
+    body.app-authenticated .puce-content-scale textarea,
+    body.app-authenticated .puce-content-scale button,
+    body.system-page .puce-content-scale input,
+    body.system-page .puce-content-scale select,
+    body.system-page .puce-content-scale textarea,
+    body.system-page .puce-content-scale button {
+        font-size: max(10px, 1em);
+    }
+
+    body.app-authenticated .puce-content-scale input:not([type="checkbox"]):not([type="radio"]),
+    body.app-authenticated .puce-content-scale select,
+    body.system-page .puce-content-scale input:not([type="checkbox"]):not([type="radio"]),
+    body.system-page .puce-content-scale select {
+        min-height: 38px;
+    }
+
+    body.app-authenticated .puce-content-scale textarea,
+    body.system-page .puce-content-scale textarea {
+        min-height: 90px;
+    }
+}
+
+/* =========================================================
+   PANTALLAS MEDIANAS
+   ========================================================= */
+
+@media (min-width: 760px) and (max-width: 999px) {
+
+    body.app-authenticated .puce-content-scale,
+    body.app-authenticated .puce-ui-scaled,
+    body.app-authenticated .puce-main-scaled,
+    body.system-page .puce-content-scale,
+    body.system-page .puce-ui-scaled,
+    body.system-page .puce-main-scaled {
+        width: 83.333333% !important;
+        min-width: 83.333333% !important;
+        max-width: none !important;
+
+        zoom: 1.20 !important;
+        transform-origin: top left !important;
+    }
+}
+
+/* =========================================================
+   MÓVILES
+   ========================================================= */
+
+@media (max-width: 759px) {
+
+    body.app-authenticated .puce-content-scale,
+    body.app-authenticated .puce-ui-scaled,
+    body.app-authenticated .puce-main-scaled,
+    body.system-page .puce-content-scale,
+    body.system-page .puce-ui-scaled,
+    body.system-page .puce-main-scaled {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: none !important;
+        min-height: 100vh !important;
+
+        zoom: 1 !important;
+        transform: none !important;
+    }
+}

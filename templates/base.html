@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+{% load static %}
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -20,9 +21,18 @@
         rel="stylesheet"
         href="/static/css/app.css"
     >
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/puce-dark-theme.css' %}?v=restaurado1"
+>
+<link
+    rel="stylesheet"
+    href="{% static 'css/escala-ui.css' %}?v=7"
+>
 </head>
 
-<body class="bg-slate-100 text-slate-800">
+<body class="bg-slate-100 text-slate-800 {% if user.is_authenticated %}app-authenticated{% else %}app-login{% endif %}">
 
 {% if user.is_authenticated %}
 
@@ -173,8 +183,16 @@
 
 {% endif %}
 
+
+<script
+    src="{% static 'js/app.js' %}?v=restaurado1"
+></script>
+<script
+    src="{% static 'js/escala-ui.js' %}?v=restaurado1"
+></script>
 </body>
 </html>
+
 
 
 

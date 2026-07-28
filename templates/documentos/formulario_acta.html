@@ -1,106 +1,388 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
+{% load static %}
 
 {% block title %}
-    {{ titulo }}
+    Nueva acta
 {% endblock %}
 
 {% block page_title %}
-    {{ titulo }}
+    Crear acta
 {% endblock %}
-
 
 {% block content %}
 
-<div class="mx-auto max-w-3xl">
+<link
+    rel="stylesheet"
+    href="{% static 'css/nueva-acta.css' %}?v=5"
+>
 
-    <div class="card">
+<section class="new-acta-page">
 
-        <h1 class="text-2xl font-bold">
-            {{ titulo }}
-        </h1>
+    <header class="new-acta-header">
 
-        <p class="mt-2 text-sm text-slate-500">
-            Selecciona el estudiante y el tipo de acta.
-            Los datos se tomarán automáticamente del
-            formulario de Gestión de estudiantes.
-        </p>
+        <div class="new-acta-header-content">
 
+            <div class="new-acta-header-icon">
+                <span>+</span>
+            </div>
 
-        {% if form.non_field_errors %}
+            <div>
 
-            <div class="mt-5 rounded-lg bg-red-100 p-4 text-red-700">
+                <span class="new-acta-eyebrow">
+                    Gestión documental
+                </span>
 
-                {% for error in form.non_field_errors %}
-                    <p>{{ error }}</p>
-                {% endfor %}
+                <h1>
+                    Crear nueva acta
+                </h1>
+
+                <p>
+                    Selecciona al estudiante y configura la información
+                    principal del documento de titulación.
+                </p>
 
             </div>
 
-        {% endif %}
+        </div>
 
+        <div class="new-acta-header-status">
 
-        <form
-            method="post"
-            class="mt-6 space-y-5"
-        >
+            <span class="new-acta-status-dot"></span>
 
-            {% csrf_token %}
+            <div>
 
+                <small>
+                    Estado del formulario
+                </small>
 
-            {% for field in form %}
+                <strong id="new-acta-header-status">
+                    Pendiente
+                </strong>
 
-                <div>
+            </div>
 
-                    <label
-                        for="{{ field.id_for_label }}"
-                        class="block font-semibold"
-                    >
-                        {{ field.label }}
+        </div>
 
-                        {% if field.field.required %}
-                            <span class="text-red-600">*</span>
-                        {% endif %}
-                    </label>
+    </header>
 
+    {% if form.errors %}
 
-                    {{ field }}
+        <section class="new-acta-errors">
 
+            <span class="new-acta-error-icon">
+                !
+            </span>
 
-                    {% for error in field.errors %}
+            <div>
 
-                        <p class="mt-1 text-sm text-red-600">
-                            {{ error }}
-                        </p>
+                <strong>
+                    No se pudo guardar el acta
+                </strong>
 
-                    {% endfor %}
+                <p>
+                    Revisa los campos marcados y vuelve a intentarlo.
+                </p>
+
+            </div>
+
+        </section>
+
+    {% endif %}
+
+    <div class="new-acta-layout">
+
+        <main class="new-acta-main">
+
+            <form
+                method="post"
+                enctype="multipart/form-data"
+                id="new-acta-form"
+                class="new-acta-form"
+                novalidate
+            >
+
+                {% csrf_token %}
+                {{ form.media }}
+
+                {% for hidden_field in form.hidden_fields %}
+                    {{ hidden_field }}
+                {% endfor %}
+
+                {% if form.non_field_errors %}
+
+                    <div class="new-acta-global-errors">
+
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+                <section class="new-acta-form-card">
+
+                    <header class="new-acta-form-card-header">
+
+                        <div>
+
+                            <span class="new-acta-section-number">
+                                01
+                            </span>
+
+                            <div>
+
+                                <h2>
+                                    Configuración del acta
+                                </h2>
+
+                                <p>
+                                    Completa los datos necesarios para
+                                    registrar el documento.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <span class="new-acta-required-message">
+                            * Campos obligatorios
+                        </span>
+
+                    </header>
+
+                    <div class="new-acta-fields">
+
+                        {% for campo in form.visible_fields %}
+
+                            <div
+                                class="new-acta-field {% if campo.errors %}has-error{% endif %}"
+                                data-new-acta-field
+                                data-field-name="{{ campo.name }}"
+                            >
+
+                                <label
+                                    for="{{ campo.id_for_label }}"
+                                    class="new-acta-label"
+                                >
+
+                                    {{ campo.label }}
+
+                                    {% if campo.field.required %}
+                                        <span>*</span>
+                                    {% endif %}
+
+                                </label>
+
+                                <div class="new-acta-control">
+                                    {{ campo }}
+                                </div>
+
+                                {% if campo.help_text %}
+
+                                    <small class="new-acta-help">
+                                        {{ campo.help_text|safe }}
+                                    </small>
+
+                                {% endif %}
+
+                                {% if campo.errors %}
+
+                                    <div class="new-acta-field-errors">
+
+                                        {% for error in campo.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </section>
+
+                <section class="new-acta-form-footer">
+
+                    <div class="new-acta-save-information">
+
+                        <span class="new-acta-save-icon">
+                            ✓
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Guardar documento
+                            </strong>
+
+                            <p>
+                                Los datos académicos se tomarán
+                                automáticamente del expediente.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="new-acta-buttons">
+
+                        <a
+                            href="{% url 'documentos:lista_actas' %}"
+                            class="new-acta-cancel-button"
+                        >
+                            Cancelar
+                        </a>
+
+                        <button
+                            type="submit"
+                            id="new-acta-submit"
+                            class="new-acta-submit-button"
+                        >
+
+                            <span class="new-acta-submit-icon">
+                                +
+                            </span>
+
+                            <span id="new-acta-submit-text">
+                                Guardar acta
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </section>
+
+            </form>
+
+        </main>
+
+        <aside class="new-acta-sidebar">
+
+            <section class="new-acta-progress-card">
+
+                <header>
+
+                    <div>
+
+                        <span class="new-acta-sidebar-eyebrow">
+                            Progreso
+                        </span>
+
+                        <h2>
+                            Avance del formulario
+                        </h2>
+
+                    </div>
+
+                    <strong id="new-acta-progress-value">
+                        0%
+                    </strong>
+
+                </header>
+
+                <div class="new-acta-progress-track">
+
+                    <span
+                        id="new-acta-progress-bar"
+                        class="new-acta-progress-bar"
+                    ></span>
 
                 </div>
 
-            {% endfor %}
+                <p id="new-acta-progress-description">
+                    Selecciona los campos obligatorios.
+                </p>
 
+            </section>
 
-            <div class="flex justify-end gap-3 border-t pt-5">
+            <section class="new-acta-summary-card">
 
-                <a
-                    href="{% url 'documentos:lista_actas' %}"
-                    class="btn-secondary"
-                >
-                    Cancelar
-                </a>
+                <span class="new-acta-sidebar-eyebrow">
+                    Vista previa
+                </span>
 
-                <button
-                    type="submit"
-                    class="btn-primary"
-                >
-                    {{ texto_boton }}
-                </button>
+                <h2>
+                    Resumen del acta
+                </h2>
 
-            </div>
+                <div class="new-acta-summary-student">
 
-        </form>
+                    <span
+                        id="new-acta-student-avatar"
+                        class="new-acta-student-avatar"
+                    >
+                        E
+                    </span>
+
+                    <div>
+
+                        <small>
+                            Estudiante
+                        </small>
+
+                        <strong id="new-acta-summary-student">
+                            Sin seleccionar
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <div class="new-acta-summary-list">
+
+                    <div class="new-acta-summary-item">
+
+                        <span>
+                            Tipo de acta
+                        </span>
+
+                        <strong id="new-acta-summary-type">
+                            Sin seleccionar
+                        </strong>
+
+                    </div>
+
+                    <div class="new-acta-summary-item">
+
+                        <span>
+                            Estado
+                        </span>
+
+                        <strong id="new-acta-summary-status">
+                            Borrador
+                        </strong>
+
+                    </div>
+
+                    <div class="new-acta-summary-item">
+
+                        <span>
+                            Observaciones
+                        </span>
+
+                        <strong id="new-acta-summary-observations">
+                            Sin observaciones
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+</aside>
 
     </div>
 
-</div>
+</section>
+
+<script
+    src="{% static 'js/nueva-acta.js' %}?v=5"
+></script>
 
 {% endblock %}

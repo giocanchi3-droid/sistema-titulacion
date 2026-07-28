@@ -1,188 +1,546 @@
 ﻿{% extends "base.html" %}
+{% load static %}
 
 {% block title %}
     Gestión de estudiantes
 {% endblock %}
 
 {% block page_title %}
-    Registros de titulación
+    Gestión de estudiantes
 {% endblock %}
-
 
 {% block content %}
 
-<div class="card">
+<link
+    rel="stylesheet"
+    href="{% static 'css/gestion-estudiantes.css' %}?v=1"
+>
 
-    <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+<section class="students-page">
 
-        <div>
+    <header class="students-hero">
 
-            <h1 class="text-2xl font-bold">
+        <div class="students-hero-content">
+
+            <span class="students-eyebrow">
+                Módulo académico
+            </span>
+
+            <h1 class="students-title">
                 Gestión de estudiantes
             </h1>
 
-            <p class="mt-1 text-sm text-slate-500">
-                Administra la información personal, académica y de titulación de los estudiantes.
+            <p class="students-description">
+                Consulta y administra los expedientes personales,
+                académicos y de titulación registrados en el sistema.
             </p>
 
         </div>
 
-
         <a
             href="{% url 'estudiantes:crear' %}"
-            class="btn-primary"
+            class="students-primary-button"
         >
-            Nuevo registro
+            <span class="students-button-symbol">
+                +
+            </span>
+
+            Registrar estudiante
         </a>
 
-    </div>
+    </header>
 
+    <section class="students-statistics">
 
-    <form
-        method="get"
-        class="mb-6 flex gap-2"
-    >
+        <article class="students-stat-card">
 
-        <input
-            type="search"
-            name="q"
-            value="{{ consulta }}"
-            placeholder="Buscar por cédula, nombre, ID Banner, programa o tutor"
-            class="w-full max-w-2xl rounded-lg border border-slate-300 px-3 py-2"
+            <span class="students-stat-label">
+                Total de estudiantes
+            </span>
+
+            <strong class="students-stat-value">
+                {{ total_registros }}
+            </strong>
+
+            <span class="students-stat-detail">
+                Registros almacenados
+            </span>
+
+        </article>
+
+        <article class="students-stat-card">
+
+            <span class="students-stat-label">
+                Resultados visibles
+            </span>
+
+            <strong class="students-stat-value">
+                {{ total_filtrados }}
+            </strong>
+
+            <span class="students-stat-detail">
+                Según los filtros aplicados
+            </span>
+
+        </article>
+
+        <article class="students-stat-card students-stat-success">
+
+            <span class="students-stat-label">
+                Con fecha de grado
+            </span>
+
+            <strong class="students-stat-value">
+                {{ con_fecha_grado }}
+            </strong>
+
+            <span class="students-stat-detail">
+                Procesos finalizados
+            </span>
+
+        </article>
+
+        <article class="students-stat-card students-stat-warning">
+
+            <span class="students-stat-label">
+                Pendientes de grado
+            </span>
+
+            <strong class="students-stat-value">
+                {{ pendientes_grado }}
+            </strong>
+
+            <span class="students-stat-detail">
+                Sin fecha registrada
+            </span>
+
+        </article>
+
+    </section>
+
+    <section class="students-panel">
+
+        <div class="students-panel-header">
+
+            <div>
+
+                <h2 class="students-panel-title">
+                    Registros de titulación
+                </h2>
+
+                <p class="students-panel-description">
+                    Utiliza los filtros para encontrar un expediente.
+                </p>
+
+            </div>
+
+            {% if consulta or programa_seleccionado or modalidad_seleccionada or estado_seleccionado %}
+
+                <span class="students-filter-indicator">
+                    Filtros activos
+                </span>
+
+            {% endif %}
+
+        </div>
+
+        <form
+            method="get"
+            class="students-filters"
         >
 
-        <button
-            type="submit"
-            class="btn-secondary"
-        >
-            Buscar
-        </button>
+            <div class="students-search-field">
 
-    </form>
+                <label
+                    for="student-search"
+                    class="students-filter-label"
+                >
+                    Buscar estudiante
+                </label>
 
+                <input
+                    type="search"
+                    id="student-search"
+                    name="q"
+                    value="{{ consulta }}"
+                    placeholder="Cédula, nombre, ID Banner, programa o tutor"
+                    class="students-control"
+                >
 
-    <div class="overflow-x-auto">
+            </div>
 
-        <table class="w-full border-collapse">
+            <div>
 
-            <thead>
+                <label
+                    for="program-filter"
+                    class="students-filter-label"
+                >
+                    Programa
+                </label>
 
-                <tr class="bg-slate-100 text-left text-sm">
+                <select
+                    id="program-filter"
+                    name="programa"
+                    class="students-control"
+                >
 
-                    <th class="p-3">
-                        ID Banner
-                    </th>
+                    <option value="">
+                        Todos los programas
+                    </option>
 
-                    <th class="p-3">
-                        Cédula
-                    </th>
+                    {% for programa in programas %}
 
-                    <th class="p-3">
-                        Nombres completos
-                    </th>
+                        <option
+                            value="{{ programa }}"
+                            {% if programa == programa_seleccionado %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ programa }}
+                        </option>
 
-                    <th class="p-3">
-                        Programa
-                    </th>
+                    {% endfor %}
 
-                    <th class="p-3">
-                        Modalidad
-                    </th>
+                </select>
 
-                    <th class="p-3">
-                        Estado
-                    </th>
+            </div>
 
-                    <th class="p-3">
-                        Fecha de grado
-                    </th>
+            <div>
 
-                    <th class="p-3">
-                        Acciones
-                    </th>
+                <label
+                    for="modality-filter"
+                    class="students-filter-label"
+                >
+                    Modalidad
+                </label>
 
-                </tr>
+                <select
+                    id="modality-filter"
+                    name="modalidad"
+                    class="students-control"
+                >
 
-            </thead>
+                    <option value="">
+                        Todas las modalidades
+                    </option>
 
+                    {% for valor, etiqueta in modalidades %}
 
-            <tbody>
+                        <option
+                            value="{{ valor }}"
+                            {% if valor == modalidad_seleccionada %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ etiqueta }}
+                        </option>
 
-                {% for registro in registros %}
+                    {% endfor %}
 
-                    <tr class="border-t border-slate-200">
+                </select>
 
-                        <td class="p-3">
-                            {{ registro.id_banner|default:"—" }}
-                        </td>
+            </div>
 
-                        <td class="p-3">
-                            {{ registro.cedula }}
-                        </td>
+            <div>
 
-                        <td class="p-3 font-semibold">
-                            {{ registro.nombres_completos }}
-                        </td>
+                <label
+                    for="status-filter"
+                    class="students-filter-label"
+                >
+                    Estado
+                </label>
 
-                        <td class="p-3">
-                            {{ registro.programa }}
-                        </td>
+                <select
+                    id="status-filter"
+                    name="estado"
+                    class="students-control"
+                >
 
-                        <td class="p-3">
-                            {{ registro.get_modalidad_titulacion_display|default:"—" }}
-                        </td>
+                    <option value="">
+                        Todos los estados
+                    </option>
 
-                        <td class="p-3">
-                            {{ registro.get_estado_display|default:"—" }}
-                        </td>
+                    {% for valor, etiqueta in estados %}
 
-                        <td class="p-3">
-                            {{ registro.fecha_grado|date:"d/m/Y"|default:"—" }}
-                        </td>
+                        <option
+                            value="{{ valor }}"
+                            {% if valor == estado_seleccionado %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ etiqueta }}
+                        </option>
 
-                        <td class="p-3 whitespace-nowrap">
+                    {% endfor %}
 
-                            <a
-                                href="{% url 'estudiantes:expediente' registro.pk %}"
-                                class="font-semibold text-blue-700"
-                            >
-                                Ver
-                            </a>
+                </select>
 
-                            <a
-                                href="{% url 'estudiantes:editar' registro.pk %}"
-                                class="ml-3 font-semibold text-amber-700"
-                            >
-                                Editar
-                            </a>
+            </div>
 
-                        </td>
+            <div class="students-filter-actions">
 
-                    </tr>
+                <button
+                    type="submit"
+                    class="students-search-button"
+                >
+                    Buscar
+                </button>
 
-                {% empty %}
+                <a
+                    href="{% url 'estudiantes:lista' %}"
+                    class="students-clear-button"
+                >
+                    Limpiar
+                </a>
+
+            </div>
+
+        </form>
+
+        <div class="students-results-summary">
+
+            {% if total_filtrados %}
+
+                Mostrando
+                <strong>{{ page_obj.start_index }}</strong>
+                a
+                <strong>{{ page_obj.end_index }}</strong>
+                de
+                <strong>{{ total_filtrados }}</strong>
+                estudiantes.
+
+            {% else %}
+
+                No existen estudiantes que coincidan con la búsqueda.
+
+            {% endif %}
+
+        </div>
+
+        <div class="students-table-wrapper">
+
+            <table class="students-table">
+
+                <thead>
 
                     <tr>
-
-                        <td
-                            colspan="8"
-                            class="p-8 text-center text-slate-500"
-                        >
-                            Todavía no existen registros.
-                        </td>
-
+                        <th>Estudiante</th>
+                        <th>ID Banner</th>
+                        <th>Programa</th>
+                        <th>Modalidad</th>
+                        <th>Estado</th>
+                        <th>Fecha de grado</th>
+                        <th>Acciones</th>
                     </tr>
 
-                {% endfor %}
+                </thead>
 
-            </tbody>
+                <tbody>
 
-        </table>
+                    {% for registro in registros %}
 
-    </div>
+                        <tr>
 
-</div>
+                            <td>
+
+                                <div class="student-identity">
+
+                                    <span class="student-avatar">
+                                        {{ registro.nombres_completos|slice:":1"|upper }}
+                                    </span>
+
+                                    <div class="student-identity-text">
+
+                                        <strong class="student-name">
+                                            {{ registro.nombres_completos }}
+                                        </strong>
+
+                                        <span class="student-document">
+                                            C.I. {{ registro.cedula }}
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+                                <span class="student-code">
+                                    {{ registro.id_banner|default:"No registrado" }}
+                                </span>
+                            </td>
+
+                            <td>
+                                {{ registro.programa|default:"No registrado" }}
+                            </td>
+
+                            <td>
+                                <span class="student-modality">
+                                    {{ registro.get_modalidad_titulacion_display|default:"Sin modalidad" }}
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <span class="student-status student-status-{{ registro.estado|default:'sin-estado'|slugify }}">
+                                    {{ registro.get_estado_display|default:"Sin estado" }}
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                {% if registro.fecha_grado %}
+
+                                    <span class="student-grade-date">
+                                        {{ registro.fecha_grado|date:"d/m/Y" }}
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="student-pending">
+                                        Pendiente
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                <div class="student-actions">
+
+                                    <a
+                                        href="{% url 'estudiantes:expediente' registro.pk %}"
+                                        class="student-action student-action-view"
+                                    >
+                                        Expediente
+                                    </a>
+
+                                    <a
+                                        href="{% url 'estudiantes:editar' registro.pk %}"
+                                        class="student-action student-action-edit"
+                                    >
+                                        Editar
+                                    </a>
+
+                                    <a
+                                        href="{% url 'estudiantes:eliminar' registro.pk %}"
+                                        class="student-action student-action-delete"
+                                    >
+                                        Eliminar
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="students-empty-cell"
+                            >
+
+                                <div class="students-empty">
+
+                                    <span class="students-empty-icon">
+                                        ?
+                                    </span>
+
+                                    <h3>
+                                        No se encontraron estudiantes
+                                    </h3>
+
+                                    <p>
+                                        Modifica los filtros o registra un nuevo estudiante.
+                                    </p>
+
+                                    <a
+                                        href="{% url 'estudiantes:crear' %}"
+                                        class="students-primary-button"
+                                    >
+                                        Registrar estudiante
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% if page_obj.paginator.num_pages > 1 %}
+
+            <nav class="students-pagination">
+
+                <div class="students-pagination-information">
+                    Página
+                    <strong>{{ page_obj.number }}</strong>
+                    de
+                    <strong>{{ page_obj.paginator.num_pages }}</strong>
+                </div>
+
+                <div class="students-pagination-actions">
+
+                    {% if page_obj.has_previous %}
+
+                        <a
+                            href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.previous_page_number }}"
+                            class="students-page-button"
+                        >
+                            Anterior
+                        </a>
+
+                    {% else %}
+
+                        <span class="students-page-button students-page-disabled">
+                            Anterior
+                        </span>
+
+                    {% endif %}
+
+                    <span class="students-current-page">
+                        {{ page_obj.number }}
+                    </span>
+
+                    {% if page_obj.has_next %}
+
+                        <a
+                            href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.next_page_number }}"
+                            class="students-page-button"
+                        >
+                            Siguiente
+                        </a>
+
+                    {% else %}
+
+                        <span class="students-page-button students-page-disabled">
+                            Siguiente
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </nav>
+
+        {% endif %}
+
+    </section>
+
+</section>
 
 {% endblock %}
-
-

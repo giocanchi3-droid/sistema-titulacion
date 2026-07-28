@@ -1,0 +1,511 @@
+.excel-import-pro,
+.excel-import-pro * {
+    box-sizing: border-box;
+}
+
+.excel-import-pro {
+    width: min(100%, 1480px);
+    margin: 0 auto;
+    padding: 28px;
+    color: #eef8ff;
+}
+
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
+
+.excel-import-hero-pro {
+    position: relative;
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    overflow: hidden;
+    margin-bottom: 18px !important;
+    border: 1px solid rgba(71, 181, 232, 0.37);
+    border-radius: 19px;
+    padding: 24px 27px !important;
+    background:
+        radial-gradient(
+            circle at 88% 15%,
+            rgba(45, 193, 244, 0.20),
+            transparent 35%
+        ),
+        linear-gradient(
+            125deg,
+            rgba(3, 22, 42, 0.97),
+            rgba(5, 51, 80, 0.92)
+        ) !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.32);
+    backdrop-filter: blur(17px);
+}
+
+.excel-import-hero-pro::after {
+    position: absolute;
+    top: -115px;
+    right: -55px;
+    width: 285px;
+    height: 285px;
+    border: 40px solid rgba(87, 211, 255, 0.06);
+    border-radius: 50%;
+    content: "";
+    pointer-events: none;
+}
+
+.excel-import-hero-main {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 17px;
+}
+
+.excel-import-hero-icon {
+    display: grid;
+    width: 58px;
+    height: 58px;
+    flex: 0 0 58px;
+    place-items: center;
+    border: 1px solid rgba(104, 218, 255, 0.42);
+    border-radius: 17px;
+    color: #ffffff !important;
+    background:
+        linear-gradient(
+            145deg,
+            #1aa7e5,
+            #08608f
+        );
+    box-shadow: 0 11px 25px rgba(0, 128, 193, 0.28);
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.excel-import-hero-pro h1,
+.excel-import-hero-pro h2 {
+    margin: 0 !important;
+    color: #ffffff !important;
+    font-size: 29px !important;
+    font-weight: 850 !important;
+    line-height: 1.15;
+}
+
+.excel-import-hero-pro p {
+    max-width: 800px;
+    margin: 8px 0 0 !important;
+    color: #a7c8db !important;
+    font-size: 13px !important;
+    line-height: 1.55;
+}
+
+.excel-import-limit-badge {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    min-width: 210px;
+    align-items: center;
+    gap: 11px;
+    border: 1px solid rgba(102, 200, 243, 0.28);
+    border-radius: 13px;
+    padding: 13px 15px;
+    background: rgba(3, 29, 50, 0.70);
+}
+
+.excel-import-limit-badge > span {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    place-items: center;
+    border-radius: 10px;
+    color: #ffffff !important;
+    background: rgba(10, 125, 185, 0.80);
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.excel-import-limit-badge small {
+    display: block;
+    color: #82a7bc !important;
+    font-size: 10px;
+}
+
+.excel-import-limit-badge strong {
+    display: block;
+    margin-top: 2px;
+    color: #ffffff !important;
+    font-size: 15px;
+}
+
+/* =========================================================
+   INFORMACIÓN RÁPIDA
+   ========================================================= */
+
+.excel-import-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 13px;
+    margin-bottom: 18px;
+}
+
+.excel-import-metric {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid rgba(68, 167, 218, 0.29);
+    border-radius: 14px;
+    padding: 15px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(3, 23, 42, 0.94),
+            rgba(4, 39, 64, 0.87)
+        );
+    box-shadow: 0 9px 24px rgba(0, 0, 0, 0.23);
+    backdrop-filter: blur(14px);
+}
+
+.excel-import-metric-icon {
+    display: grid;
+    width: 39px;
+    height: 39px;
+    flex: 0 0 39px;
+    place-items: center;
+    border: 1px solid rgba(101, 207, 255, 0.32);
+    border-radius: 11px;
+    color: #ffffff !important;
+    background: rgba(8, 106, 159, 0.76);
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.excel-import-metric span {
+    display: block;
+    color: #7fa5bb !important;
+    font-size: 10px;
+}
+
+.excel-import-metric strong {
+    display: block;
+    margin-top: 3px;
+    color: #ffffff !important;
+    font-size: 13px;
+}
+
+/* =========================================================
+   CONTENEDOR DE PANELES
+   ========================================================= */
+
+.excel-import-grid {
+    display: grid !important;
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr) !important;
+    gap: 18px !important;
+    align-items: stretch;
+}
+
+.excel-import-card {
+    min-width: 0;
+    min-height: 390px;
+    border: 1px solid rgba(68, 169, 220, 0.34) !important;
+    border-radius: 18px !important;
+    padding: 22px !important;
+    color: #eef8ff !important;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(3, 22, 41, 0.97),
+            rgba(4, 37, 61, 0.93)
+        ) !important;
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.29);
+    backdrop-filter: blur(16px);
+}
+
+.excel-import-card h1,
+.excel-import-card h2,
+.excel-import-card h3 {
+    color: #ffffff !important;
+    font-size: 20px !important;
+    font-weight: 800 !important;
+}
+
+.excel-import-card p,
+.excel-import-card small {
+    color: #87aabf !important;
+    font-size: 11px !important;
+    line-height: 1.5;
+}
+
+.excel-import-card label {
+    color: #e8f6ff !important;
+    font-size: 13px !important;
+    font-weight: 750 !important;
+}
+
+/* =========================================================
+   ZONA DE ARCHIVO
+   ========================================================= */
+
+.excel-file-zone {
+    position: relative;
+    display: grid;
+    min-height: 150px;
+    place-items: center;
+    margin-top: 13px;
+    border: 2px dashed rgba(73, 188, 239, 0.40);
+    border-radius: 15px;
+    padding: 21px;
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(16, 112, 164, 0.13),
+            transparent 68%
+        ),
+        rgba(2, 17, 31, 0.76);
+    text-align: center;
+    transition:
+        border-color 0.18s ease,
+        background 0.18s ease,
+        transform 0.18s ease;
+}
+
+.excel-file-zone.is-dragging {
+    border-color: #55cdfb;
+    background: rgba(5, 76, 117, 0.58);
+    transform: translateY(-2px);
+}
+
+.excel-file-zone.is-valid {
+    border-color: rgba(72, 222, 148, 0.55);
+    background: rgba(13, 93, 56, 0.27);
+}
+
+.excel-file-zone.is-invalid {
+    border-color: rgba(255, 101, 107, 0.65);
+    background: rgba(107, 24, 31, 0.35);
+}
+
+.excel-file-zone::before {
+    display: grid;
+    width: 46px;
+    height: 46px;
+    place-items: center;
+    margin-bottom: 9px;
+    border: 1px solid rgba(93, 206, 252, 0.34);
+    border-radius: 14px;
+    color: #ffffff;
+    background: rgba(7, 102, 155, 0.77);
+    content: "XLSX";
+    font-size: 9px;
+    font-weight: 900;
+}
+
+.excel-file-zone input[type="file"] {
+    width: 100% !important;
+    border: 1px solid rgba(80, 176, 224, 0.35) !important;
+    border-radius: 10px !important;
+    padding: 7px !important;
+    color: #dff4ff !important;
+    background: rgba(3, 25, 43, 0.90) !important;
+    font-size: 12px !important;
+    cursor: pointer;
+}
+
+.excel-file-zone input[type="file"]::file-selector-button {
+    min-height: 38px;
+    margin-right: 11px;
+    border: 1px solid #1ba6e5;
+    border-radius: 8px;
+    padding: 8px 13px;
+    color: #ffffff;
+    background:
+        linear-gradient(
+            135deg,
+            #19a6e7,
+            #0870aa
+        );
+    font-weight: 750;
+    cursor: pointer;
+}
+
+.excel-file-meta {
+    display: grid;
+    gap: 3px;
+    margin-top: 10px;
+}
+
+.excel-file-meta strong {
+    color: #ffffff !important;
+    font-size: 12px;
+}
+
+.excel-file-meta span {
+    color: #7fa4bb !important;
+    font-size: 10px;
+}
+
+/* =========================================================
+   BOTONES
+   ========================================================= */
+
+.excel-import-card button,
+.excel-import-card a {
+    min-height: 44px !important;
+    border-radius: 9px !important;
+    padding: 10px 15px !important;
+    text-decoration: none !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+}
+
+.excel-import-submit {
+    border: 1px solid #1ba7e6 !important;
+    color: #ffffff !important;
+    background:
+        linear-gradient(
+            135deg,
+            #19a6e7,
+            #0870aa
+        ) !important;
+    box-shadow: 0 8px 19px rgba(0, 119, 183, 0.27);
+}
+
+.excel-import-template {
+    border: 1px solid rgba(79, 211, 145, 0.37) !important;
+    color: #dcffeb !important;
+    background: rgba(18, 111, 66, 0.73) !important;
+}
+
+.excel-import-back {
+    border: 1px solid rgba(94, 176, 219, 0.35) !important;
+    color: #dcf4ff !important;
+    background: rgba(7, 47, 75, 0.89) !important;
+}
+
+.excel-import-submit:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+/* =========================================================
+   RESULTADOS
+   ========================================================= */
+
+.excel-import-result-card {
+    position: relative;
+}
+
+.excel-result-state {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 13px;
+    border: 1px solid rgba(78, 188, 238, 0.32);
+    border-radius: 999px;
+    padding: 6px 10px;
+    color: #dff6ff !important;
+    background: rgba(7, 89, 137, 0.62);
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.excel-result-state::before {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #62d2ff;
+    box-shadow: 0 0 10px rgba(98, 210, 255, 0.60);
+    content: "";
+}
+
+.excel-result-placeholder {
+    display: grid !important;
+    min-height: 170px;
+    place-items: center;
+    border: 1px dashed rgba(81, 176, 224, 0.32) !important;
+    border-radius: 14px !important;
+    padding: 25px !important;
+    color: #92b4c8 !important;
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(12, 102, 153, 0.13),
+            transparent 70%
+        ),
+        rgba(2, 18, 33, 0.74) !important;
+    text-align: center;
+}
+
+.excel-import-result-card table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #eaf7ff;
+    background: rgba(2, 18, 33, 0.72);
+}
+
+.excel-import-result-card th {
+    padding: 10px;
+    color: #ffffff !important;
+    background: rgba(7, 76, 118, 0.94) !important;
+    font-size: 10px;
+    text-align: left;
+}
+
+.excel-import-result-card td {
+    border-top: 1px solid rgba(73, 159, 205, 0.18);
+    padding: 10px;
+    color: #d9edf8 !important;
+    background: rgba(3, 26, 45, 0.78) !important;
+    font-size: 10px;
+}
+
+.excel-import-result-card ul {
+    display: grid;
+    gap: 7px;
+    padding-left: 18px;
+    color: #d8edf8;
+}
+
+.excel-import-result-card li {
+    color: #d8edf8 !important;
+    font-size: 11px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+    .excel-import-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .excel-import-metrics {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    .excel-import-pro {
+        padding: 14px;
+    }
+
+    .excel-import-hero-pro {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 19px !important;
+    }
+
+    .excel-import-hero-main {
+        align-items: flex-start;
+    }
+
+    .excel-import-limit-badge {
+        width: 100%;
+    }
+
+    .excel-import-card {
+        min-height: auto;
+        padding: 17px !important;
+    }
+}

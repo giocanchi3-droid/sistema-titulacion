@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 from decouple import Csv, config
 
@@ -176,4 +176,16 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ],
 }
+
+# EXCEL_UPLOAD_LIMIT_START
+# Tamaño máximo permitido para una matriz Excel: 100 MB.
+MAX_EXCEL_UPLOAD_SIZE = 100 * 1024 * 1024
+
+# Margen adicional para el cuerpo completo de la solicitud.
+DATA_UPLOAD_MAX_MEMORY_SIZE = 110 * 1024 * 1024
+
+# Archivos mayores a 5 MB se almacenan temporalmente en disco,
+# evitando mantener archivos grandes completamente en memoria RAM.
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024
+# EXCEL_UPLOAD_LIMIT_END
 

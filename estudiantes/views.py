@@ -1,5 +1,6 @@
 ﻿from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -145,8 +146,21 @@ def construir_secciones_detalle(registro):
 @login_required
 def lista_registros(request):
     consulta = request.GET.get("q", "").strip()
+    programa_seleccionado = request.GET.get(
+        "programa",
+        "",
+    ).strip()
+    modalidad_seleccionada = request.GET.get(
+        "modalidad",
+        "",
+    ).strip()
+    estado_seleccionado = request.GET.get(
+        "estado",
+        "",
+    ).strip()
 
-    registros = RegistroTitulacion.objects.all()
+    registros_base = RegistroTitulacion.objects.all()
+    registros = registros_base
 
     if consulta:
         registros = registros.filter(
@@ -157,9 +171,95 @@ def lista_registros(request):
             | Q(nombres_completos_tutor__icontains=consulta)
         )
 
+    if programa_seleccionado:
+        registros = registros.filter(
+            programa=programa_seleccionado
+        )
+
+    if modalidad_seleccionada:
+        registros = registros.filter(
+            modalidad_titulacion=modalidad_seleccionada
+        )
+
+    if estado_seleccionado:
+        registros = registros.filter(
+            estado=estado_seleccionado
+        )
+
+    registros = registros.order_by(
+        "nombres_completos",
+        "cedula",
+    )
+
+    total_registros = registros_base.count()
+    total_filtrados = registros.count()
+
+    con_fecha_grado = registros_base.exclude(
+        fecha_grado__isnull=True
+    ).count()
+
+    pendientes_grado = registros_base.filter(
+        fecha_grado__isnull=True
+    ).count()
+
+    programas = (
+        registros_base
+        .exclude(programa__isnull=True)
+        .exclude(programa__exact="")
+        .values_list("programa", flat=True)
+        .distinct()
+        .order_by("programa")
+    )
+
+    campo_modalidad = RegistroTitulacion._meta.get_field(
+        "modalidad_titulacion"
+    )
+
+    modalidades = [
+        (valor, etiqueta)
+        for valor, etiqueta in campo_modalidad.choices
+        if valor
+    ]
+
+    campo_estado = RegistroTitulacion._meta.get_field(
+        "estado"
+    )
+
+    estados = [
+        (valor, etiqueta)
+        for valor, etiqueta in campo_estado.choices
+        if valor
+    ]
+
+    paginador = Paginator(
+        registros,
+        10,
+    )
+
+    pagina = paginador.get_page(
+        request.GET.get("page")
+    )
+
+    parametros = request.GET.copy()
+
+    if "page" in parametros:
+        del parametros["page"]
+
     contexto = {
-        "registros": registros,
+        "registros": pagina,
+        "page_obj": pagina,
         "consulta": consulta,
+        "programas": programas,
+        "modalidades": modalidades,
+        "estados": estados,
+        "programa_seleccionado": programa_seleccionado,
+        "modalidad_seleccionada": modalidad_seleccionada,
+        "estado_seleccionado": estado_seleccionado,
+        "total_registros": total_registros,
+        "total_filtrados": total_filtrados,
+        "con_fecha_grado": con_fecha_grado,
+        "pendientes_grado": pendientes_grado,
+        "querystring": parametros.urlencode(),
     }
 
     return render(
@@ -167,7 +267,6 @@ def lista_registros(request):
         "estudiantes/lista.html",
         contexto,
     )
-
 
 @login_required
 def crear_registro(request):
@@ -295,3 +394,4 @@ def eliminar_registro(request, pk):
             "registro": registro,
         },
     )
+

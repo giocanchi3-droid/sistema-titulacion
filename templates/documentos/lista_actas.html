@@ -1,4 +1,5 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
+{% load static %}
 
 {% block title %}
     Gestión de actas
@@ -8,207 +9,489 @@
     Gestión de actas
 {% endblock %}
 
-
 {% block content %}
 
-<div class="card">
+<link
+    rel="stylesheet"
+    href="{% static 'css/gestion-actas.css' %}?v=30"
+>
 
-    <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+<section class="ga-page">
 
-        <div>
+    <header class="ga-hero">
 
-            <h1 class="text-2xl font-bold">
+        <div class="ga-hero-content">
+
+            <span class="ga-eyebrow">
+                Módulo documental institucional
+            </span>
+
+            <h1 class="ga-title">
                 Gestión de actas
             </h1>
 
-            <p class="mt-1 text-sm text-slate-500">
-                Crea, genera, revisa y descarga las actas
-                de titulación.
+            <p class="ga-description">
+                Consulta y administra las actas de titulación,
+                los documentos generados y su estado actual.
             </p>
 
         </div>
 
+        {% if crear_url %}
 
-        <a
-            href="{% url 'documentos:crear_acta' %}"
-            class="btn-primary"
+            <a
+                href="{{ crear_url }}"
+                class="ga-primary-button"
+            >
+                <span class="ga-primary-icon">
+                    +
+                </span>
+
+                Generar acta
+            </a>
+
+        {% endif %}
+
+    </header>
+
+    <section class="ga-statistics">
+
+        <article class="ga-stat-card">
+
+            <div class="ga-stat-heading">
+                <span class="ga-stat-icon">T</span>
+                <span class="ga-stat-label">Total visible</span>
+            </div>
+
+            <strong class="ga-stat-value">
+                {{ total_actas }}
+            </strong>
+
+            <span class="ga-stat-description">
+                Actas encontradas
+            </span>
+
+        </article>
+
+        <article class="ga-stat-card ga-stat-generated">
+
+            <div class="ga-stat-heading">
+                <span class="ga-stat-icon">G</span>
+                <span class="ga-stat-label">Generadas</span>
+            </div>
+
+            <strong class="ga-stat-value">
+                {{ total_generadas }}
+            </strong>
+
+            <span class="ga-stat-description">
+                Documentos emitidos
+            </span>
+
+        </article>
+
+        <article class="ga-stat-card ga-stat-approved">
+
+            <div class="ga-stat-heading">
+                <span class="ga-stat-icon">A</span>
+                <span class="ga-stat-label">Aprobadas</span>
+            </div>
+
+            <strong class="ga-stat-value">
+                {{ total_aprobadas }}
+            </strong>
+
+            <span class="ga-stat-description">
+                Documentos validados
+            </span>
+
+        </article>
+
+        <article class="ga-stat-card ga-stat-cancelled">
+
+            <div class="ga-stat-heading">
+                <span class="ga-stat-icon">X</span>
+                <span class="ga-stat-label">Anuladas</span>
+            </div>
+
+            <strong class="ga-stat-value">
+                {{ total_anuladas }}
+            </strong>
+
+            <span class="ga-stat-description">
+                Documentos sin vigencia
+            </span>
+
+        </article>
+
+    </section>
+
+    <section class="ga-panel">
+
+        <header class="ga-panel-header">
+
+            <div>
+
+                <span class="ga-panel-eyebrow">
+                    Registro documental
+                </span>
+
+                <h2 class="ga-panel-title">
+                    Actas registradas
+                </h2>
+
+                <p class="ga-panel-description">
+                    Busca por número, estudiante, cédula,
+                    programa, tipo o estado.
+                </p>
+
+            </div>
+
+            {% if consulta or estado_seleccionado %}
+
+                <span class="ga-filter-active">
+                    Filtros activos
+                </span>
+
+            {% endif %}
+
+        </header>
+
+        <form
+            method="get"
+            class="ga-filters"
         >
-            Nueva acta
-        </a>
 
-    </div>
+            <div class="ga-search-container">
 
-
-    <form
-        method="get"
-        class="mb-6 grid gap-3 md:grid-cols-4"
-    >
-
-        <input
-            type="search"
-            name="q"
-            value="{{ consulta }}"
-            placeholder="Número, cédula, estudiante o programa"
-            class="rounded-lg border border-slate-300 px-3 py-2 md:col-span-2"
-        >
-
-
-        <select
-            name="estado"
-            class="rounded-lg border border-slate-300 px-3 py-2"
-        >
-
-            <option value="">
-                Todos los estados
-            </option>
-
-            {% for valor, etiqueta in estados %}
-
-                <option
-                    value="{{ valor }}"
-                    {% if estado_seleccionado == valor %}
-                        selected
-                    {% endif %}
+                <label
+                    for="ga-search"
+                    class="ga-filter-label"
                 >
-                    {{ etiqueta }}
-                </option>
+                    Buscar acta
+                </label>
 
-            {% endfor %}
+                <input
+                    id="ga-search"
+                    type="search"
+                    name="q"
+                    value="{{ consulta }}"
+                    placeholder="Número, estudiante, cédula o programa"
+                    class="ga-control"
+                >
 
-        </select>
+            </div>
 
+            <div>
 
-        <button
-            type="submit"
-            class="btn-secondary"
-        >
-            Buscar
-        </button>
+                <label
+                    for="ga-status"
+                    class="ga-filter-label"
+                >
+                    Estado
+                </label>
 
-    </form>
+                <select
+                    id="ga-status"
+                    name="estado"
+                    class="ga-control"
+                >
 
+                    <option value="">
+                        Todos los estados
+                    </option>
 
-    <div class="overflow-x-auto">
+                    {% for valor, etiqueta in estados %}
 
-        <table class="w-full border-collapse">
+                        <option
+                            value="{{ valor }}"
+                            {% if valor == estado_seleccionado %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ etiqueta }}
+                        </option>
 
-            <thead>
+                    {% endfor %}
 
-                <tr class="bg-slate-100 text-left text-sm">
+                </select>
 
-                    <th class="p-3">
-                        Número
-                    </th>
+            </div>
 
-                    <th class="p-3">
-                        Estudiante
-                    </th>
+            <div class="ga-filter-actions">
 
-                    <th class="p-3">
-                        Cédula
-                    </th>
+                <button
+                    type="submit"
+                    class="ga-search-button"
+                >
+                    Buscar
+                </button>
 
-                    <th class="p-3">
-                        Tipo
-                    </th>
+                <a
+                    href="{{ lista_url }}"
+                    class="ga-clear-button"
+                >
+                    Limpiar
+                </a>
 
-                    <th class="p-3">
-                        Estado
-                    </th>
+            </div>
 
-                    <th class="p-3">
-                        Generación
-                    </th>
+        </form>
 
-                    <th class="p-3">
-                        Acciones
-                    </th>
+        <div class="ga-result-information">
 
-                </tr>
+            {% if total_actas %}
 
-            </thead>
+                Mostrando
+                <strong>{{ total_actas }}</strong>
+                actas.
 
+            {% else %}
 
-            <tbody>
+                No se encontraron actas.
 
-                {% for acta in actas %}
+            {% endif %}
 
-                    <tr class="border-t border-slate-200">
+        </div>
 
-                        <td class="p-3 font-semibold">
-                            {{ acta.numero_acta }}
-                        </td>
+        <div class="ga-table-wrapper">
 
-                        <td class="p-3">
-                            {{ acta.registro.nombres_completos }}
-                        </td>
+            <table class="ga-table">
 
-                        <td class="p-3">
-                            {{ acta.registro.cedula }}
-                        </td>
-
-                        <td class="p-3">
-                            {{ acta.get_tipo_acta_display }}
-                        </td>
-
-                        <td class="p-3">
-
-                            <span
-                                class="
-                                    rounded-full bg-slate-200
-                                    px-3 py-1 text-xs font-semibold
-                                "
-                            >
-                                {{ acta.get_estado_display }}
-                            </span>
-
-                        </td>
-
-                        <td class="p-3">
-                            {{ acta.fecha_generacion|date:"d/m/Y H:i"|default:"Pendiente" }}
-                        </td>
-
-                        <td class="p-3 whitespace-nowrap">
-
-                            <a
-                                href="{% url 'documentos:detalle_acta' acta.pk %}"
-                                class="font-semibold text-blue-700"
-                            >
-                                Ver
-                            </a>
-
-                            <a
-                                href="{% url 'documentos:editar_acta' acta.pk %}"
-                                class="ml-3 font-semibold text-amber-700"
-                            >
-                                Editar
-                            </a>
-
-                        </td>
-
-                    </tr>
-
-                {% empty %}
+                <thead>
 
                     <tr>
-
-                        <td
-                            colspan="7"
-                            class="p-8 text-center text-slate-500"
-                        >
-                            Todavía no existen actas.
-                        </td>
-
+                        <th>Acta</th>
+                        <th>Estudiante</th>
+                        <th>Cédula</th>
+                        <th>Tipo</th>
+                        <th>Estado</th>
+                        <th>Generación</th>
+                        <th>Acciones</th>
                     </tr>
 
-                {% endfor %}
+                </thead>
 
-            </tbody>
+                <tbody>
 
-        </table>
+                    {% for fila in filas_actas %}
 
-    </div>
+                        <tr
+                            data-ga-row
+                            data-ga-status="{{ fila.estado_normalizado }}"
+                        >
 
-</div>
+                            <td>
+
+                                <div class="ga-document">
+
+                                    <span class="ga-document-icon">
+                                        A
+                                    </span>
+
+                                    <div>
+
+                                        <strong class="ga-document-number">
+                                            {{ fila.codigo }}
+                                        </strong>
+
+                                        <small class="ga-document-caption">
+                                            Acta de titulación
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+
+                                <div class="ga-student">
+
+                                    <span class="ga-avatar">
+                                        {{ fila.inicial }}
+                                    </span>
+
+                                    <div>
+
+                                        <strong class="ga-student-name">
+                                            {{ fila.estudiante }}
+                                        </strong>
+
+                                        <small class="ga-student-caption">
+                                            {{ fila.programa }}
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+                                <span class="ga-code">
+                                    {{ fila.cedula }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="ga-type">
+                                    {{ fila.tipo }}
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <span
+                                    class="ga-status ga-status-{{ fila.estado_clase }}"
+                                >
+                                    {{ fila.estado }}
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                {% if fila.fecha %}
+
+                                    <div class="ga-date">
+
+                                        <strong>
+                                            {{ fila.fecha }}
+                                        </strong>
+
+                                        {% if fila.hora %}
+                                            <small>
+                                                {{ fila.hora }}
+                                            </small>
+                                        {% endif %}
+
+                                    </div>
+
+                                {% else %}
+
+                                    <span class="ga-pending">
+                                        Pendiente
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                <div class="ga-actions">
+
+                                    {% if fila.url_detalle %}
+
+                                        <a
+                                            href="{{ fila.url_detalle }}"
+                                            class="ga-action ga-action-view"
+                                        >
+                                            Ver
+                                        </a>
+
+                                    {% endif %}
+
+                                    {% if fila.url_editar %}
+
+                                        <a
+                                            href="{{ fila.url_editar }}"
+                                            class="ga-action ga-action-edit"
+                                        >
+                                            Editar
+                                        </a>
+
+                                    {% endif %}
+
+                                    {% if fila.url_generar %}
+
+                                        <a
+                                            href="{{ fila.url_generar }}"
+                                            class="ga-action ga-action-view"
+                                        >
+                                            Generar
+                                        </a>
+
+                                    {% endif %}
+
+                                    {% if fila.url_word %}
+
+                                        <a
+                                            href="{{ fila.url_word }}"
+                                            class="ga-action ga-action-word"
+                                        >
+                                            Word
+                                        </a>
+
+                                    {% endif %}
+
+                                    {% if fila.url_pdf %}
+
+                                        <a
+                                            href="{{ fila.url_pdf }}"
+                                            class="ga-action ga-action-pdf"
+                                        >
+                                            PDF
+                                        </a>
+
+                                    {% endif %}
+
+                                    {% if not fila.url_detalle and not fila.url_editar and not fila.url_generar and not fila.url_word and not fila.url_pdf %}
+
+                                        <span class="ga-pending">
+                                            Sin acciones
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="ga-empty-cell"
+                            >
+
+                                <div class="ga-empty">
+
+                                    <span class="ga-empty-icon">
+                                        A
+                                    </span>
+
+                                    <h3>
+                                        No existen actas
+                                    </h3>
+
+                                    <p>
+                                        Modifica los filtros o genera
+                                        una nueva acta.
+                                    </p>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</section>
 
 {% endblock %}

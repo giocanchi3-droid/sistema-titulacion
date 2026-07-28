@@ -1,0 +1,113 @@
+﻿/* CORRECCION DEFINITIVA DE ACTAS */
+
+body.app-authenticated .puce-acta-panel-dark,
+body.system-page .puce-acta-panel-dark {
+    border-color: rgba(76, 177, 231, 0.32) !important;
+    color: #eef8ff !important;
+    background: rgba(4, 28, 50, 0.94) !important;
+    background-color: rgba(4, 28, 50, 0.94) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+body.app-authenticated .puce-acta-panel-dark *,
+body.system-page .puce-acta-panel-dark * {
+    color: #eef8ff !important;
+}
+
+/* Etiquetas pequeñas dentro de los campos */
+
+body.app-authenticated .puce-acta-panel-dark small,
+body.app-authenticated .puce-acta-panel-dark label,
+body.app-authenticated .puce-acta-panel-dark [class*="label"],
+body.system-page .puce-acta-panel-dark small,
+body.system-page .puce-acta-panel-dark label,
+body.system-page .puce-acta-panel-dark [class*="label"] {
+    color: #91bad2 !important;
+}
+
+/* Estado dentro del listado de actas */
+
+body.app-authenticated .puce-estado-acta,
+body.system-page .puce-estado-acta {
+    display: inline-flex !important;
+    min-width: 72px !important;
+    min-height: 24px !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border: 1px solid rgba(92, 205, 255, 0.45) !important;
+    border-radius: 999px !important;
+    padding: 4px 10px !important;
+
+    color: #ffffff !important;
+    background: #087bb8 !important;
+    background-color: #087bb8 !important;
+    background-image: none !important;
+
+    box-shadow: 0 4px 12px rgba(0, 108, 174, 0.25) !important;
+
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    opacity: 1 !important;
+}
+
+/* Estado generado */
+
+body.app-authenticated .puce-estado-generada,
+body.system-page .puce-estado-generada {
+    border-color: rgba(76, 194, 255, 0.48) !important;
+    color: #ffffff !important;
+    background: #087bb8 !important;
+}
+
+/* Estado aprobado */
+
+body.app-authenticated .puce-estado-aprobada,
+body.system-page .puce-estado-aprobada {
+    border-color: rgba(79, 224, 151, 0.45) !important;
+    color: #e1ffed !important;
+    background: #15824e !important;
+}
+
+/* Estado anulado */
+
+body.app-authenticated .puce-estado-anulada,
+body.system-page .puce-estado-anulada {
+    border-color: rgba(255, 112, 112, 0.48) !important;
+    color: #ffe5e5 !important;
+    background: #a6343a !important;
+}
+
+/* Valores de los cuadros del acta */
+
+body.app-authenticated .puce-acta-panel-dark p,
+body.app-authenticated .puce-acta-panel-dark span,
+body.app-authenticated .puce-acta-panel-dark strong,
+body.system-page .puce-acta-panel-dark p,
+body.system-page .puce-acta-panel-dark span,
+body.system-page .puce-acta-panel-dark strong {
+    opacity: 1 !important;
+}
+
+/* Tabla del módulo de actas */
+
+body.app-authenticated table td,
+body.system-page table td {
+    color: #eef8ff !important;
+}
+
+body.app-authenticated table th,
+body.system-page table th {
+    color: #ffffff !important;
+}
+
+/* Evitar que clases utilitarias restauren el blanco */
+
+body.app-authenticated .puce-acta-panel-dark.bg-white,
+body.app-authenticated .puce-acta-panel-dark.bg-light,
+body.system-page .puce-acta-panel-dark.bg-white,
+body.system-page .puce-acta-panel-dark.bg-light {
+    background: rgba(4, 28, 50, 0.94) !important;
+}

@@ -214,12 +214,16 @@ def crear_word(acta):
         cols=2,
     )
 
-    tabla_firmas.cells[0].text = (
+    celdas_firmas = [cell for row in tabla_firmas.rows for cell in row.cells]
+
+    celdas_firmas[0].text = (
         "____________________________\n"
         "Secretaría"
     )
 
-    tabla_firmas.cells[1].text = (
+    celdas_firmas = [cell for row in tabla_firmas.rows for cell in row.cells]
+
+    celdas_firmas[1].text = (
         "____________________________\n"
         "Coordinación de carrera"
     )
@@ -584,3 +588,4 @@ def generar_archivos_acta(acta):
     acta.save()
 
     return acta
+

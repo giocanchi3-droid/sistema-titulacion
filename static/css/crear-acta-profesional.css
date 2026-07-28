@@ -1,0 +1,687 @@
+﻿.acta-form-page,
+.acta-form-page * {
+    box-sizing: border-box;
+}
+
+.acta-form-page {
+    width: min(100%, 1500px);
+    margin: 0 auto;
+    padding: 25px;
+    color: #eef8ff;
+}
+
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
+
+.acta-form-hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    overflow: hidden;
+    margin-bottom: 18px;
+    border: 1px solid rgba(72, 176, 230, 0.35);
+    border-radius: 18px;
+    padding: 25px;
+    background:
+        radial-gradient(
+            circle at 87% 12%,
+            rgba(43, 181, 240, 0.20),
+            transparent 34%
+        ),
+        linear-gradient(
+            135deg,
+            rgba(4, 22, 42, 0.96),
+            rgba(5, 48, 78, 0.90)
+        );
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.30);
+    backdrop-filter: blur(16px) saturate(130%);
+}
+
+.acta-form-hero::after {
+    position: absolute;
+    top: -105px;
+    right: -60px;
+    width: 270px;
+    height: 270px;
+    border: 38px solid rgba(80, 202, 255, 0.06);
+    border-radius: 50%;
+    content: "";
+    pointer-events: none;
+}
+
+.acta-form-hero-content,
+.acta-form-progress-card {
+    position: relative;
+    z-index: 1;
+}
+
+.acta-form-eyebrow,
+.acta-form-sidebar-eyebrow {
+    display: inline-block;
+    margin-bottom: 7px;
+    color: #65caf8 !important;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+}
+
+.acta-form-title {
+    margin: 0;
+    color: #ffffff !important;
+    font-size: 26px;
+    font-weight: 850;
+    line-height: 1.15;
+    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.34);
+}
+
+.acta-form-description {
+    max-width: 760px;
+    margin: 8px 0 0;
+    color: #a9c9dc !important;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.acta-form-progress-card {
+    width: 275px;
+    flex: 0 0 275px;
+    border: 1px solid rgba(102, 200, 247, 0.25);
+    border-radius: 13px;
+    padding: 15px;
+    background: rgba(4, 34, 59, 0.68);
+}
+
+.acta-form-progress-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.acta-form-progress-heading span {
+    color: #a0c4d9 !important;
+    font-size: 9px;
+    font-weight: 750;
+}
+
+.acta-form-progress-heading strong {
+    color: #ffffff !important;
+    font-size: 14px;
+}
+
+.acta-form-progress-track {
+    height: 8px;
+    overflow: hidden;
+    margin-top: 10px;
+    border-radius: 999px;
+    background: rgba(64, 137, 180, 0.18);
+}
+
+.acta-form-progress-bar {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #168fd1, #52caff);
+    box-shadow: 0 0 12px rgba(48, 181, 239, 0.32);
+    transition: width 0.25s ease;
+}
+
+.acta-form-progress-card small {
+    display: block;
+    margin-top: 8px;
+    color: #789eb6 !important;
+    font-size: 8px;
+}
+
+/* =========================================================
+   RESUMEN DE ERRORES
+   ========================================================= */
+
+.acta-form-error-summary {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(255, 102, 102, 0.38);
+    border-radius: 13px;
+    padding: 14px;
+    color: #ffe8e8;
+    background: rgba(113, 27, 34, 0.72);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.20);
+}
+
+.acta-form-error-icon {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    place-items: center;
+    border-radius: 11px;
+    color: #ffffff;
+    background: #c8454d;
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.acta-form-error-summary h2 {
+    margin: 0;
+    color: #ffffff !important;
+    font-size: 13px;
+}
+
+.acta-form-error-summary p {
+    margin: 4px 0 0;
+    color: #f4c8cb !important;
+    font-size: 9px;
+}
+
+/* =========================================================
+   DISTRIBUCIÓN
+   ========================================================= */
+
+.acta-form-layout {
+    display: grid;
+    grid-template-columns: 255px minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+}
+
+.acta-form-sidebar {
+    position: sticky;
+    top: 18px;
+    display: grid;
+    gap: 13px;
+}
+
+.acta-form-sidebar-card,
+.acta-form-sidebar-note {
+    border: 1px solid rgba(70, 166, 219, 0.30);
+    border-radius: 15px;
+    padding: 16px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(4, 22, 41, 0.95),
+            rgba(4, 33, 56, 0.90)
+        );
+    box-shadow: 0 10px 27px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(14px);
+}
+
+.acta-form-sidebar-title {
+    margin: 0;
+    color: #ffffff !important;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.acta-form-navigation {
+    display: grid;
+    gap: 7px;
+    margin-top: 14px;
+}
+
+.acta-form-nav-item {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 9px;
+    align-items: center;
+    width: 100%;
+    border: 1px solid rgba(76, 161, 209, 0.16);
+    border-radius: 9px;
+    padding: 8px;
+    color: #b9d3e3;
+    background: rgba(4, 29, 50, 0.64);
+    text-align: left;
+    cursor: pointer;
+    transition:
+        border-color 0.16s ease,
+        background 0.16s ease,
+        transform 0.16s ease;
+}
+
+.acta-form-nav-item:hover,
+.acta-form-nav-item.is-active {
+    border-color: rgba(77, 196, 251, 0.52);
+    color: #ffffff;
+    background: rgba(8, 82, 127, 0.72);
+    transform: translateX(2px);
+}
+
+.acta-form-nav-number {
+    display: grid;
+    width: 28px;
+    height: 28px;
+    place-items: center;
+    border: 1px solid rgba(96, 199, 246, 0.24);
+    border-radius: 8px;
+    color: #ffffff !important;
+    background: rgba(8, 97, 148, 0.72);
+    font-size: 8px;
+    font-weight: 850;
+}
+
+.acta-form-nav-text {
+    color: inherit !important;
+    font-size: 8px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.acta-form-sidebar-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.acta-form-note-symbol {
+    display: grid;
+    width: 29px;
+    height: 29px;
+    flex: 0 0 29px;
+    place-items: center;
+    border: 1px solid rgba(92, 201, 252, 0.30);
+    border-radius: 9px;
+    color: #ffffff !important;
+    background: rgba(8, 94, 143, 0.72);
+    font-size: 11px;
+    font-weight: 850;
+}
+
+.acta-form-sidebar-note strong {
+    color: #ffffff !important;
+    font-size: 9px;
+}
+
+.acta-form-sidebar-note p {
+    margin: 4px 0 0;
+    color: #88abc1 !important;
+    font-size: 8px;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   FORMULARIO
+   ========================================================= */
+
+.acta-main-form {
+    display: grid;
+    min-width: 0;
+    gap: 18px;
+}
+
+.acta-form-section {
+    scroll-margin-top: 18px;
+    border: 1px solid rgba(70, 166, 219, 0.31);
+    border-radius: 17px;
+    padding: 20px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(4, 22, 41, 0.96),
+            rgba(4, 33, 56, 0.91)
+        );
+    box-shadow: 0 12px 31px rgba(0, 0, 0, 0.27);
+    backdrop-filter: blur(15px) saturate(125%);
+}
+
+.acta-form-section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 17px;
+    border-bottom: 1px solid rgba(95, 177, 221, 0.17);
+    padding-bottom: 14px;
+}
+
+.acta-form-section-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+}
+
+.acta-form-section-number {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    place-items: center;
+    border: 1px solid rgba(99, 204, 251, 0.30);
+    border-radius: 11px;
+    color: #ffffff !important;
+    background: linear-gradient(145deg, #168fd1, #07568c);
+    box-shadow: 0 7px 17px rgba(0, 111, 179, 0.23);
+    font-size: 9px;
+    font-weight: 850;
+}
+
+.acta-form-section-title {
+    margin: 0;
+    color: #ffffff !important;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.acta-form-section-description {
+    max-width: 700px;
+    margin: 5px 0 0;
+    color: #91b4c9 !important;
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+.acta-form-section-count {
+    display: inline-flex;
+    border: 1px solid rgba(87, 184, 233, 0.25);
+    border-radius: 999px;
+    padding: 5px 9px;
+    color: #bfe8fb !important;
+    background: rgba(7, 75, 115, 0.47);
+    font-size: 8px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.acta-form-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.acta-form-field {
+    min-width: 0;
+}
+
+.acta-form-field.is-full-width {
+    grid-column: 1 / -1;
+}
+
+.acta-form-label {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-bottom: 7px;
+    color: #dceef9 !important;
+    font-size: 9px;
+    font-weight: 750;
+}
+
+.acta-form-label span {
+    color: inherit !important;
+}
+
+.acta-form-required {
+    color: #ff7373 !important;
+}
+
+.acta-form-control-wrapper input:not([type="checkbox"]):not([type="radio"]),
+.acta-form-control-wrapper select,
+.acta-form-control-wrapper textarea {
+    width: 100% !important;
+    border: 1px solid rgba(77, 166, 216, 0.37) !important;
+    border-radius: 9px !important;
+    padding: 0 11px !important;
+    color: #eef8ff !important;
+    background: rgba(2, 16, 30, 0.90) !important;
+    outline: none !important;
+    box-shadow: none !important;
+    font-size: 10px !important;
+    transition:
+        border-color 0.16s ease,
+        box-shadow 0.16s ease,
+        background 0.16s ease;
+}
+
+.acta-form-control-wrapper input:not([type="checkbox"]):not([type="radio"]),
+.acta-form-control-wrapper select {
+    height: 42px !important;
+}
+
+.acta-form-control-wrapper textarea {
+    min-height: 105px !important;
+    padding-top: 10px !important;
+    resize: vertical;
+}
+
+.acta-form-control-wrapper input:focus,
+.acta-form-control-wrapper select:focus,
+.acta-form-control-wrapper textarea:focus {
+    border-color: #3ebaf2 !important;
+    background: rgba(3, 27, 49, 0.98) !important;
+    box-shadow: 0 0 0 3px rgba(35, 166, 229, 0.17) !important;
+}
+
+.acta-form-control-wrapper input::placeholder,
+.acta-form-control-wrapper textarea::placeholder {
+    color: #6f91a7 !important;
+}
+
+.acta-form-control-wrapper select option {
+    color: #ffffff !important;
+    background: #06192b !important;
+}
+
+.acta-form-control-wrapper input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px !important;
+    accent-color: #168fd1;
+}
+
+.acta-form-field.is-checkbox {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border: 1px solid rgba(77, 163, 212, 0.18);
+    border-radius: 10px;
+    padding: 12px;
+    background: rgba(4, 31, 53, 0.63);
+}
+
+.acta-form-help {
+    display: block;
+    margin-top: 5px;
+    color: #7196ae !important;
+    font-size: 8px;
+    line-height: 1.4;
+}
+
+.acta-form-field-errors {
+    display: grid;
+    gap: 3px;
+    margin-top: 6px;
+}
+
+.acta-form-field-errors span {
+    color: #ff9d9d !important;
+    font-size: 8px;
+    font-weight: 700;
+}
+
+.acta-form-field.has-error input,
+.acta-form-field.has-error select,
+.acta-form-field.has-error textarea {
+    border-color: #e45860 !important;
+    box-shadow: 0 0 0 3px rgba(218, 63, 72, 0.14) !important;
+}
+
+.acta-form-global-errors {
+    border: 1px solid rgba(255, 102, 102, 0.38);
+    border-radius: 11px;
+    padding: 12px;
+    color: #ffdada;
+    background: rgba(113, 27, 34, 0.70);
+}
+
+.acta-form-global-errors p {
+    margin: 0;
+    color: inherit !important;
+    font-size: 9px;
+}
+
+/* =========================================================
+   BARRA DE ACCIONES
+   ========================================================= */
+
+.acta-form-actions {
+    position: sticky;
+    bottom: 12px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border: 1px solid rgba(75, 175, 228, 0.36);
+    border-radius: 15px;
+    padding: 14px 16px;
+    background: rgba(4, 20, 37, 0.96);
+    box-shadow:
+        0 -7px 25px rgba(0, 0, 0, 0.28),
+        0 10px 28px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(17px) saturate(135%);
+}
+
+.acta-form-actions-information {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.acta-form-actions-icon {
+    display: grid;
+    width: 35px;
+    height: 35px;
+    flex: 0 0 35px;
+    place-items: center;
+    border: 1px solid rgba(74, 215, 145, 0.32);
+    border-radius: 10px;
+    color: #ffffff !important;
+    background: rgba(18, 126, 73, 0.72);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.acta-form-actions-information strong {
+    color: #ffffff !important;
+    font-size: 9px;
+}
+
+.acta-form-actions-information p {
+    margin: 3px 0 0;
+    color: #82a7bd !important;
+    font-size: 8px;
+}
+
+.acta-form-actions-buttons {
+    display: flex;
+    gap: 9px;
+}
+
+.acta-form-cancel-button,
+.acta-form-save-button {
+    display: inline-flex;
+    min-height: 41px;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border-radius: 9px;
+    padding: 9px 14px;
+    text-decoration: none;
+    font-size: 9px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.acta-form-cancel-button {
+    border: 1px solid rgba(82, 171, 220, 0.34);
+    color: #d9f2ff !important;
+    background: rgba(7, 45, 74, 0.87);
+}
+
+.acta-form-save-button {
+    border: 1px solid #168fd1;
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #1599df, #07568c);
+    box-shadow: 0 8px 20px rgba(0, 111, 179, 0.28);
+}
+
+.acta-form-save-button:disabled {
+    cursor: wait;
+    opacity: 0.68;
+}
+
+.acta-form-save-symbol {
+    color: #ffffff !important;
+    font-size: 11px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1080px) {
+    .acta-form-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .acta-form-sidebar {
+        position: static;
+    }
+
+    .acta-form-navigation {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 760px) {
+    .acta-form-page {
+        padding: 14px;
+    }
+
+    .acta-form-hero {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 19px;
+    }
+
+    .acta-form-progress-card {
+        width: 100%;
+        flex-basis: auto;
+    }
+
+    .acta-form-navigation {
+        grid-template-columns: 1fr;
+    }
+
+    .acta-form-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .acta-form-field.is-full-width {
+        grid-column: auto;
+    }
+
+    .acta-form-section {
+        padding: 15px;
+    }
+
+    .acta-form-section-header {
+        flex-direction: column;
+    }
+
+    .acta-form-actions {
+        position: static;
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .acta-form-actions-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}

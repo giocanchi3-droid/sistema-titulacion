@@ -1,389 +1,581 @@
-﻿.expediente {
-    display: grid;
-    gap: 1.25rem;
+﻿/* =========================================================
+   EXPEDIENTE DIGITAL PUCE TEC
+   Compatible con el tema oscuro institucional.
+   ========================================================= */
+
+body.app-authenticated .expediente,
+body.system-page .expediente {
+    width: min(100%, 1450px);
+    margin: 0 auto;
+    padding: 26px;
+    color: #eef8ff;
 }
 
-.expediente-header {
+/* =========================================================
+   ENCABEZADO DEL ESTUDIANTE
+   ========================================================= */
+
+body.app-authenticated .expediente-header,
+body.system-page .expediente-header {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
     overflow: hidden;
-    border: 1px solid #dce6f0;
+    margin-bottom: 22px;
+    border: 1px solid rgba(71, 174, 230, 0.36);
     border-radius: 18px;
-    padding: 1.75rem;
+    padding: 24px;
+    color: #ffffff;
     background:
+        radial-gradient(
+            circle at 90% 15%,
+            rgba(37, 164, 225, 0.17),
+            transparent 35%
+        ),
         linear-gradient(
             135deg,
-            #ffffff 0%,
-            #f1f7fd 100%
-        );
-    box-shadow: 0 8px 25px rgba(15, 47, 79, 0.06);
+            rgba(4, 22, 42, 0.93),
+            rgba(5, 43, 72, 0.87)
+        ) !important;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.32);
+    backdrop-filter: blur(15px) saturate(130%);
 }
 
-.expediente-header::after {
+body.app-authenticated .expediente-header::after,
+body.system-page .expediente-header::after {
     position: absolute;
-    top: -80px;
-    right: -70px;
-    width: 220px;
-    height: 220px;
-    border: 35px solid rgba(0, 71, 133, 0.05);
+    top: -95px;
+    right: -75px;
+    width: 240px;
+    height: 240px;
+    border: 34px solid rgba(84, 197, 255, 0.07);
     border-radius: 50%;
     content: "";
+    pointer-events: none;
 }
 
-.expediente-profile {
+body.app-authenticated .expediente-profile,
+body.system-page .expediente-profile {
     position: relative;
     z-index: 1;
     display: flex;
+    min-width: 0;
     align-items: center;
-    gap: 1rem;
+    gap: 16px;
 }
 
-.expediente-avatar {
+body.app-authenticated .expediente-avatar,
+body.system-page .expediente-avatar {
     display: grid;
-    width: 70px;
-    height: 70px;
-    flex: 0 0 auto;
+    width: 72px;
+    height: 72px;
+    flex: 0 0 72px;
     place-items: center;
+    border: 1px solid rgba(142, 222, 255, 0.42);
     border-radius: 20px;
-    color: white;
+    color: #ffffff;
     background:
         linear-gradient(
             145deg,
-            #003b71,
-            #0075bc
-        );
-    box-shadow: 0 12px 25px rgba(0, 59, 113, 0.22);
-    font-size: 1.35rem;
+            #168fd1,
+            #07558a
+        ) !important;
+    box-shadow: 0 12px 27px rgba(0, 116, 183, 0.34);
+    font-size: 25px;
     font-weight: 800;
     text-transform: uppercase;
 }
 
-.expediente-name {
+body.app-authenticated .expediente-name,
+body.system-page .expediente-name {
     margin: 0;
-    color: #17212b;
-    font-size: clamp(1.35rem, 3vw, 2rem);
-    font-weight: 750;
+    color: #ffffff !important;
+    font-size: clamp(22px, 3vw, 31px);
+    font-weight: 800;
+    line-height: 1.15;
+    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.42);
 }
 
-.expediente-meta {
-    margin: 0.35rem 0 0;
-    color: #64748b;
-    font-size: 0.86rem;
+body.app-authenticated .expediente-meta,
+body.system-page .expediente-meta {
+    margin: 7px 0 0;
+    color: #b8d5e8 !important;
+    font-size: 13px;
+    line-height: 1.5;
 }
 
-.expediente-badges {
+body.app-authenticated .expediente-badges,
+body.system-page .expediente-badges {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.45rem;
-    margin-top: 0.75rem;
+    gap: 8px;
+    margin-top: 12px;
 }
 
-.expediente-badge {
+body.app-authenticated .expediente-badge,
+body.system-page .expediente-badge {
     display: inline-flex;
+    min-height: 27px;
     align-items: center;
-    gap: 0.35rem;
+    justify-content: center;
+    border: 1px solid rgba(97, 190, 241, 0.34);
     border-radius: 999px;
-    padding: 0.34rem 0.7rem;
-    color: #004785;
-    background: #e7f1fa;
-    font-size: 0.7rem;
-    font-weight: 700;
+    padding: 5px 10px;
+    color: #dff5ff !important;
+    background: rgba(9, 72, 113, 0.74) !important;
+    font-size: 10px;
+    font-weight: 750;
+    letter-spacing: 0.02em;
 }
 
-.expediente-badge-success {
-    color: #14703e;
-    background: #e4f7eb;
+body.app-authenticated .expediente-badge-success,
+body.system-page .expediente-badge-success {
+    border-color: rgba(61, 208, 137, 0.34) !important;
+    color: #bff7d7 !important;
+    background: rgba(18, 111, 69, 0.54) !important;
 }
 
-.expediente-badge-warning {
-    color: #a34b00;
-    background: #fff1dc;
+body.app-authenticated .expediente-badge-warning,
+body.system-page .expediente-badge-warning {
+    border-color: rgba(255, 181, 77, 0.38) !important;
+    color: #ffe0ad !important;
+    background: rgba(139, 78, 12, 0.57) !important;
 }
 
-.expediente-actions {
+/* =========================================================
+   BOTONES DEL ENCABEZADO
+   ========================================================= */
+
+body.app-authenticated .expediente-actions,
+body.system-page .expediente-actions {
     position: relative;
     z-index: 1;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.6rem;
-    margin-top: 1.25rem;
+    justify-content: flex-end;
+    gap: 9px;
 }
 
-.expediente-button {
+body.app-authenticated .expediente-button,
+body.system-page .expediente-button {
     display: inline-flex;
     min-height: 40px;
     align-items: center;
     justify-content: center;
-    border: 1px solid #d8e2ec;
+    border: 1px solid rgba(91, 183, 233, 0.40) !important;
     border-radius: 10px;
-    padding: 0.6rem 0.9rem;
-    color: #344454;
-    background: white;
+    padding: 9px 14px;
+    color: #ecf8ff !important;
+    background: rgba(7, 43, 71, 0.88) !important;
+    box-shadow: 0 5px 13px rgba(0, 0, 0, 0.17);
     text-decoration: none;
-    font-size: 0.78rem;
-    font-weight: 650;
+    font-size: 11px;
+    font-weight: 750;
+    cursor: pointer;
+    transition:
+        transform 0.16s ease,
+        border-color 0.16s ease,
+        background 0.16s ease;
 }
 
-.expediente-button:hover {
-    border-color: #004785;
-    color: #004785;
+body.app-authenticated .expediente-button:hover,
+body.system-page .expediente-button:hover {
+    border-color: #56c4fa !important;
+    color: #ffffff !important;
+    background: rgba(11, 93, 145, 0.96) !important;
+    transform: translateY(-1px);
 }
 
-.expediente-button-primary {
-    border-color: #004785;
-    color: white;
-    background: #004785;
+body.app-authenticated .expediente-button-primary,
+body.system-page .expediente-button-primary {
+    border-color: #168fd1 !important;
+    color: #ffffff !important;
+    background:
+        linear-gradient(
+            135deg,
+            #1599df,
+            #07568c
+        ) !important;
 }
 
-.expediente-button-primary:hover {
-    border-color: #002f5d;
-    color: white;
-    background: #002f5d;
-}
+/* =========================================================
+   DISTRIBUCIÓN PRINCIPAL
+   ========================================================= */
 
-.expediente-grid {
+body.app-authenticated .expediente-grid,
+body.system-page .expediente-grid {
     display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(290px, 1fr);
-    gap: 1.25rem;
+    grid-template-columns: minmax(0, 2fr) minmax(310px, 0.82fr);
+    gap: 20px;
     align-items: start;
 }
 
-.expediente-main,
-.expediente-sidebar {
+body.app-authenticated .expediente-main,
+body.app-authenticated .expediente-sidebar,
+body.system-page .expediente-main,
+body.system-page .expediente-sidebar {
     display: grid;
-    gap: 1.25rem;
+    min-width: 0;
+    gap: 20px;
 }
 
-.expediente-card {
-    border: 1px solid #dce6f0;
-    border-radius: 15px;
-    padding: 1.25rem;
-    background: white;
-    box-shadow: 0 4px 15px rgba(15, 47, 79, 0.04);
+body.app-authenticated .expediente-sidebar,
+body.system-page .expediente-sidebar {
+    position: sticky;
+    top: 20px;
 }
 
-.expediente-card-header {
+/* =========================================================
+   TARJETAS
+   ========================================================= */
+
+body.app-authenticated .expediente-card,
+body.system-page .expediente-card {
+    overflow: hidden;
+    border: 1px solid rgba(68, 161, 215, 0.30) !important;
+    border-radius: 16px;
+    padding: 20px;
+    color: #edf8ff !important;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(4, 23, 43, 0.93),
+            rgba(4, 31, 54, 0.88)
+        ) !important;
+    box-shadow: 0 11px 29px rgba(0, 0, 0, 0.27) !important;
+    backdrop-filter: blur(14px) saturate(125%);
+}
+
+body.app-authenticated .expediente-card-header,
+body.system-page .expediente-card-header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    gap: 15px;
+    margin-bottom: 17px;
+    border-bottom: 1px solid rgba(104, 183, 225, 0.17);
+    padding-bottom: 14px;
 }
 
-.expediente-card-title {
+body.app-authenticated .expediente-card-title,
+body.system-page .expediente-card-title {
     margin: 0;
-    color: #17212b;
-    font-size: 1rem;
-    font-weight: 750;
+    color: #ffffff !important;
+    font-size: 15px;
+    font-weight: 800;
 }
 
-.expediente-card-description {
-    margin: 0.22rem 0 0;
-    color: #728091;
-    font-size: 0.73rem;
+body.app-authenticated .expediente-card-description,
+body.system-page .expediente-card-description {
+    margin: 5px 0 0;
+    color: #9dbcd0 !important;
+    font-size: 10px;
+    line-height: 1.5;
 }
 
-.expediente-information-grid {
+/* =========================================================
+   INFORMACIÓN PERSONAL, ACADÉMICA Y CALIFICACIONES
+   ========================================================= */
+
+body.app-authenticated .expediente-information-grid,
+body.system-page .expediente-information-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem;
+    gap: 12px;
 }
 
-.expediente-information {
-    border: 1px solid #edf1f5;
+body.app-authenticated .expediente-information,
+body.system-page .expediente-information {
+    min-width: 0;
+    border: 1px solid rgba(88, 171, 218, 0.20) !important;
     border-radius: 11px;
-    padding: 0.8rem;
-    background: #f8fafc;
+    padding: 13px;
+    color: #edf8ff !important;
+    background: rgba(5, 34, 58, 0.78) !important;
+    transition:
+        border-color 0.16s ease,
+        background 0.16s ease;
 }
 
-.expediente-information-full {
+body.app-authenticated .expediente-information:hover,
+body.system-page .expediente-information:hover {
+    border-color: rgba(79, 196, 255, 0.46) !important;
+    background: rgba(8, 51, 84, 0.85) !important;
+}
+
+body.app-authenticated .expediente-information-full,
+body.system-page .expediente-information-full {
     grid-column: 1 / -1;
 }
 
-.expediente-label {
+body.app-authenticated .expediente-label,
+body.system-page .expediente-label {
     margin: 0;
-    color: #8491a0;
-    font-size: 0.62rem;
-    font-weight: 750;
-    letter-spacing: 0.06em;
+    color: #82b6d3 !important;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
 }
 
-.expediente-value {
+body.app-authenticated .expediente-value,
+body.system-page .expediente-value {
     overflow-wrap: anywhere;
-    margin: 0.3rem 0 0;
-    color: #273746;
-    font-size: 0.79rem;
-    font-weight: 600;
+    margin: 7px 0 0;
+    color: #f4faff !important;
+    font-size: 12px;
+    font-weight: 650;
+    line-height: 1.45;
     white-space: pre-wrap;
 }
 
-.expediente-progress-value {
+/* =========================================================
+   PROGRESO
+   ========================================================= */
+
+body.app-authenticated .expediente-progress-value,
+body.system-page .expediente-progress-value {
     margin: 0;
-    color: #003b71;
-    font-size: 2.2rem;
-    font-weight: 800;
+    color: #62c9fa !important;
+    font-size: 43px;
+    font-weight: 850;
     line-height: 1;
+    text-shadow: 0 4px 15px rgba(0, 116, 183, 0.28);
 }
 
-.expediente-progress {
-    height: 10px;
+body.app-authenticated .expediente-progress,
+body.system-page .expediente-progress {
+    height: 11px;
     overflow: hidden;
-    margin-top: 1rem;
+    margin-top: 17px;
+    border: 1px solid rgba(103, 178, 219, 0.20);
     border-radius: 999px;
-    background: #e8eef4;
+    background: rgba(2, 14, 27, 0.84) !important;
 }
 
-.expediente-progress-bar {
+body.app-authenticated .expediente-progress-bar,
+body.system-page .expediente-progress-bar {
     height: 100%;
     border-radius: inherit;
     background:
         linear-gradient(
             90deg,
-            #003b71,
-            #00a3e0
-        );
+            #0875b6,
+            #43c4fb
+        ) !important;
+    box-shadow: 0 0 13px rgba(54, 187, 244, 0.44);
 }
 
-.requisitos-list {
+/* =========================================================
+   REQUISITOS
+   ========================================================= */
+
+body.app-authenticated .requisitos-list,
+body.system-page .requisitos-list {
     display: grid;
-    gap: 0.55rem;
-    margin-top: 1rem;
+    gap: 7px;
 }
 
-.requisito-item {
+body.app-authenticated .requisito-item,
+body.system-page .requisito-item {
     display: flex;
     align-items: flex-start;
-    gap: 0.7rem;
-    border-bottom: 1px solid #edf1f5;
-    padding: 0.65rem 0;
+    gap: 11px;
+    border: 1px solid rgba(89, 171, 216, 0.16);
+    border-radius: 10px;
+    padding: 10px;
+    background: rgba(5, 33, 56, 0.66) !important;
 }
 
-.requisito-item:last-child {
-    border-bottom: 0;
-}
-
-.requisito-icon {
+body.app-authenticated .requisito-icon,
+body.system-page .requisito-icon {
     display: grid;
-    width: 25px;
-    height: 25px;
-    flex: 0 0 auto;
+    width: 27px;
+    height: 27px;
+    flex: 0 0 27px;
     place-items: center;
+    border: 1px solid rgba(83, 221, 150, 0.30);
     border-radius: 50%;
-    color: #14703e;
-    background: #e3f7eb;
-    font-size: 0.75rem;
+    color: #c5f8dc !important;
+    background: rgba(18, 128, 75, 0.49) !important;
+    font-size: 11px;
     font-weight: 900;
 }
 
-.requisito-icon-pending {
-    color: #b42318;
-    background: #fee8e7;
+body.app-authenticated .requisito-icon-pending,
+body.system-page .requisito-icon-pending {
+    border-color: rgba(255, 111, 111, 0.34) !important;
+    color: #ffd0d0 !important;
+    background: rgba(150, 38, 43, 0.54) !important;
 }
 
-.requisito-name {
+body.app-authenticated .requisito-name,
+body.system-page .requisito-name {
     margin: 0;
-    color: #334155;
-    font-size: 0.76rem;
-    font-weight: 700;
+    color: #f4faff !important;
+    font-size: 11px;
+    font-weight: 750;
 }
 
-.requisito-detail {
-    margin: 0.12rem 0 0;
-    color: #8793a1;
-    font-size: 0.66rem;
+body.app-authenticated .requisito-detail,
+body.system-page .requisito-detail {
+    margin: 3px 0 0;
+    color: #9bb9cd !important;
+    font-size: 9px;
+    line-height: 1.4;
 }
 
-.expediente-alert {
+/* =========================================================
+   ALERTAS
+   ========================================================= */
+
+body.app-authenticated .expediente-alert,
+body.system-page .expediente-alert {
     display: flex;
     align-items: flex-start;
-    gap: 0.7rem;
-    margin-top: 0.8rem;
-    border: 1px solid #f5d0a5;
+    gap: 8px;
+    margin-top: 9px;
+    border: 1px solid rgba(255, 181, 72, 0.31) !important;
     border-radius: 10px;
-    padding: 0.75rem;
-    color: #914500;
-    background: #fff8ed;
-    font-size: 0.72rem;
+    padding: 11px;
+    color: #ffe1ad !important;
+    background: rgba(118, 65, 9, 0.46) !important;
+    font-size: 10px;
+    line-height: 1.5;
 }
 
-.expediente-table-wrapper {
+/* =========================================================
+   TABLAS
+   ========================================================= */
+
+body.app-authenticated .expediente-table-wrapper,
+body.system-page .expediente-table-wrapper {
     overflow-x: auto;
+    border: 1px solid rgba(79, 167, 216, 0.20);
+    border-radius: 11px;
 }
 
-.expediente-table {
+body.app-authenticated .expediente-table,
+body.system-page .expediente-table {
     width: 100%;
+    min-width: 650px;
     border-collapse: collapse;
+    color: #edf8ff !important;
+    background: rgba(3, 20, 37, 0.84) !important;
 }
 
-.expediente-table th {
-    padding: 0.7rem;
-    color: #6d7a88;
-    background: #f8fafc;
-    font-size: 0.63rem;
+body.app-authenticated .expediente-table th,
+body.system-page .expediente-table th {
+    border: 0 !important;
+    padding: 11px;
+    color: #ffffff !important;
+    background: rgba(8, 70, 111, 0.96) !important;
+    font-size: 9px;
+    font-weight: 800;
     letter-spacing: 0.05em;
     text-align: left;
     text-transform: uppercase;
 }
 
-.expediente-table td {
-    border-top: 1px solid #edf1f5;
-    padding: 0.75rem;
-    color: #3e4b59;
-    font-size: 0.73rem;
+body.app-authenticated .expediente-table td,
+body.system-page .expediente-table td {
+    border-top: 1px solid rgba(94, 173, 217, 0.16) !important;
+    padding: 11px;
+    color: #eaf7ff !important;
+    background: rgba(3, 21, 39, 0.76) !important;
+    font-size: 10px;
 }
 
-.expediente-empty {
-    border: 1px dashed #cbd8e4;
+body.app-authenticated .expediente-table tbody tr:hover td,
+body.system-page .expediente-table tbody tr:hover td {
+    background: rgba(10, 70, 111, 0.72) !important;
+}
+
+/* =========================================================
+   VACÍOS Y OBSERVACIONES
+   ========================================================= */
+
+body.app-authenticated .expediente-empty,
+body.system-page .expediente-empty {
+    border: 1px dashed rgba(100, 188, 237, 0.34) !important;
     border-radius: 11px;
-    padding: 1.5rem;
-    color: #7b8895;
-    background: #fafcfe;
+    padding: 20px;
+    color: #9fc3da !important;
+    background: rgba(4, 28, 49, 0.67) !important;
     text-align: center;
-    font-size: 0.75rem;
+    font-size: 10px;
 }
 
-.observacion-box {
-    min-height: 90px;
-    border: 1px solid #edf1f5;
+body.app-authenticated .observacion-box,
+body.system-page .observacion-box {
+    min-height: 92px;
+    margin-top: 7px;
+    border: 1px solid rgba(91, 176, 223, 0.20) !important;
     border-radius: 10px;
-    padding: 0.85rem;
-    color: #526170;
-    background: #f8fafc;
-    font-size: 0.76rem;
+    padding: 13px;
+    color: #dceefa !important;
+    background: rgba(3, 23, 42, 0.78) !important;
+    font-size: 11px;
+    line-height: 1.55;
     white-space: pre-wrap;
 }
 
-@media (max-width: 1000px) {
-    .expediente-grid {
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1050px) {
+    body.app-authenticated .expediente-grid,
+    body.system-page .expediente-grid {
         grid-template-columns: 1fr;
+    }
+
+    body.app-authenticated .expediente-sidebar,
+    body.system-page .expediente-sidebar {
+        position: static;
     }
 }
 
-@media (max-width: 680px) {
-    .expediente-header {
-        padding: 1.2rem;
+@media (max-width: 720px) {
+    body.app-authenticated .expediente,
+    body.system-page .expediente {
+        padding: 15px;
     }
 
-    .expediente-profile {
+    body.app-authenticated .expediente-header,
+    body.system-page .expediente-header {
         align-items: flex-start;
+        padding: 18px;
     }
 
-    .expediente-avatar {
-        width: 55px;
-        height: 55px;
-        border-radius: 16px;
+    body.app-authenticated .expediente-avatar,
+    body.system-page .expediente-avatar {
+        width: 56px;
+        height: 56px;
+        flex-basis: 56px;
+        border-radius: 15px;
     }
 
-    .expediente-information-grid {
+    body.app-authenticated .expediente-information-grid,
+    body.system-page .expediente-information-grid {
         grid-template-columns: 1fr;
     }
 
-    .expediente-information-full {
+    body.app-authenticated .expediente-information-full,
+    body.system-page .expediente-information-full {
         grid-column: auto;
     }
 
-    .expediente-actions {
-        display: grid;
-        grid-template-columns: 1fr;
+    body.app-authenticated .expediente-actions,
+    body.system-page .expediente-actions {
+        width: 100%;
+        justify-content: stretch;
+    }
+
+    body.app-authenticated .expediente-actions .expediente-button,
+    body.system-page .expediente-actions .expediente-button {
+        flex: 1;
     }
 }

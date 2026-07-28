@@ -50,3 +50,168 @@
     border: 1px solid #cbd5e1;
     cursor: pointer;
 }
+
+
+
+
+
+
+
+/* SYSTEM_TOP_GAP_FIX_START */
+
+/* Eliminar cualquier separación exterior del documento */
+
+html {
+    width: 100%;
+    min-height: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.system-page {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden;
+}
+
+/* Desactivar fondos o capas heredadas de los cambios del login */
+
+body.system-page::before,
+body.system-page::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* El primer componente no debe dejar espacio arriba */
+
+body.system-page > *:first-child {
+    margin-top: 0 !important;
+}
+
+/* Cubrir los nombres más comunes del contenedor principal */
+
+body.system-page .layout,
+body.system-page .app-layout,
+body.system-page .app-wrapper,
+body.system-page .page-layout,
+body.system-page .dashboard-layout,
+body.system-page .main-layout,
+body.system-page .wrapper,
+body.system-page .app-container {
+    top: 0 !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* El menú debe comenzar exactamente en la parte superior */
+
+body.system-page .sidebar,
+body.system-page .app-sidebar,
+body.system-page .side-menu,
+body.system-page .navigation-sidebar {
+    top: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* Evitar separación sobre el contenido principal */
+
+body.system-page .main,
+body.system-page .app-main,
+body.system-page .main-content,
+body.system-page .page-content,
+body.system-page .content-wrapper {
+    margin-top: 0 !important;
+}
+
+/* Mantener correctamente posicionada la barra superior */
+
+body.system-page .topbar,
+body.system-page .app-topbar,
+body.system-page .main-header,
+body.system-page .page-header-bar {
+    top: 0;
+    margin-top: 0 !important;
+}
+
+/* SYSTEM_TOP_GAP_FIX_END */
+
+
+/* PUCE_LOGO_START */
+
+/* Logo pequeño del menú lateral */
+
+.brand-logo {
+    display: flex !important;
+    width: 48px !important;
+    height: 48px !important;
+    flex: 0 0 48px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    border-radius: 10px !important;
+    padding: 5px !important;
+    background: #ffffff !important;
+}
+
+.brand-logo img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+}
+
+/* Logo del formulario de inicio de sesión */
+
+.puce-login-logo {
+    display: flex !important;
+    width: 68px !important;
+    height: 68px !important;
+    margin: 0 auto 14px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    border-radius: 14px !important;
+    padding: 6px !important;
+    background: #ffffff !important;
+    box-shadow: 0 9px 24px rgba(0, 59, 113, 0.22) !important;
+}
+
+.puce-login-logo img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+}
+
+/* PUCE_LOGO_END */
+
+
+
+
+
+body.app-authenticated .form-section,
+body.app-authenticated .table-container,
+body.app-authenticated .detail-card,
+body.app-authenticated .expediente-card,
+body.app-authenticated .acta-card,
+body.system-page .form-section,
+body.system-page .table-container,
+body.system-page .detail-card,
+body.system-page .expediente-card,
+body.system-page .acta-card {
+    border-color: #d7e1eb !important;
+    background: rgba(255, 255, 255, 0.93) !important;
+    box-shadow: 0 5px 16px rgba(31, 55, 78, 0.05) !important;
+}
+
+
+
+
+
+
+
+
+
+

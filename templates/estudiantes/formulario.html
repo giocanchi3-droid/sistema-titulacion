@@ -1,108 +1,296 @@
 ﻿{% extends "base.html" %}
+{% load static %}
 
 {% block title %}
     {{ titulo }}
 {% endblock %}
 
 {% block page_title %}
-    Matriz de titulación
+    Crear nueva acta
 {% endblock %}
-
 
 {% block content %}
 
-<div class="mx-auto max-w-7xl">
+<link
+    rel="stylesheet"
+    href="{% static 'css/crear-acta-profesional.css' %}?v=1"
+>
 
-    <div class="mb-6">
+<section class="acta-form-page">
 
-        <h1 class="text-2xl font-bold">
-            {{ titulo }}
-        </h1>
+    <header class="acta-form-hero">
 
-        <p class="mt-2 text-slate-500">
-            Complete en una sola página los 44 campos
-            correspondientes a la matriz Excel.
-        </p>
+        <div class="acta-form-hero-content">
 
-    </div>
+            <span class="acta-form-eyebrow">
+                Matriz institucional de titulación
+            </span>
 
+            <h1 class="acta-form-title">
+                {{ titulo }}
+            </h1>
 
-    {% if form.non_field_errors %}
-
-        <div class="mb-6 rounded-lg bg-red-100 p-4 text-red-700">
-
-            {% for error in form.non_field_errors %}
-                <p>{{ error }}</p>
-            {% endfor %}
+            <p class="acta-form-description">
+                Complete la información personal, académica, documental
+                y de titulación. Los campos obligatorios están marcados
+                con un asterisco.
+            </p>
 
         </div>
 
+        <div class="acta-form-progress-card">
+
+            <div class="acta-form-progress-heading">
+
+                <span>
+                    Avance del formulario
+                </span>
+
+                <strong id="acta-progress-percentage">
+                    0%
+                </strong>
+
+            </div>
+
+            <div class="acta-form-progress-track">
+
+                <span
+                    id="acta-progress-bar"
+                    class="acta-form-progress-bar"
+                ></span>
+
+            </div>
+
+            <small id="acta-progress-detail">
+                Preparando campos...
+            </small>
+
+        </div>
+
+    </header>
+
+    {% if form.errors %}
+
+        <section class="acta-form-error-summary">
+
+            <div class="acta-form-error-icon">
+                !
+            </div>
+
+            <div>
+
+                <h2>
+                    Revisa la información ingresada
+                </h2>
+
+                <p>
+                    Existen campos incompletos o con valores que no
+                    cumplen las validaciones del sistema.
+                </p>
+
+            </div>
+
+        </section>
+
     {% endif %}
 
+    <div class="acta-form-layout">
 
-    <form method="post">
+        <aside class="acta-form-sidebar">
 
-        {% csrf_token %}
+            <div class="acta-form-sidebar-card">
 
+                <span class="acta-form-sidebar-eyebrow">
+                    Navegación
+                </span>
 
-        <div class="space-y-6">
+                <h2 class="acta-form-sidebar-title">
+                    Secciones del formulario
+                </h2>
+
+                <nav class="acta-form-navigation">
+
+                    {% for titulo_seccion, campos in secciones %}
+
+                        <button
+                            type="button"
+                            class="acta-form-nav-item {% if forloop.first %}is-active{% endif %}"
+                            data-section-target="acta-section-{{ forloop.counter }}"
+                        >
+
+                            <span class="acta-form-nav-number">
+                                {{ forloop.counter|stringformat:"02d" }}
+                            </span>
+
+                            <span class="acta-form-nav-text">
+                                {{ titulo_seccion }}
+                            </span>
+
+                        </button>
+
+                    {% endfor %}
+
+                </nav>
+
+            </div>
+
+            <div class="acta-form-sidebar-note">
+
+                <span class="acta-form-note-symbol">
+                    i
+                </span>
+
+                <div>
+
+                    <strong>
+                        Información institucional
+                    </strong>
+
+                    <p>
+                        Los datos serán utilizados en el expediente,
+                        las actas y los documentos generados.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+        <form
+            method="post"
+            enctype="multipart/form-data"
+            id="acta-main-form"
+            class="acta-main-form"
+            novalidate
+        >
+
+            {% csrf_token %}
+
+            {% for campo_oculto in form.hidden_fields %}
+                {{ campo_oculto }}
+            {% endfor %}
+
+            {% if form.non_field_errors %}
+
+                <div class="acta-form-global-errors">
+
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
 
             {% for titulo_seccion, campos in secciones %}
 
-                <section class="card">
+                <section
+                    id="acta-section-{{ forloop.counter }}"
+                    class="acta-form-section"
+                    data-form-section
+                >
 
-                    <div class="mb-5 border-b border-slate-200 pb-4">
+                    <header class="acta-form-section-header">
 
-                        <h2 class="text-lg font-bold text-blue-800">
-                            {{ titulo_seccion }}
-                        </h2>
+                        <div class="acta-form-section-heading">
 
-                    </div>
+                            <span class="acta-form-section-number">
+                                {{ forloop.counter|stringformat:"02d" }}
+                            </span>
 
+                            <div>
 
-                    <div class="grid gap-5 md:grid-cols-2">
+                                <h2 class="acta-form-section-title">
+                                    {{ titulo_seccion }}
+                                </h2>
 
-                        {% for field in campos %}
+                                <p class="acta-form-section-description">
+
+                                    {% if forloop.counter == 1 %}
+                                        Datos de identificación, contacto,
+                                        sede y programa académico.
+                                    {% elif forloop.counter == 2 %}
+                                        Cohorte, períodos, modalidad y estado
+                                        del proceso de titulación.
+                                    {% elif forloop.counter == 3 %}
+                                        Cumplimiento de prácticas
+                                        preprofesionales y servicio comunitario.
+                                    {% elif forloop.counter == 4 %}
+                                        Información del tutor y tema del
+                                        trabajo de titulación.
+                                    {% elif forloop.counter == 5 %}
+                                        Registro de los miembros que conforman
+                                        el tribunal.
+                                    {% elif forloop.counter == 6 %}
+                                        Resultados obtenidos durante la
+                                        evaluación del proceso.
+                                    {% else %}
+                                        Observaciones administrativas,
+                                        envío de registro y fecha de grado.
+                                    {% endif %}
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <span class="acta-form-section-count">
+                            {{ campos|length }} campos
+                        </span>
+
+                    </header>
+
+                    <div class="acta-form-fields">
+
+                        {% for campo in campos %}
 
                             <div
-                                class="
-                                    {% if field.field.widget.input_type == 'textarea' %}
-                                        md:col-span-2
-                                    {% endif %}
-                                "
+                                class="acta-form-field {% if campo.errors %}has-error{% endif %}"
+                                data-field-container
                             >
 
                                 <label
-                                    for="{{ field.id_for_label }}"
-                                    class="block font-semibold text-slate-700"
+                                    for="{{ campo.id_for_label }}"
+                                    class="acta-form-label"
                                 >
-                                    {{ field.label }}
 
-                                    {% if field.field.required %}
-                                        <span class="text-red-600">*</span>
+                                    <span>
+                                        {{ campo.label }}
+                                    </span>
+
+                                    {% if campo.field.required %}
+                                        <span class="acta-form-required">
+                                            *
+                                        </span>
                                     {% endif %}
+
                                 </label>
 
+                                <div class="acta-form-control-wrapper">
+                                    {{ campo }}
+                                </div>
 
-                                {{ field }}
+                                {% if campo.help_text %}
 
-
-                                {% if field.help_text %}
-
-                                    <p class="mt-1 text-xs text-slate-500">
-                                        {{ field.help_text }}
-                                    </p>
+                                    <small class="acta-form-help">
+                                        {{ campo.help_text|safe }}
+                                    </small>
 
                                 {% endif %}
 
+                                {% if campo.errors %}
 
-                                {% for error in field.errors %}
+                                    <div class="acta-form-field-errors">
 
-                                    <p class="mt-1 text-sm font-semibold text-red-600">
-                                        {{ error }}
-                                    </p>
+                                        {% for error in campo.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
 
-                                {% endfor %}
+                                    </div>
+
+                                {% endif %}
 
                             </div>
 
@@ -114,35 +302,77 @@
 
             {% endfor %}
 
-        </div>
+            <footer class="acta-form-actions">
 
+                <div class="acta-form-actions-information">
 
-        <div
-            class="
-                sticky bottom-0 mt-6 flex flex-wrap
-                justify-end gap-3 rounded-xl border
-                border-slate-200 bg-white p-4 shadow-lg
-            "
-        >
+                    <span class="acta-form-actions-icon">
+                        ✓
+                    </span>
 
-            <a
-                href="{% url 'estudiantes:lista' %}"
-                class="btn-secondary"
-            >
-                Cancelar
-            </a>
+                    <div>
 
-            <button
-                type="submit"
-                class="btn-primary"
-            >
-                {{ texto_boton }}
-            </button>
+                        <strong>
+                            Verificación final
+                        </strong>
 
-        </div>
+                        <p>
+                            Comprueba los datos antes de guardar la
+                            información institucional.
+                        </p>
 
-    </form>
+                    </div>
 
-</div>
+                </div>
+
+                <div class="acta-form-actions-buttons">
+
+                    {% if registro %}
+
+                        <a
+                            href="{% url 'estudiantes:detalle' registro.pk %}"
+                            class="acta-form-cancel-button"
+                        >
+                            Cancelar
+                        </a>
+
+                    {% else %}
+
+                        <a
+                            href="{% url 'estudiantes:lista' %}"
+                            class="acta-form-cancel-button"
+                        >
+                            Cancelar
+                        </a>
+
+                    {% endif %}
+
+                    <button
+                        type="submit"
+                        id="acta-submit-button"
+                        class="acta-form-save-button"
+                    >
+                        <span class="acta-form-save-symbol">
+                            ✓
+                        </span>
+
+                        <span id="acta-submit-text">
+                            {{ texto_boton }}
+                        </span>
+                    </button>
+
+                </div>
+
+            </footer>
+
+        </form>
+
+    </div>
+
+</section>
+
+<script
+    src="{% static 'js/crear-acta-profesional.js' %}?v=1"
+></script>
 
 {% endblock %}

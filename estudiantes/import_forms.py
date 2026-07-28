@@ -1,4 +1,5 @@
-﻿from django import forms
+from django.conf import settings
+from django import forms
 
 
 class ImportarExcelForm(forms.Form):
@@ -7,7 +8,7 @@ class ImportarExcelForm(forms.Form):
         label="Archivo Excel",
         help_text=(
             "Seleccione la matriz institucional en formato .xlsx. "
-            "El tamaño máximo permitido es de 10 MB."
+            "El tamaño máximo permitido es de 100 MB."
         ),
         widget=forms.ClearableFileInput(
             attrs={
@@ -31,11 +32,11 @@ class ImportarExcelForm(forms.Form):
                 "El archivo debe estar en formato .xlsx."
             )
 
-        limite = 10 * 1024 * 1024
+        limite = settings.MAX_EXCEL_UPLOAD_SIZE
 
         if archivo.size > limite:
             raise forms.ValidationError(
-                "El archivo no puede superar los 10 MB."
+                "El archivo no puede superar los 100 MB."
             )
 
         return archivo

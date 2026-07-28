@@ -1,0 +1,263 @@
+﻿/* =========================================================
+   CORRECCIÓN VISUAL DEL MÓDULO DE ACTAS
+   ========================================================= */
+
+/* Tarjeta principal de visualización del acta */
+
+body.app-authenticated .acta-preview,
+body.app-authenticated .acta-document,
+body.app-authenticated .acta-sheet,
+body.app-authenticated .acta-detail,
+body.app-authenticated .acta-detail-card,
+body.app-authenticated .document-preview,
+body.system-page .acta-preview,
+body.system-page .acta-document,
+body.system-page .acta-sheet,
+body.system-page .acta-detail,
+body.system-page .acta-detail-card,
+body.system-page .document-preview {
+    border: 1px solid rgba(64, 169, 225, 0.34) !important;
+    color: #edf8ff !important;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(4, 22, 41, 0.95),
+            rgba(4, 32, 55, 0.90)
+        ) !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.30) !important;
+    backdrop-filter: blur(14px);
+}
+
+/* Cuadros de información que todavía aparecían blancos */
+
+body.app-authenticated .acta-info-grid > *,
+body.app-authenticated .acta-data-grid > *,
+body.app-authenticated .acta-summary-grid > *,
+body.app-authenticated .acta-details-grid > *,
+body.app-authenticated .acta-preview-grid > *,
+body.app-authenticated .document-info-grid > *,
+body.app-authenticated .acta-field,
+body.app-authenticated .acta-data-item,
+body.app-authenticated .acta-info-item,
+body.app-authenticated .document-field,
+body.app-authenticated .detail-item,
+body.app-authenticated .info-item,
+body.system-page .acta-info-grid > *,
+body.system-page .acta-data-grid > *,
+body.system-page .acta-summary-grid > *,
+body.system-page .acta-details-grid > *,
+body.system-page .acta-preview-grid > *,
+body.system-page .document-info-grid > *,
+body.system-page .acta-field,
+body.system-page .acta-data-item,
+body.system-page .acta-info-item,
+body.system-page .document-field,
+body.system-page .detail-item,
+body.system-page .info-item {
+    border: 1px solid rgba(84, 175, 224, 0.22) !important;
+    border-radius: 9px !important;
+    color: #f1f9ff !important;
+    background: rgba(5, 33, 57, 0.86) !important;
+    box-shadow: none !important;
+}
+
+/* Textos y valores dentro de los cuadros */
+
+body.app-authenticated .acta-field *,
+body.app-authenticated .acta-data-item *,
+body.app-authenticated .acta-info-item *,
+body.app-authenticated .document-field *,
+body.app-authenticated .detail-item *,
+body.app-authenticated .info-item *,
+body.system-page .acta-field *,
+body.system-page .acta-data-item *,
+body.system-page .acta-info-item *,
+body.system-page .document-field *,
+body.system-page .detail-item *,
+body.system-page .info-item * {
+    color: #edf8ff !important;
+}
+
+/* Etiquetas de los campos */
+
+body.app-authenticated .acta-label,
+body.app-authenticated .document-label,
+body.app-authenticated .detail-label,
+body.app-authenticated .info-label,
+body.system-page .acta-label,
+body.system-page .document-label,
+body.system-page .detail-label,
+body.system-page .info-label {
+    color: #8fbdd7 !important;
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* Valores */
+
+body.app-authenticated .acta-value,
+body.app-authenticated .document-value,
+body.app-authenticated .detail-value,
+body.app-authenticated .info-value,
+body.system-page .acta-value,
+body.system-page .document-value,
+body.system-page .detail-value,
+body.system-page .info-value {
+    color: #ffffff !important;
+    font-weight: 650 !important;
+}
+
+/* Encabezado institucional dentro del acta */
+
+body.app-authenticated .acta-preview h1,
+body.app-authenticated .acta-preview h2,
+body.app-authenticated .acta-preview h3,
+body.app-authenticated .acta-document h1,
+body.app-authenticated .acta-document h2,
+body.app-authenticated .acta-document h3,
+body.system-page .acta-preview h1,
+body.system-page .acta-preview h2,
+body.system-page .acta-preview h3,
+body.system-page .acta-document h1,
+body.system-page .acta-document h2,
+body.system-page .acta-document h3 {
+    color: #ffffff !important;
+    text-shadow: 0 2px 7px rgba(0, 0, 0, 0.45);
+}
+
+/* Separadores */
+
+body.app-authenticated .acta-preview hr,
+body.app-authenticated .acta-document hr,
+body.system-page .acta-preview hr,
+body.system-page .acta-document hr {
+    border-color: rgba(115, 193, 235, 0.30) !important;
+}
+
+/* =========================================================
+   ESTADO DEL ACTA EN LA TABLA
+   ========================================================= */
+
+/* Corrige el texto invisible del estado Generada */
+
+body.app-authenticated table .badge,
+body.app-authenticated table .status-badge,
+body.app-authenticated table .estado-badge,
+body.app-authenticated table .acta-status,
+body.app-authenticated table [class*="status-badge"],
+body.app-authenticated table [class*="estado-badge"],
+body.system-page table .badge,
+body.system-page table .status-badge,
+body.system-page table .estado-badge,
+body.system-page table .acta-status,
+body.system-page table [class*="status-badge"],
+body.system-page table [class*="estado-badge"] {
+    display: inline-flex !important;
+    min-height: 24px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(101, 205, 255, 0.38) !important;
+    border-radius: 999px !important;
+    padding: 4px 10px !important;
+    color: #ffffff !important;
+    background: #087bb8 !important;
+    box-shadow: 0 4px 12px rgba(0, 102, 164, 0.24);
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    opacity: 1 !important;
+}
+
+/* Estados específicos */
+
+body.app-authenticated .status-generada,
+body.app-authenticated .estado-generada,
+body.app-authenticated .badge-generada,
+body.system-page .status-generada,
+body.system-page .estado-generada,
+body.system-page .badge-generada {
+    color: #dff7ff !important;
+    background: #087bb8 !important;
+}
+
+body.app-authenticated .status-aprobada,
+body.app-authenticated .estado-aprobada,
+body.app-authenticated .badge-aprobada,
+body.system-page .status-aprobada,
+body.system-page .estado-aprobada,
+body.system-page .badge-aprobada {
+    border-color: rgba(69, 219, 143, 0.38) !important;
+    color: #d7ffe8 !important;
+    background: #147a49 !important;
+}
+
+body.app-authenticated .status-anulada,
+body.app-authenticated .estado-anulada,
+body.app-authenticated .badge-anulada,
+body.system-page .status-anulada,
+body.system-page .estado-anulada,
+body.system-page .badge-anulada {
+    border-color: rgba(255, 113, 113, 0.42) !important;
+    color: #ffe0e0 !important;
+    background: #9c3036 !important;
+}
+
+/* Selector Todos los estados */
+
+body.app-authenticated select,
+body.system-page select {
+    color: #eef8ff !important;
+    background-color: rgba(3, 20, 37, 0.94) !important;
+}
+
+body.app-authenticated select option,
+body.system-page select option {
+    color: #ffffff !important;
+    background: #06192b !important;
+}
+
+/* =========================================================
+   TABLA DEL TRIBUNAL
+   ========================================================= */
+
+body.app-authenticated .acta-preview table th,
+body.app-authenticated .acta-document table th,
+body.system-page .acta-preview table th,
+body.system-page .acta-document table th {
+    color: #ffffff !important;
+    background: rgba(9, 79, 124, 0.95) !important;
+}
+
+body.app-authenticated .acta-preview table td,
+body.app-authenticated .acta-document table td,
+body.system-page .acta-preview table td,
+body.system-page .acta-document table td {
+    color: #edf8ff !important;
+    background: rgba(3, 20, 37, 0.82) !important;
+}
+
+/* Botones laterales del acta */
+
+body.app-authenticated .acta-actions-card,
+body.app-authenticated .document-actions-card,
+body.system-page .acta-actions-card,
+body.system-page .document-actions-card {
+    border: 1px solid rgba(67, 169, 224, 0.32) !important;
+    color: #edf8ff !important;
+    background: rgba(4, 24, 43, 0.92) !important;
+}
+
+/* Corrección para fondos claros definidos directamente */
+
+body.app-authenticated [style*="background: white"],
+body.app-authenticated [style*="background:#fff"],
+body.app-authenticated [style*="background: #fff"],
+body.app-authenticated [style*="background-color: white"],
+body.system-page [style*="background: white"],
+body.system-page [style*="background:#fff"],
+body.system-page [style*="background: #fff"],
+body.system-page [style*="background-color: white"] {
+    color: #edf8ff !important;
+    background: rgba(5, 33, 57, 0.90) !important;
+}

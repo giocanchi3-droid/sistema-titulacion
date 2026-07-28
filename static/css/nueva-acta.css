@@ -1,0 +1,787 @@
+﻿.new-acta-page,
+.new-acta-page * {
+    box-sizing: border-box;
+}
+
+.new-acta-page {
+    width: min(100%, 1420px);
+    margin: 0 auto;
+    padding: 30px;
+    color: #eef8ff;
+}
+
+/* Encabezado */
+
+.new-acta-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    overflow: hidden;
+    margin-bottom: 22px;
+    border: 1px solid rgba(75, 188, 238, 0.36);
+    border-radius: 20px;
+    padding: 26px 28px;
+    background:
+        radial-gradient(
+            circle at 90% 15%,
+            rgba(41, 195, 244, 0.19),
+            transparent 34%
+        ),
+        linear-gradient(
+            120deg,
+            rgba(3, 22, 42, 0.97),
+            rgba(5, 50, 79, 0.92)
+        );
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
+    backdrop-filter: blur(18px);
+}
+
+.new-acta-header::after {
+    position: absolute;
+    top: -120px;
+    right: -55px;
+    width: 300px;
+    height: 300px;
+    border: 42px solid rgba(87, 211, 255, 0.06);
+    border-radius: 50%;
+    content: "";
+}
+
+.new-acta-header-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.new-acta-header-icon {
+    display: grid;
+    width: 58px;
+    height: 58px;
+    flex: 0 0 58px;
+    place-items: center;
+    border: 1px solid rgba(110, 218, 255, 0.42);
+    border-radius: 17px;
+    background:
+        linear-gradient(
+            145deg,
+            #19a7e7,
+            #086191
+        );
+    box-shadow: 0 12px 25px rgba(0, 129, 194, 0.28);
+}
+
+.new-acta-header-icon span {
+    color: #ffffff !important;
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.new-acta-eyebrow,
+.new-acta-sidebar-eyebrow {
+    display: block;
+    margin-bottom: 5px;
+    color: #70d5ff !important;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.new-acta-header h1 {
+    margin: 0;
+    color: #ffffff !important;
+    font-size: 31px;
+    font-weight: 850;
+    line-height: 1.15;
+}
+
+.new-acta-header p {
+    max-width: 760px;
+    margin: 8px 0 0;
+    color: #a9cadc !important;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.new-acta-header-status {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    min-width: 200px;
+    align-items: center;
+    gap: 11px;
+    border: 1px solid rgba(101, 199, 241, 0.25);
+    border-radius: 13px;
+    padding: 13px 15px;
+    background: rgba(3, 29, 50, 0.67);
+}
+
+.new-acta-status-dot {
+    width: 11px;
+    height: 11px;
+    flex: 0 0 11px;
+    border-radius: 50%;
+    background: #ffb33f;
+    box-shadow: 0 0 13px rgba(255, 179, 63, 0.7);
+}
+
+.new-acta-header-status small {
+    display: block;
+    color: #88abc0 !important;
+    font-size: 10px;
+}
+
+.new-acta-header-status strong {
+    display: block;
+    margin-top: 2px;
+    color: #ffffff !important;
+    font-size: 14px;
+}
+
+/* Errores */
+
+.new-acta-errors {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 103, 109, 0.45);
+    border-radius: 14px;
+    padding: 15px;
+    background: rgba(112, 25, 35, 0.82);
+}
+
+.new-acta-error-icon {
+    display: grid;
+    width: 39px;
+    height: 39px;
+    flex: 0 0 39px;
+    place-items: center;
+    border-radius: 11px;
+    color: #ffffff !important;
+    background: #c8444c;
+    font-size: 17px;
+    font-weight: 900;
+}
+
+.new-acta-errors strong {
+    color: #ffffff !important;
+    font-size: 14px;
+}
+
+.new-acta-errors p {
+    margin: 3px 0 0;
+    color: #f2c5c8 !important;
+    font-size: 12px;
+}
+
+/* Distribución */
+
+.new-acta-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 20px;
+    align-items: start;
+}
+
+.new-acta-main {
+    min-width: 0;
+}
+
+.new-acta-form {
+    display: grid;
+    gap: 18px;
+}
+
+.new-acta-form-card {
+    border: 1px solid rgba(68, 172, 222, 0.33);
+    border-radius: 19px;
+    padding: 24px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(3, 21, 39, 0.97),
+            rgba(4, 37, 61, 0.93)
+        );
+    box-shadow: 0 15px 38px rgba(0, 0, 0, 0.30);
+    backdrop-filter: blur(16px);
+}
+
+.new-acta-form-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 23px;
+    border-bottom: 1px solid rgba(90, 177, 219, 0.17);
+    padding-bottom: 18px;
+}
+
+.new-acta-form-card-header > div {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+}
+
+.new-acta-section-number {
+    display: grid;
+    width: 43px;
+    height: 43px;
+    flex: 0 0 43px;
+    place-items: center;
+    border: 1px solid rgba(95, 211, 255, 0.32);
+    border-radius: 13px;
+    color: #ffffff !important;
+    background:
+        linear-gradient(
+            145deg,
+            #168fd1,
+            #075b8e
+        );
+    font-size: 12px;
+    font-weight: 850;
+}
+
+.new-acta-form-card-header h2 {
+    margin: 0;
+    color: #ffffff !important;
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.new-acta-form-card-header p {
+    margin: 5px 0 0;
+    color: #8fb3c8 !important;
+    font-size: 12px;
+}
+
+.new-acta-required-message {
+    border: 1px solid rgba(255, 119, 119, 0.25);
+    border-radius: 999px;
+    padding: 6px 10px;
+    color: #ffb6b6 !important;
+    background: rgba(127, 34, 39, 0.33);
+    font-size: 10px;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+/* Campos */
+
+.new-acta-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.new-acta-field {
+    min-width: 0;
+}
+
+.new-acta-field.is-full-width {
+    grid-column: 1 / -1;
+}
+
+.new-acta-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #e9f6ff !important;
+    font-size: 14px;
+    font-weight: 750;
+}
+
+.new-acta-label span {
+    color: #ff737a !important;
+}
+
+.new-acta-control input:not([type="checkbox"]):not([type="radio"]),
+.new-acta-control select,
+.new-acta-control textarea {
+    width: 100% !important;
+    border: 1px solid rgba(74, 172, 219, 0.46) !important;
+    border-radius: 11px !important;
+    padding: 0 14px !important;
+    color: #ffffff !important;
+    background: rgba(2, 17, 31, 0.94) !important;
+    outline: none !important;
+    box-shadow: none !important;
+    font-size: 14px !important;
+    transition:
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        background 0.18s ease;
+}
+
+.new-acta-control input:not([type="checkbox"]):not([type="radio"]),
+.new-acta-control select {
+    height: 49px !important;
+}
+
+.new-acta-control textarea {
+    min-height: 150px !important;
+    padding-top: 13px !important;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+.new-acta-control input:focus,
+.new-acta-control select:focus,
+.new-acta-control textarea:focus {
+    border-color: #49c8ff !important;
+    background: rgba(3, 30, 51, 0.98) !important;
+    box-shadow:
+        0 0 0 4px rgba(42, 179, 235, 0.16) !important;
+}
+
+.new-acta-control input::placeholder,
+.new-acta-control textarea::placeholder {
+    color: #7194aa !important;
+}
+
+.new-acta-control select option {
+    color: #ffffff !important;
+    background: #06192b !important;
+}
+
+.new-acta-help {
+    display: block;
+    margin-top: 6px;
+    color: #759bb2 !important;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.new-acta-field-errors {
+    display: grid;
+    gap: 3px;
+    margin-top: 7px;
+}
+
+.new-acta-field-errors span {
+    color: #ff9da2 !important;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.new-acta-field.has-error input,
+.new-acta-field.has-error select,
+.new-acta-field.has-error textarea {
+    border-color: #ef626a !important;
+    box-shadow:
+        0 0 0 4px rgba(226, 74, 82, 0.14) !important;
+}
+
+.new-acta-global-errors {
+    border: 1px solid rgba(255, 103, 109, 0.40);
+    border-radius: 12px;
+    padding: 13px;
+    background: rgba(112, 25, 35, 0.78);
+}
+
+.new-acta-global-errors p {
+    margin: 0;
+    color: #ffd9db !important;
+    font-size: 12px;
+}
+
+/* Botones inferiores */
+
+.new-acta-form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border: 1px solid rgba(70, 171, 221, 0.34);
+    border-radius: 17px;
+    padding: 17px 19px;
+    background: rgba(3, 20, 36, 0.96);
+    box-shadow: 0 13px 32px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(17px);
+}
+
+.new-acta-save-information {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.new-acta-save-icon {
+    display: grid;
+    width: 39px;
+    height: 39px;
+    flex: 0 0 39px;
+    place-items: center;
+    border: 1px solid rgba(67, 222, 145, 0.34);
+    border-radius: 11px;
+    color: #ffffff !important;
+    background: rgba(19, 126, 73, 0.76);
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.new-acta-save-information strong {
+    color: #ffffff !important;
+    font-size: 13px;
+}
+
+.new-acta-save-information p {
+    margin: 3px 0 0;
+    color: #819fb3 !important;
+    font-size: 11px;
+}
+
+.new-acta-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.new-acta-cancel-button,
+.new-acta-submit-button {
+    display: inline-flex;
+    min-height: 46px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 10px;
+    padding: 10px 17px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.new-acta-cancel-button {
+    border: 1px solid rgba(96, 179, 222, 0.35);
+    color: #ddf4ff !important;
+    background: rgba(7, 47, 75, 0.89);
+}
+
+.new-acta-submit-button {
+    border: 1px solid #1ca8e6;
+    color: #ffffff !important;
+    background:
+        linear-gradient(
+            135deg,
+            #19a6e7,
+            #0870aa
+        );
+    box-shadow: 0 9px 22px rgba(0, 121, 187, 0.28);
+}
+
+.new-acta-submit-button:disabled {
+    cursor: wait;
+    opacity: 0.68;
+}
+
+.new-acta-submit-icon {
+    color: #ffffff !important;
+    font-size: 18px;
+    line-height: 1;
+}
+
+/* Panel lateral */
+
+.new-acta-sidebar {
+    position: sticky;
+    top: 18px;
+    display: grid;
+    gap: 14px;
+}
+
+.new-acta-progress-card,
+.new-acta-summary-card,
+.new-acta-workflow-card,
+.new-acta-information-card {
+    border: 1px solid rgba(69, 166, 216, 0.31);
+    border-radius: 16px;
+    padding: 17px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(3, 22, 41, 0.96),
+            rgba(4, 35, 57, 0.92)
+        );
+    box-shadow: 0 11px 29px rgba(0, 0, 0, 0.26);
+    backdrop-filter: blur(15px);
+}
+
+.new-acta-progress-card header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.new-acta-progress-card h2,
+.new-acta-summary-card h2,
+.new-acta-workflow-card h2 {
+    margin: 0;
+    color: #ffffff !important;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.new-acta-progress-card header > strong {
+    color: #ffffff !important;
+    font-size: 20px;
+}
+
+.new-acta-progress-track {
+    height: 9px;
+    overflow: hidden;
+    margin-top: 15px;
+    border-radius: 999px;
+    background: rgba(72, 150, 191, 0.18);
+}
+
+.new-acta-progress-bar {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background:
+        linear-gradient(
+            90deg,
+            #1a9ddd,
+            #63d4ff
+        );
+    box-shadow: 0 0 13px rgba(55, 193, 246, 0.38);
+    transition: width 0.25s ease;
+}
+
+.new-acta-progress-card > p {
+    margin: 9px 0 0;
+    color: #809fb4 !important;
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+/* Resumen */
+
+.new-acta-summary-student {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin-top: 15px;
+    border: 1px solid rgba(85, 176, 222, 0.20);
+    border-radius: 12px;
+    padding: 12px;
+    background: rgba(3, 27, 47, 0.69);
+}
+
+.new-acta-student-avatar {
+    display: grid;
+    width: 43px;
+    height: 43px;
+    flex: 0 0 43px;
+    place-items: center;
+    border: 1px solid rgba(105, 212, 255, 0.36);
+    border-radius: 13px;
+    color: #ffffff !important;
+    background:
+        linear-gradient(
+            145deg,
+            #189bd9,
+            #075d91
+        );
+    font-size: 16px;
+    font-weight: 850;
+}
+
+.new-acta-summary-student small {
+    display: block;
+    color: #789bb1 !important;
+    font-size: 10px;
+}
+
+.new-acta-summary-student strong {
+    display: block;
+    margin-top: 3px;
+    color: #ffffff !important;
+    font-size: 12px;
+    line-height: 1.35;
+}
+
+.new-acta-summary-list {
+    display: grid;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.new-acta-summary-item {
+    border: 1px solid rgba(80, 163, 207, 0.17);
+    border-radius: 10px;
+    padding: 10px;
+    background: rgba(3, 28, 48, 0.62);
+}
+
+.new-acta-summary-item span {
+    display: block;
+    color: #789bb1 !important;
+    font-size: 10px;
+}
+
+.new-acta-summary-item strong {
+    display: block;
+    overflow: hidden;
+    margin-top: 4px;
+    color: #eaf8ff !important;
+    font-size: 12px;
+    line-height: 1.4;
+    text-overflow: ellipsis;
+}
+
+/* Flujo */
+
+.new-acta-workflow {
+    position: relative;
+    display: grid;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.new-acta-workflow-item {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+    border: 1px solid rgba(73, 158, 204, 0.16);
+    border-radius: 10px;
+    padding: 9px;
+    background: rgba(3, 27, 47, 0.61);
+    transition:
+        border-color 0.18s ease,
+        background 0.18s ease;
+}
+
+.new-acta-workflow-item > span {
+    display: grid;
+    width: 31px;
+    height: 31px;
+    place-items: center;
+    border: 1px solid rgba(93, 184, 228, 0.25);
+    border-radius: 9px;
+    color: #91b7cd !important;
+    background: rgba(6, 52, 82, 0.75);
+    font-size: 11px;
+    font-weight: 850;
+}
+
+.new-acta-workflow-item strong {
+    display: block;
+    color: #d8ecf7 !important;
+    font-size: 11px;
+}
+
+.new-acta-workflow-item small {
+    display: block;
+    margin-top: 2px;
+    color: #7193a8 !important;
+    font-size: 9px;
+}
+
+.new-acta-workflow-item.is-complete {
+    border-color: rgba(65, 218, 140, 0.34);
+    background: rgba(15, 100, 60, 0.35);
+}
+
+.new-acta-workflow-item.is-complete > span {
+    border-color: rgba(70, 224, 147, 0.35);
+    color: #ffffff !important;
+    background: #167a4e;
+}
+
+/* Información */
+
+.new-acta-information-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+}
+
+.new-acta-information-icon {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    place-items: center;
+    border: 1px solid rgba(99, 207, 255, 0.31);
+    border-radius: 10px;
+    color: #ffffff !important;
+    background: rgba(8, 96, 146, 0.75);
+    font-size: 13px;
+    font-weight: 850;
+}
+
+.new-acta-information-card strong {
+    color: #ffffff !important;
+    font-size: 12px;
+}
+
+.new-acta-information-card p {
+    margin: 4px 0 0;
+    color: #83a4b8 !important;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+/* Responsive */
+
+@media (max-width: 1050px) {
+    .new-acta-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .new-acta-sidebar {
+        position: static;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 720px) {
+    .new-acta-page {
+        padding: 15px;
+    }
+
+    .new-acta-header {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .new-acta-header-content {
+        align-items: flex-start;
+    }
+
+    .new-acta-header-status {
+        width: 100%;
+    }
+
+    .new-acta-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .new-acta-field.is-full-width {
+        grid-column: auto;
+    }
+
+    .new-acta-sidebar {
+        grid-template-columns: 1fr;
+    }
+
+    .new-acta-form-card-header,
+    .new-acta-form-footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .new-acta-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}

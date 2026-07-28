@@ -1,97 +1,335 @@
 ﻿{% extends "base.html" %}
+{% load static %}
 
 {% block title %}
-    Iniciar sesión
+    Iniciar sesión | PUCE TEC
 {% endblock %}
 
-
 {% block public_content %}
+<!-- NUEVO_FONDO_LOGIN_START -->
+<style>
+    .puce-login-page {
+        background-image:
+            linear-gradient(
+                135deg,
+                rgba(2, 22, 48, 0.42),
+                rgba(0, 53, 101, 0.46)
+            ),
+            url("{% static 'img/puce-login-fondo.png' %}") !important;
 
-<div class="flex min-h-screen items-center justify-center bg-slate-900 px-4">
+        background-position: center center !important;
+        background-repeat: no-repeat !important;
+        background-size: cover !important;
+        background-attachment: fixed !important;
+    }
 
-    <div class="w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl">
+    .puce-login-card {
+        background: rgba(255, 255, 255, 0.96) !important;
+        box-shadow: 0 28px 70px rgba(0, 20, 50, 0.42) !important;
+        backdrop-filter: blur(8px);
+    }
 
-        <div class="mb-8 text-center">
+    @media (max-width: 700px) {
+        .puce-login-page {
+            background-position: center center !important;
+            background-attachment: scroll !important;
+        }
+    }
+</style>
+<!-- NUEVO_FONDO_LOGIN_END -->
 
-            <p class="text-sm font-semibold uppercase tracking-widest text-blue-700">
+<style>
+    .puce-login-page,
+    .puce-login-page * {
+        box-sizing: border-box;
+    }
+
+    .puce-login-page {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: grid;
+        min-height: 100vh;
+        min-height: 100dvh;
+        place-items: center;
+        overflow-y: auto;
+        padding: 32px 20px;
+        background-image:
+            linear-gradient(
+                135deg,
+                rgba(3, 20, 45, 0.55),
+                rgba(0, 48, 91, 0.58)
+            ),
+            url("{% static 'img/PUCE_gal1.jpg' %}?v=4");
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    .puce-login-card {
+        width: min(100%, 390px);
+        border: 1px solid rgba(255, 255, 255, 0.72);
+        border-radius: 18px;
+        padding: 35px 30px 30px;
+        background: rgba(255, 255, 255, 0.96);
+        box-shadow:
+            0 28px 70px rgba(0, 18, 45, 0.42);
+        backdrop-filter: blur(10px);
+    }
+
+    .puce-login-brand {
+        margin-bottom: 27px;
+        text-align: center;
+    }
+
+    .puce-login-logo {
+        display: grid;
+        width: 52px;
+        height: 52px;
+        margin: 0 auto 13px;
+        place-items: center;
+        border-radius: 14px;
+        color: white;
+        background:
+            linear-gradient(
+                145deg,
+                #003b71,
+                #006fba
+            );
+        box-shadow:
+            0 10px 25px rgba(0, 59, 113, 0.24);
+        font-size: 19px;
+        font-weight: 800;
+    }
+
+    .puce-login-institution {
+        margin: 0 0 7px;
+        color: #0057d9;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+
+    .puce-login-title {
+        margin: 0;
+        color: #152033;
+        font-size: 22px;
+        font-weight: 750;
+    }
+
+    .puce-login-description {
+        margin: 8px 0 0;
+        color: #718096;
+        font-size: 12px;
+    }
+
+    .puce-login-alert {
+        margin-bottom: 18px;
+        border: 1px solid #f2b8b5;
+        border-radius: 9px;
+        padding: 10px 12px;
+        color: #a61b1b;
+        background: #fff0f0;
+        font-size: 12px;
+    }
+
+    .puce-login-group {
+        margin-bottom: 17px;
+    }
+
+    .puce-login-label {
+        display: block;
+        margin-bottom: 7px;
+        color: #1f2937;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .puce-login-input {
+        width: 100%;
+        height: 43px;
+        border: 1px solid #cbd7e5;
+        border-radius: 9px;
+        padding: 0 13px;
+        color: #172033;
+        background: #f5f8fc;
+        font-size: 13px;
+        outline: none;
+        transition:
+            border-color 0.18s ease,
+            box-shadow 0.18s ease,
+            background 0.18s ease;
+    }
+
+    .puce-login-input:focus {
+        border-color: #0057d9;
+        background: white;
+        box-shadow:
+            0 0 0 3px rgba(0, 87, 217, 0.12);
+    }
+
+    .puce-login-button {
+        width: 100%;
+        min-height: 44px;
+        margin-top: 3px;
+        border: 0;
+        border-radius: 9px;
+        color: white;
+        background:
+            linear-gradient(
+                135deg,
+                #004a8f,
+                #1859dd
+            );
+        box-shadow:
+            0 8px 20px rgba(0, 74, 143, 0.2);
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 700;
+        transition:
+            transform 0.16s ease,
+            box-shadow 0.16s ease;
+    }
+
+    .puce-login-button:hover {
+        transform: translateY(-1px);
+        box-shadow:
+            0 11px 25px rgba(0, 74, 143, 0.28);
+    }
+
+    .puce-login-footer {
+        margin: 20px 0 0;
+        color: #7a8798;
+        font-size: 10px;
+        text-align: center;
+    }
+
+    @media (max-width: 520px) {
+        .puce-login-page {
+            padding: 20px 14px;
+            background-position: 42% center;
+        }
+
+        .puce-login-card {
+            padding: 29px 22px 25px;
+        }
+
+        .puce-login-title {
+            font-size: 20px;
+        }
+    }
+</style>
+
+<div class="puce-login-page">
+
+    <section class="puce-login-card">
+
+        <header class="puce-login-brand">
+
+            <div class="puce-login-logo">
+    <img
+        src="{% static 'img/puce-logo.png' %}"
+        alt="Logo PUCE"
+    >
+</div>
+
+            <p class="puce-login-institution">
                 PUCE TEC
             </p>
 
-            <h1 class="mt-2 text-2xl font-bold">
+            <h1 class="puce-login-title">
                 Sistema de Titulación
             </h1>
 
-            <p class="mt-2 text-sm text-slate-500">
+            <p class="puce-login-description">
                 Acceso para usuarios registrados
             </p>
 
-        </div>
+        </header>
 
         {% if form.errors %}
 
-            <div class="mb-4 rounded-lg bg-red-100 p-3 text-sm text-red-700">
-                Usuario o contraseña incorrectos.
+            <div class="puce-login-alert">
+                El usuario o la contraseña son incorrectos.
             </div>
 
         {% endif %}
 
-        <form
-            method="post"
-            class="space-y-5"
-        >
+        <form method="post">
 
             {% csrf_token %}
 
-            <div>
+            <div class="puce-login-group">
 
                 <label
+                    class="puce-login-label"
                     for="id_username"
-                    class="font-semibold"
                 >
                     Usuario
                 </label>
 
                 <input
+                    class="puce-login-input"
                     type="text"
                     name="username"
                     id="id_username"
-                    autofocus
+                    value="{{ form.username.value|default:'' }}"
+                    placeholder="Ingrese su usuario"
+                    autocomplete="username"
                     required
-                    class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2"
+                    autofocus
                 >
 
             </div>
 
-            <div>
+            <div class="puce-login-group">
 
                 <label
+                    class="puce-login-label"
                     for="id_password"
-                    class="font-semibold"
                 >
                     Contraseña
                 </label>
 
                 <input
+                    class="puce-login-input"
                     type="password"
                     name="password"
                     id="id_password"
+                    placeholder="Ingrese su contraseña"
+                    autocomplete="current-password"
                     required
-                    class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2"
                 >
 
             </div>
 
+            {% if next %}
+                <input
+                    type="hidden"
+                    name="next"
+                    value="{{ next }}"
+                >
+            {% endif %}
+
             <button
+                class="puce-login-button"
                 type="submit"
-                class="btn-primary w-full"
             >
                 Iniciar sesión
             </button>
 
         </form>
 
-    </div>
+        <p class="puce-login-footer">
+            Pontificia Universidad Católica del Ecuador
+        </p>
+
+    </section>
 
 </div>
 
 {% endblock %}
+
+

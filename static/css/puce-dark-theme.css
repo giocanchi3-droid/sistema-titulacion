@@ -1,0 +1,525 @@
+﻿/* =========================================================
+   TEMA INTERNO PUCE
+   Se aplica únicamente después de iniciar sesión.
+   ========================================================= */
+
+body.app-authenticated,
+body.system-page {
+    --puce-bg-dark: #061526;
+    --puce-bg-card: rgba(5, 24, 44, 0.88);
+    --puce-bg-card-strong: rgba(4, 19, 36, 0.96);
+    --puce-bg-control: rgba(3, 17, 32, 0.93);
+    --puce-bg-header: rgba(4, 19, 35, 0.96);
+
+    --puce-border: rgba(75, 166, 218, 0.36);
+    --puce-border-soft: rgba(98, 177, 221, 0.22);
+
+    --puce-text: #f3f9ff;
+    --puce-text-soft: #b7d0e2;
+    --puce-text-muted: #8fabc0;
+    --puce-primary: #168fd1;
+    --puce-primary-dark: #075b93;
+
+    min-height: 100vh !important;
+    color: var(--puce-text) !important;
+
+    background:
+        url("../img/puce-fondo-interno.png")
+        center center / cover
+        no-repeat fixed !important;
+
+    color-scheme: dark;
+}
+
+/* Quitar capas anteriores */
+
+body.app-authenticated::before,
+body.app-authenticated::after,
+body.system-page::before,
+body.system-page::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Contenedores principales transparentes */
+
+body.app-authenticated .app-layout,
+body.app-authenticated .app-main,
+body.app-authenticated .app-content,
+body.app-authenticated .main-content,
+body.app-authenticated .content-wrapper,
+body.app-authenticated .page-content,
+body.app-authenticated main,
+body.system-page .app-layout,
+body.system-page .app-main,
+body.system-page .app-content,
+body.system-page .main-content,
+body.system-page .content-wrapper,
+body.system-page .page-content,
+body.system-page main {
+    background: transparent !important;
+}
+
+/* =========================================================
+   BARRA SUPERIOR
+   ========================================================= */
+
+body.app-authenticated .app-topbar,
+body.app-authenticated .topbar,
+body.app-authenticated .main-header,
+body.app-authenticated .page-topbar,
+body.app-authenticated .app-main > header,
+body.system-page .app-topbar,
+body.system-page .topbar,
+body.system-page .main-header,
+body.system-page .page-topbar,
+body.system-page .app-main > header {
+    border: 0 !important;
+    border-bottom: 1px solid var(--puce-border) !important;
+    color: var(--puce-text) !important;
+    background: var(--puce-bg-header) !important;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.3) !important;
+    backdrop-filter: blur(16px) saturate(130%);
+}
+
+body.app-authenticated .app-topbar *,
+body.app-authenticated .topbar *,
+body.app-authenticated .main-header *,
+body.app-authenticated .page-topbar *,
+body.app-authenticated .app-main > header *,
+body.system-page .app-topbar *,
+body.system-page .topbar *,
+body.system-page .main-header *,
+body.system-page .page-topbar *,
+body.system-page .app-main > header * {
+    color: var(--puce-text) !important;
+}
+
+body.app-authenticated .topbar-subtitle,
+body.app-authenticated .page-subtitle,
+body.system-page .topbar-subtitle,
+body.system-page .page-subtitle {
+    color: var(--puce-text-soft) !important;
+}
+
+/* =========================================================
+   TÍTULOS Y TEXTOS
+   ========================================================= */
+
+body.app-authenticated h1,
+body.app-authenticated h2,
+body.app-authenticated h3,
+body.app-authenticated h4,
+body.app-authenticated h5,
+body.app-authenticated h6,
+body.system-page h1,
+body.system-page h2,
+body.system-page h3,
+body.system-page h4,
+body.system-page h5,
+body.system-page h6 {
+    color: var(--puce-text) !important;
+}
+
+body.app-authenticated .page-title,
+body.app-authenticated .section-title,
+body.app-authenticated .card-title,
+body.system-page .page-title,
+body.system-page .section-title,
+body.system-page .card-title {
+    color: #ffffff !important;
+}
+
+body.app-authenticated p,
+body.app-authenticated span,
+body.app-authenticated small,
+body.system-page p,
+body.system-page span,
+body.system-page small {
+    border-color: inherit;
+}
+
+body.app-authenticated .text-dark,
+body.app-authenticated .text-black,
+body.system-page .text-dark,
+body.system-page .text-black {
+    color: var(--puce-text) !important;
+}
+
+body.app-authenticated .text-secondary,
+body.app-authenticated .text-muted,
+body.app-authenticated .page-description,
+body.app-authenticated .section-description,
+body.system-page .text-secondary,
+body.system-page .text-muted,
+body.system-page .page-description,
+body.system-page .section-description {
+    color: var(--puce-text-soft) !important;
+}
+
+/* =========================================================
+   TARJETAS Y SECCIONES
+   ========================================================= */
+
+body.app-authenticated .card,
+body.app-authenticated .content-card,
+body.app-authenticated .stat-card,
+body.app-authenticated .dashboard-card,
+body.app-authenticated .dashboard-workspace-card,
+body.app-authenticated .form-section,
+body.app-authenticated .form-card,
+body.app-authenticated .search-card,
+body.app-authenticated .filter-card,
+body.app-authenticated .table-container,
+body.app-authenticated .table-card,
+body.app-authenticated .detail-card,
+body.app-authenticated .expediente-card,
+body.app-authenticated .acta-card,
+body.app-authenticated .import-card,
+body.app-authenticated .result-card,
+body.app-authenticated .panel,
+body.system-page .card,
+body.system-page .content-card,
+body.system-page .stat-card,
+body.system-page .dashboard-card,
+body.system-page .dashboard-workspace-card,
+body.system-page .form-section,
+body.system-page .form-card,
+body.system-page .search-card,
+body.system-page .filter-card,
+body.system-page .table-container,
+body.system-page .table-card,
+body.system-page .detail-card,
+body.system-page .expediente-card,
+body.system-page .acta-card,
+body.system-page .import-card,
+body.system-page .result-card,
+body.system-page .panel {
+    border: 1px solid var(--puce-border) !important;
+    color: var(--puce-text) !important;
+    background: var(--puce-bg-card) !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28) !important;
+    backdrop-filter: blur(13px) saturate(125%);
+}
+
+/* Clases Bootstrap que todavía pintaban blanco */
+
+body.app-authenticated .bg-white,
+body.app-authenticated .bg-light,
+body.app-authenticated .background-white,
+body.system-page .bg-white,
+body.system-page .bg-light,
+body.system-page .background-white {
+    color: var(--puce-text) !important;
+    background: var(--puce-bg-card) !important;
+}
+
+/* Bloques internos */
+
+body.app-authenticated .expediente-information,
+body.app-authenticated .observacion-box,
+body.app-authenticated .quick-action,
+body.app-authenticated .list-group-item,
+body.app-authenticated .info-box,
+body.app-authenticated .field-group,
+body.system-page .expediente-information,
+body.system-page .observacion-box,
+body.system-page .quick-action,
+body.system-page .list-group-item,
+body.system-page .info-box,
+body.system-page .field-group {
+    border-color: var(--puce-border-soft) !important;
+    color: var(--puce-text) !important;
+    background: rgba(6, 30, 53, 0.86) !important;
+}
+
+/* =========================================================
+   TABLAS
+   ========================================================= */
+
+body.app-authenticated .table-responsive,
+body.app-authenticated .expediente-table-wrapper,
+body.system-page .table-responsive,
+body.system-page .expediente-table-wrapper {
+    border-radius: 10px;
+    background: transparent !important;
+}
+
+body.app-authenticated table,
+body.app-authenticated .table,
+body.app-authenticated .expediente-table,
+body.system-page table,
+body.system-page .table,
+body.system-page .expediente-table {
+    border-color: var(--puce-border-soft) !important;
+    color: var(--puce-text) !important;
+    background: rgba(3, 17, 32, 0.9) !important;
+}
+
+body.app-authenticated table thead,
+body.app-authenticated .table thead,
+body.app-authenticated .expediente-table thead,
+body.system-page table thead,
+body.system-page .table thead,
+body.system-page .expediente-table thead {
+    color: #ffffff !important;
+    background: rgba(9, 67, 106, 0.96) !important;
+}
+
+body.app-authenticated table th,
+body.app-authenticated .table th,
+body.app-authenticated .expediente-table th,
+body.system-page table th,
+body.system-page .table th,
+body.system-page .expediente-table th {
+    border-color: var(--puce-border-soft) !important;
+    color: #ffffff !important;
+    background: rgba(9, 67, 106, 0.96) !important;
+}
+
+body.app-authenticated table td,
+body.app-authenticated .table td,
+body.app-authenticated .expediente-table td,
+body.system-page table td,
+body.system-page .table td,
+body.system-page .expediente-table td {
+    border-color: var(--puce-border-soft) !important;
+    color: var(--puce-text) !important;
+    background: rgba(3, 18, 34, 0.76) !important;
+}
+
+body.app-authenticated table tbody tr:hover td,
+body.system-page table tbody tr:hover td {
+    background: rgba(10, 66, 104, 0.78) !important;
+}
+
+/* =========================================================
+   FORMULARIOS
+   ========================================================= */
+
+body.app-authenticated label,
+body.app-authenticated legend,
+body.system-page label,
+body.system-page legend {
+    color: var(--puce-text) !important;
+}
+
+body.app-authenticated input,
+body.app-authenticated select,
+body.app-authenticated textarea,
+body.app-authenticated .form-control,
+body.app-authenticated .form-select,
+body.system-page input,
+body.system-page select,
+body.system-page textarea,
+body.system-page .form-control,
+body.system-page .form-select {
+    border: 1px solid var(--puce-border) !important;
+    color: var(--puce-text) !important;
+    background: var(--puce-bg-control) !important;
+    box-shadow: none !important;
+}
+
+body.app-authenticated input::placeholder,
+body.app-authenticated textarea::placeholder,
+body.system-page input::placeholder,
+body.system-page textarea::placeholder {
+    color: var(--puce-text-muted) !important;
+    opacity: 1;
+}
+
+body.app-authenticated input:focus,
+body.app-authenticated select:focus,
+body.app-authenticated textarea:focus,
+body.app-authenticated .form-control:focus,
+body.app-authenticated .form-select:focus,
+body.system-page input:focus,
+body.system-page select:focus,
+body.system-page textarea:focus,
+body.system-page .form-control:focus,
+body.system-page .form-select:focus {
+    border-color: #39b8f2 !important;
+    color: #ffffff !important;
+    background: rgba(3, 25, 46, 0.98) !important;
+    box-shadow: 0 0 0 3px rgba(32, 164, 226, 0.18) !important;
+}
+
+body.app-authenticated option,
+body.system-page option {
+    color: #ffffff !important;
+    background: #06192b !important;
+}
+
+/* Selector de archivos */
+
+body.app-authenticated input[type="file"],
+body.system-page input[type="file"] {
+    padding: 7px !important;
+}
+
+body.app-authenticated input[type="file"]::file-selector-button,
+body.system-page input[type="file"]::file-selector-button {
+    margin-right: 10px;
+    border: 0;
+    border-radius: 7px;
+    padding: 7px 12px;
+    color: #ffffff;
+    background: var(--puce-primary);
+    cursor: pointer;
+}
+
+/* =========================================================
+   BARRAS DE ACCIONES INFERIORES
+   ========================================================= */
+
+body.app-authenticated .form-actions,
+body.app-authenticated .form-footer,
+body.app-authenticated .action-bar,
+body.app-authenticated .actions-bar,
+body.app-authenticated .sticky-actions,
+body.app-authenticated .sticky-footer,
+body.app-authenticated .bottom-actions,
+body.app-authenticated .footer-actions,
+body.system-page .form-actions,
+body.system-page .form-footer,
+body.system-page .action-bar,
+body.system-page .actions-bar,
+body.system-page .sticky-actions,
+body.system-page .sticky-footer,
+body.system-page .bottom-actions,
+body.system-page .footer-actions {
+    border: 1px solid var(--puce-border) !important;
+    border-radius: 12px !important;
+    color: var(--puce-text) !important;
+    background: rgba(4, 19, 35, 0.96) !important;
+    box-shadow: 0 -5px 22px rgba(0, 0, 0, 0.26) !important;
+    backdrop-filter: blur(14px);
+}
+
+/* Contenedores blancos ubicados al final de formularios */
+
+body.app-authenticated form > div:last-child.bg-white,
+body.app-authenticated form > section:last-child.bg-white,
+body.system-page form > div:last-child.bg-white,
+body.system-page form > section:last-child.bg-white {
+    background: var(--puce-bg-card-strong) !important;
+}
+
+/* =========================================================
+   ALERTAS Y RESULTADOS
+   ========================================================= */
+
+body.app-authenticated .alert,
+body.app-authenticated .app-message,
+body.app-authenticated .message,
+body.app-authenticated .notification,
+body.system-page .alert,
+body.system-page .app-message,
+body.system-page .message,
+body.system-page .notification {
+    border: 1px solid var(--puce-border) !important;
+    color: var(--puce-text) !important;
+    background: rgba(6, 35, 60, 0.94) !important;
+}
+
+body.app-authenticated .alert-light,
+body.app-authenticated .alert-secondary,
+body.system-page .alert-light,
+body.system-page .alert-secondary {
+    color: var(--puce-text) !important;
+    background: rgba(8, 39, 67, 0.94) !important;
+}
+
+/* =========================================================
+   BOTONES
+   ========================================================= */
+
+body.app-authenticated .btn-primary,
+body.app-authenticated .btn-puce,
+body.system-page .btn-primary,
+body.system-page .btn-puce {
+    border-color: var(--puce-primary) !important;
+    color: #ffffff !important;
+    background: linear-gradient(
+        135deg,
+        var(--puce-primary),
+        var(--puce-primary-dark)
+    ) !important;
+}
+
+body.app-authenticated .btn-light,
+body.app-authenticated .btn-secondary,
+body.app-authenticated .btn-outline-secondary,
+body.app-authenticated .btn-outline-dark,
+body.app-authenticated .expediente-button,
+body.system-page .btn-light,
+body.system-page .btn-secondary,
+body.system-page .btn-outline-secondary,
+body.system-page .btn-outline-dark,
+body.system-page .expediente-button {
+    border: 1px solid var(--puce-border) !important;
+    color: var(--puce-text) !important;
+    background: rgba(8, 39, 67, 0.94) !important;
+}
+
+body.app-authenticated .btn-light:hover,
+body.app-authenticated .btn-secondary:hover,
+body.app-authenticated .btn-outline-secondary:hover,
+body.app-authenticated .btn-outline-dark:hover,
+body.app-authenticated .expediente-button:hover,
+body.system-page .btn-light:hover,
+body.system-page .btn-secondary:hover,
+body.system-page .btn-outline-secondary:hover,
+body.system-page .btn-outline-dark:hover,
+body.system-page .expediente-button:hover {
+    border-color: #43b8ef !important;
+    color: #ffffff !important;
+    background: rgba(12, 78, 121, 0.98) !important;
+}
+
+/* Enlaces */
+
+body.app-authenticated a:not(.sidebar-link):not(.btn),
+body.system-page a:not(.sidebar-link):not(.btn) {
+    color: #5dc8ff;
+}
+
+body.app-authenticated a:not(.sidebar-link):not(.btn):hover,
+body.system-page a:not(.sidebar-link):not(.btn):hover {
+    color: #a7e3ff;
+}
+
+/* =========================================================
+   MENÚ LATERAL
+   ========================================================= */
+
+body.app-authenticated .app-sidebar,
+body.app-authenticated .sidebar,
+body.app-authenticated .side-menu,
+body.system-page .app-sidebar,
+body.system-page .sidebar,
+body.system-page .side-menu {
+    background: #0b172b !important;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 800px) {
+    body.app-authenticated,
+    body.system-page {
+        background-attachment: scroll !important;
+    }
+
+    body.app-authenticated .card,
+    body.app-authenticated .content-card,
+    body.app-authenticated .form-section,
+    body.app-authenticated .table-container,
+    body.system-page .card,
+    body.system-page .content-card,
+    body.system-page .form-section,
+    body.system-page .table-container {
+        background: rgba(4, 19, 36, 0.94) !important;
+    }
+}

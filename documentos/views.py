@@ -1,4 +1,4 @@
-﻿from django.contrib import messages
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
@@ -304,3 +304,410 @@ def eliminar_acta(request, pk):
             "acta": acta,
         },
     )
+
+# GESTION_ACTAS_SAFE_START
+
+import unicodedata as _ga_unicodedata
+
+from django.contrib.auth.decorators import (
+    login_required as _ga_login_required,
+)
+from django.shortcuts import render as _ga_render
+from django.urls import (
+    NoReverseMatch as _ga_NoReverseMatch,
+)
+from django.urls import reverse as _ga_reverse
+from django.utils.text import slugify as _ga_slugify
+
+from .models import Acta as _GAActa
+
+
+def _ga_safe_value(objeto, *rutas):
+    """
+    Obtiene el primer atributo disponible sin provocar
+    VariableDoesNotExist ni AttributeError.
+    """
+
+    for ruta in rutas:
+        actual = objeto
+
+        try:
+            for parte in ruta.split("."):
+                actual = getattr(actual, parte)
+
+                if callable(actual):
+                    actual = actual()
+
+            if actual is not None and actual != "":
+                return actual
+
+        except Exception:
+            continue
+
+    return ""
+
+
+def _ga_normalize(valor):
+    texto = str(valor or "").strip().lower()
+
+    texto = _ga_unicodedata.normalize(
+        "NFD",
+        texto,
+    )
+
+    return "".join(
+        caracter
+        for caracter in texto
+        if _ga_unicodedata.category(caracter) != "Mn"
+    )
+
+
+def _ga_file_url(objeto, *rutas):
+    archivo = _ga_safe_value(
+        objeto,
+        *rutas,
+    )
+
+    if not archivo:
+        return ""
+
+    try:
+        return archivo.url
+    except Exception:
+        return ""
+
+
+def _ga_reverse_first(nombres, pk=None):
+    for nombre in nombres:
+        ruta = f"documentos:{nombre}"
+
+        try:
+            if pk is None:
+                return _ga_reverse(ruta)
+
+            return _ga_reverse(
+                ruta,
+                args=[pk],
+            )
+
+        except _ga_NoReverseMatch:
+            try:
+                if pk is not None:
+                    return _ga_reverse(
+                        ruta,
+                        kwargs={"pk": pk},
+                    )
+            except _ga_NoReverseMatch:
+                pass
+
+    return ""
+
+
+def _ga_format_date(valor):
+    if not valor:
+        return "", ""
+
+    try:
+        fecha = valor.strftime("%d/%m/%Y")
+    except Exception:
+        fecha = str(valor)
+
+    try:
+        hora = valor.strftime("%H:%M")
+    except Exception:
+        hora = ""
+
+    return fecha, hora
+
+
+def _ga_build_row(acta):
+    codigo = _ga_safe_value(
+        acta,
+        "numero_acta",
+        "codigo",
+        "numero",
+        "id",
+    )
+
+    estudiante = _ga_safe_value(
+        acta,
+        "registro.nombres_completos",
+        "estudiante.nombres_completos",
+        "nombre_estudiante",
+        "registro.nombre",
+        "estudiante.nombre",
+    )
+
+    cedula = _ga_safe_value(
+        acta,
+        "registro.cedula",
+        "estudiante.cedula",
+        "cedula",
+    )
+
+    programa = _ga_safe_value(
+        acta,
+        "registro.programa",
+        "estudiante.programa",
+        "programa",
+    )
+
+    tipo = _ga_safe_value(
+        acta,
+        "get_tipo_acta_display",
+        "get_tipo_display",
+        "tipo_acta",
+        "tipo",
+    )
+
+    estado = _ga_safe_value(
+        acta,
+        "get_estado_display",
+        "estado",
+    )
+
+    estado_original = _ga_safe_value(
+        acta,
+        "estado",
+    )
+
+    fecha_valor = _ga_safe_value(
+        acta,
+        "fecha_generacion",
+        "fecha_creacion",
+        "creado_en",
+        "created_at",
+    )
+
+    fecha, hora = _ga_format_date(
+        fecha_valor
+    )
+
+    estudiante_texto = (
+        str(estudiante).strip()
+        if estudiante
+        else "No registrado"
+    )
+
+    estado_texto = (
+        str(estado).strip()
+        if estado
+        else "Generada"
+    )
+
+    tipo_texto = (
+        str(tipo).strip()
+        if tipo
+        else "Acta de titulación"
+    )
+
+    codigo_texto = (
+        str(codigo).strip()
+        if codigo
+        else f"ACTA-{acta.pk}"
+    )
+
+    return {
+        "pk": acta.pk,
+        "codigo": codigo_texto,
+        "estudiante": estudiante_texto,
+        "inicial": estudiante_texto[:1].upper(),
+        "cedula": (
+            str(cedula).strip()
+            if cedula
+            else "No registrada"
+        ),
+        "programa": (
+            str(programa).strip()
+            if programa
+            else "No registrado"
+        ),
+        "tipo": tipo_texto,
+        "estado": estado_texto,
+        "estado_original": str(
+            estado_original or estado_texto
+        ),
+        "estado_normalizado": _ga_normalize(
+            estado_texto
+        ),
+        "estado_clase": (
+            _ga_slugify(estado_texto)
+            or "generada"
+        ),
+        "fecha": fecha,
+        "hora": hora,
+        "url_detalle": _ga_reverse_first(
+            [
+                "detalle_acta",
+                "acta_detalle",
+                "detalle",
+            ],
+            acta.pk,
+        ),
+        "url_editar": _ga_reverse_first(
+            [
+                "editar_acta",
+                "acta_editar",
+                "editar",
+            ],
+            acta.pk,
+        ),
+        "url_generar": _ga_reverse_first(
+            [
+                "generar_documentos",
+                "generar_acta",
+                "regenerar_acta",
+            ],
+            acta.pk,
+        ),
+        "url_word": _ga_file_url(
+            acta,
+            "archivo_word",
+            "documento_word",
+            "word",
+        ),
+        "url_pdf": _ga_file_url(
+            acta,
+            "archivo_pdf",
+            "documento_pdf",
+            "pdf",
+        ),
+    }
+
+
+@_ga_login_required
+def lista_actas(request):
+    consulta = request.GET.get(
+        "q",
+        "",
+    ).strip()
+
+    estado_seleccionado = request.GET.get(
+        "estado",
+        "",
+    ).strip()
+
+    queryset = _GAActa.objects.all()
+
+    try:
+        queryset = queryset.order_by("-pk")
+    except Exception:
+        pass
+
+    filas_completas = [
+        _ga_build_row(acta)
+        for acta in queryset
+    ]
+
+    estados_disponibles = {}
+
+    for fila in filas_completas:
+        valor = fila["estado_original"]
+        etiqueta = fila["estado"]
+
+        if valor:
+            estados_disponibles[str(valor)] = etiqueta
+
+    filas_filtradas = []
+
+    consulta_normalizada = _ga_normalize(
+        consulta
+    )
+
+    estado_normalizado = _ga_normalize(
+        estado_seleccionado
+    )
+
+    for fila in filas_completas:
+        texto_busqueda = _ga_normalize(
+            " ".join(
+                [
+                    fila["codigo"],
+                    fila["estudiante"],
+                    fila["cedula"],
+                    fila["programa"],
+                    fila["tipo"],
+                    fila["estado"],
+                ]
+            )
+        )
+
+        coincide_busqueda = (
+            not consulta_normalizada
+            or consulta_normalizada in texto_busqueda
+        )
+
+        estado_fila_original = _ga_normalize(
+            fila["estado_original"]
+        )
+
+        coincide_estado = (
+            not estado_normalizado
+            or estado_normalizado
+            in {
+                estado_fila_original,
+                fila["estado_normalizado"],
+            }
+        )
+
+        if coincide_busqueda and coincide_estado:
+            filas_filtradas.append(fila)
+
+    total_generadas = sum(
+        1
+        for fila in filas_filtradas
+        if (
+            "generad" in fila["estado_normalizado"]
+            or "emitid" in fila["estado_normalizado"]
+        )
+    )
+
+    total_aprobadas = sum(
+        1
+        for fila in filas_filtradas
+        if (
+            "aprobad" in fila["estado_normalizado"]
+            or "validad" in fila["estado_normalizado"]
+        )
+    )
+
+    total_anuladas = sum(
+        1
+        for fila in filas_filtradas
+        if (
+            "anulad" in fila["estado_normalizado"]
+            or "cancelad" in fila["estado_normalizado"]
+        )
+    )
+
+    contexto = {
+        "filas_actas": filas_filtradas,
+        "consulta": consulta,
+        "estado_seleccionado": estado_seleccionado,
+        "estados": sorted(
+            estados_disponibles.items(),
+            key=lambda item: item[1],
+        ),
+        "total_actas": len(filas_filtradas),
+        "total_generadas": total_generadas,
+        "total_aprobadas": total_aprobadas,
+        "total_anuladas": total_anuladas,
+        "lista_url": request.path,
+        "crear_url": _ga_reverse_first(
+            [
+                "crear_acta",
+                "nueva_acta",
+                "seleccionar_estudiante",
+                "generar",
+            ]
+        ),
+    }
+
+    return _ga_render(
+        request,
+        "documentos/lista_actas.html",
+        contexto,
+    )
+
+
+# GESTION_ACTAS_SAFE_END

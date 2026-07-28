@@ -1,97 +1,479 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
+{% load static %}
 
 {% block title %}
-    Dashboard
+    Panel de control
 {% endblock %}
 
 {% block page_title %}
     Panel de control
 {% endblock %}
 
-
 {% block content %}
 
-<div class="mb-6">
+<link
+    rel="stylesheet"
+    href="{% static 'css/dashboard-profesional.css' %}?v=1"
+>
 
-    <h1 class="text-2xl font-bold">
-        Bienvenido, {{ user.username }}
-    </h1>
+{% widthratio procesos_activos total_estudiantes 100 as porcentaje_activos %}
+{% widthratio procesos_aprobados total_estudiantes 100 as porcentaje_aprobados %}
+{% widthratio actas_generadas total_estudiantes 100 as porcentaje_actas %}
 
-    <p class="mt-1 text-slate-500">
-        Resumen general del proceso de titulación.
-    </p>
+<section class="dashboard-pro">
 
-</div>
+    <header class="dashboard-pro-hero">
 
+        <div class="dashboard-pro-hero-content">
 
-<div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <span class="dashboard-pro-eyebrow">
+                Gestión académica institucional
+            </span>
 
-    <div class="card">
+            <h1 class="dashboard-pro-title">
+                Bienvenido, {{ user.get_full_name|default:user.username }}
+            </h1>
 
-        <p class="text-sm text-slate-500">
-            Estudiantes
-        </p>
+            <p class="dashboard-pro-description">
+                Consulta el avance general de los procesos de titulación,
+                estudiantes registrados y documentación generada.
+            </p>
 
-        <p class="mt-2 text-3xl font-bold">
-            {{ total_estudiantes }}
-        </p>
+        </div>
 
-    </div>
+        <div class="dashboard-pro-period">
 
+            <span class="dashboard-pro-period-label">
+                Sistema
+            </span>
 
-    <div class="card">
+            <strong class="dashboard-pro-period-value">
+                PUCE TEC
+            </strong>
 
-        <p class="text-sm text-slate-500">
-            Procesos activos
-        </p>
+            <span class="dashboard-pro-period-detail">
+                Automatización del proceso de titulación
+            </span>
 
-        <p class="mt-2 text-3xl font-bold">
-            {{ procesos_activos }}
-        </p>
+        </div>
 
-    </div>
+    </header>
 
+    <section class="dashboard-pro-stats">
 
-    <div class="card">
+        <article class="dashboard-pro-stat">
 
-        <p class="text-sm text-slate-500">
-            Procesos aprobados
-        </p>
+            <div class="dashboard-pro-stat-heading">
 
-        <p class="mt-2 text-3xl font-bold">
-            {{ procesos_aprobados }}
-        </p>
+                <span class="dashboard-pro-stat-icon">
+                    E
+                </span>
 
-    </div>
+                <span class="dashboard-pro-stat-label">
+                    Estudiantes
+                </span>
 
+            </div>
 
-    <div class="card">
+            <strong class="dashboard-pro-stat-value">
+                {{ total_estudiantes|default:0 }}
+            </strong>
 
-        <p class="text-sm text-slate-500">
-            Actas generadas
-        </p>
+            <span class="dashboard-pro-stat-detail">
+                Registros académicos almacenados
+            </span>
 
-        <p class="mt-2 text-3xl font-bold">
-            {{ actas_generadas }}
-        </p>
+            <div class="dashboard-pro-stat-line"></div>
 
-    </div>
+        </article>
 
-</div>
+        <article class="dashboard-pro-stat dashboard-pro-stat-active">
 
+            <div class="dashboard-pro-stat-heading">
 
-<div class="card mt-6">
+                <span class="dashboard-pro-stat-icon">
+                    P
+                </span>
 
-    <h2 class="text-lg font-bold">
-        Módulos del sistema
-    </h2>
+                <span class="dashboard-pro-stat-label">
+                    Procesos activos
+                </span>
 
-    <p class="mt-2 text-slate-500">
-        En los siguientes pasos agregaremos estudiantes,
-        procesos de titulación, documentos, actas, reportes
-        e importación de archivos Excel.
-    </p>
+            </div>
 
-</div>
+            <strong class="dashboard-pro-stat-value">
+                {{ procesos_activos|default:0 }}
+            </strong>
+
+            <span class="dashboard-pro-stat-detail">
+                Procesos actualmente en desarrollo
+            </span>
+
+            <div class="dashboard-pro-stat-line"></div>
+
+        </article>
+
+        <article class="dashboard-pro-stat dashboard-pro-stat-approved">
+
+            <div class="dashboard-pro-stat-heading">
+
+                <span class="dashboard-pro-stat-icon">
+                    A
+                </span>
+
+                <span class="dashboard-pro-stat-label">
+                    Procesos aprobados
+                </span>
+
+            </div>
+
+            <strong class="dashboard-pro-stat-value">
+                {{ procesos_aprobados|default:0 }}
+            </strong>
+
+            <span class="dashboard-pro-stat-detail">
+                Procesos finalizados correctamente
+            </span>
+
+            <div class="dashboard-pro-stat-line"></div>
+
+        </article>
+
+        <article class="dashboard-pro-stat dashboard-pro-stat-documents">
+
+            <div class="dashboard-pro-stat-heading">
+
+                <span class="dashboard-pro-stat-icon">
+                    D
+                </span>
+
+                <span class="dashboard-pro-stat-label">
+                    Actas generadas
+                </span>
+
+            </div>
+
+            <strong class="dashboard-pro-stat-value">
+                {{ actas_generadas|default:0 }}
+            </strong>
+
+            <span class="dashboard-pro-stat-detail">
+                Documentos Word y PDF emitidos
+            </span>
+
+            <div class="dashboard-pro-stat-line"></div>
+
+        </article>
+
+    </section>
+
+    <section class="dashboard-pro-main-grid">
+
+        <article class="dashboard-pro-card dashboard-pro-progress-card">
+
+            <div class="dashboard-pro-card-header">
+
+                <div>
+
+                    <span class="dashboard-pro-card-eyebrow">
+                        Indicador principal
+                    </span>
+
+                    <h2 class="dashboard-pro-card-title">
+                        Avance general de aprobación
+                    </h2>
+
+                    <p class="dashboard-pro-card-description">
+                        Relación entre estudiantes registrados y procesos
+                        que alcanzaron el estado aprobado.
+                    </p>
+
+                </div>
+
+                <span class="dashboard-pro-status-badge">
+                    Actualizado
+                </span>
+
+            </div>
+
+            <div class="dashboard-pro-progress-content">
+
+                <div
+                    class="dashboard-pro-ring"
+                    style="--progress: {{ porcentaje_aprobados|default:'0' }};"
+                >
+
+                    <div class="dashboard-pro-ring-center">
+
+                        <strong>
+                            {{ porcentaje_aprobados|default:0 }}%
+                        </strong>
+
+                        <span>
+                            Aprobación
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="dashboard-pro-progress-summary">
+
+                    <div class="dashboard-pro-progress-summary-item">
+
+                        <span>
+                            Total registrado
+                        </span>
+
+                        <strong>
+                            {{ total_estudiantes|default:0 }}
+                        </strong>
+
+                    </div>
+
+                    <div class="dashboard-pro-progress-summary-item">
+
+                        <span>
+                            Procesos aprobados
+                        </span>
+
+                        <strong>
+                            {{ procesos_aprobados|default:0 }}
+                        </strong>
+
+                    </div>
+
+                    <div class="dashboard-pro-progress-summary-item">
+
+                        <span>
+                            Procesos activos
+                        </span>
+
+                        <strong>
+                            {{ procesos_activos|default:0 }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </article>
+
+        <article class="dashboard-pro-card">
+
+            <div class="dashboard-pro-card-header">
+
+                <div>
+
+                    <span class="dashboard-pro-card-eyebrow">
+                        Seguimiento
+                    </span>
+
+                    <h2 class="dashboard-pro-card-title">
+                        Indicadores del proceso
+                    </h2>
+
+                    <p class="dashboard-pro-card-description">
+                        Distribución porcentual respecto al total de estudiantes.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="dashboard-pro-indicators">
+
+                <div class="dashboard-pro-indicator">
+
+                    <div class="dashboard-pro-indicator-header">
+
+                        <span>
+                            Procesos activos
+                        </span>
+
+                        <strong>
+                            {{ porcentaje_activos|default:0 }}%
+                        </strong>
+
+                    </div>
+
+                    <div class="dashboard-pro-bar">
+
+                        <span
+                            class="dashboard-pro-bar-fill dashboard-pro-bar-active"
+                            style="width: {{ porcentaje_activos|default:'0' }}%;"
+                        ></span>
+
+                    </div>
+
+                    <small>
+                        {{ procesos_activos|default:0 }}
+                        procesos en desarrollo
+                    </small>
+
+                </div>
+
+                <div class="dashboard-pro-indicator">
+
+                    <div class="dashboard-pro-indicator-header">
+
+                        <span>
+                            Procesos aprobados
+                        </span>
+
+                        <strong>
+                            {{ porcentaje_aprobados|default:0 }}%
+                        </strong>
+
+                    </div>
+
+                    <div class="dashboard-pro-bar">
+
+                        <span
+                            class="dashboard-pro-bar-fill dashboard-pro-bar-approved"
+                            style="width: {{ porcentaje_aprobados|default:'0' }}%;"
+                        ></span>
+
+                    </div>
+
+                    <small>
+                        {{ procesos_aprobados|default:0 }}
+                        procesos completados
+                    </small>
+
+                </div>
+
+                <div class="dashboard-pro-indicator">
+
+                    <div class="dashboard-pro-indicator-header">
+
+                        <span>
+                            Actas generadas
+                        </span>
+
+                        <strong>
+                            {{ porcentaje_actas|default:0 }}%
+                        </strong>
+
+                    </div>
+
+                    <div class="dashboard-pro-bar">
+
+                        <span
+                            class="dashboard-pro-bar-fill dashboard-pro-bar-documents"
+                            style="width: {{ porcentaje_actas|default:'0' }}%;"
+                        ></span>
+
+                    </div>
+
+                    <small>
+                        {{ actas_generadas|default:0 }}
+                        documentos emitidos
+                    </small>
+
+                </div>
+
+            </div>
+
+        </article>
+
+    </section>
+
+    <section class="dashboard-pro-bottom-grid">
+
+        <article class="dashboard-pro-card">
+
+            <div class="dashboard-pro-card-header">
+
+                <div>
+
+                    <span class="dashboard-pro-card-eyebrow">
+                        Resumen académico
+                    </span>
+
+                    <h2 class="dashboard-pro-card-title">
+                        Situación actual
+                    </h2>
+
+                </div>
+
+            </div>
+
+            <div class="dashboard-pro-summary-list">
+
+                <div class="dashboard-pro-summary-item">
+
+                    <span class="dashboard-pro-summary-symbol">
+                        01
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Registro de estudiantes
+                        </strong>
+
+                        <p>
+                            Se encuentran registrados
+                            {{ total_estudiantes|default:0 }}
+                            estudiantes en la matriz de titulación.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="dashboard-pro-summary-item">
+
+                    <span class="dashboard-pro-summary-symbol">
+                        02
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Seguimiento de procesos
+                        </strong>
+
+                        <p>
+                            Actualmente existen
+                            {{ procesos_activos|default:0 }}
+                            procesos activos para seguimiento.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="dashboard-pro-summary-item">
+
+                    <span class="dashboard-pro-summary-symbol">
+                        03
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Gestión documental
+                        </strong>
+
+                        <p>
+                            El sistema registra
+                            {{ actas_generadas|default:0 }}
+                            actas generadas en Word y PDF.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </article>
+</section>
+
+</section>
 
 {% endblock %}
