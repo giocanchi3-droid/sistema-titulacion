@@ -1,0 +1,679 @@
+﻿:root {
+    --puce-navy-950: #041934;
+    --puce-navy-900: #05254B;
+    --puce-blue-700: #0A4F8A;
+    --puce-blue-500: #2C7FB8;
+    --puce-blue-300: #79B9E8;
+
+    --puce-white: #FFFFFF;
+    --puce-surface: #F5F8FC;
+    --puce-border: #D5DFEA;
+
+    --puce-text: #152238;
+    --puce-muted: #64748B;
+
+    --danger: #DC2626;
+}
+
+/* =========================
+   ESTRUCTURA GENERAL
+========================= */
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    background: var(--puce-surface);
+    color: var(--puce-text);
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar,
+aside {
+    background:
+        linear-gradient(
+            180deg,
+            #041934 0%,
+            #05254B 100%
+        ) !important;
+
+    color: #FFFFFF !important;
+
+    border-right: 1px solid rgba(121, 185, 232, 0.18);
+}
+
+.sidebar h1,
+.sidebar h2,
+.sidebar h3,
+.sidebar p,
+.sidebar span,
+.sidebar small,
+aside h1,
+aside h2,
+aside h3 {
+    color: #FFFFFF;
+}
+
+/* Enlaces del menú */
+
+.sidebar a,
+aside a {
+    color: #DDEEFF !important;
+
+    border-radius: 8px;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.sidebar a:hover,
+aside a:hover {
+    color: #FFFFFF !important;
+
+    background: rgba(121, 185, 232, 0.14) !important;
+}
+
+/* Opción activa */
+
+.sidebar a.active,
+aside a.active {
+    color: #FFFFFF !important;
+
+    background: #0A4F8A !important;
+
+    box-shadow:
+        inset 3px 0 0 #79B9E8;
+}
+
+/* =========================
+   CONTENIDO PRINCIPAL
+========================= */
+
+main {
+    background: #F5F8FC;
+}
+
+.page-header,
+.content-header {
+    background:
+        linear-gradient(
+            135deg,
+            #041934,
+            #05254B
+        ) !important;
+
+    color: #FFFFFF !important;
+
+    border-radius: 10px;
+}
+
+.page-header h1,
+.page-header h2,
+.page-header p,
+.content-header h1,
+.content-header h2,
+.content-header p {
+    color: #FFFFFF !important;
+}
+
+/* =========================
+   TARJETAS
+========================= */
+
+.card,
+.dashboard-card,
+.panel {
+    background: #FFFFFF !important;
+
+    border: 1px solid #D5DFEA !important;
+
+    border-radius: 10px !important;
+
+    box-shadow:
+        0 3px 12px rgba(4, 25, 52, 0.06);
+}
+
+.card:hover,
+.dashboard-card:hover {
+    border-color: #79B9E8 !important;
+}
+
+/* =========================
+   TÍTULOS
+========================= */
+
+h1,
+h2,
+h3,
+h4 {
+    color: #041934;
+}
+
+/* =========================
+   BOTONES
+========================= */
+
+.btn-primary,
+button[type="submit"],
+.button-primary {
+    background: #0A4F8A !important;
+
+    color: #FFFFFF !important;
+
+    border: 1px solid #0A4F8A !important;
+
+    border-radius: 7px !important;
+}
+
+.btn-primary:hover,
+button[type="submit"]:hover,
+.button-primary:hover {
+    background: #063A69 !important;
+
+    border-color: #063A69 !important;
+}
+
+/* Botones secundarios */
+
+.btn-secondary {
+    background: #FFFFFF !important;
+
+    color: #05254B !important;
+
+    border: 1px solid #8B9CB2 !important;
+}
+
+.btn-secondary:hover {
+    background: #E3EFF9 !important;
+}
+
+/* Eliminar */
+
+.btn-danger,
+.delete-button {
+    background: #DC2626 !important;
+    color: #FFFFFF !important;
+}
+
+/* =========================
+   FORMULARIOS
+========================= */
+
+input,
+select,
+textarea {
+    background: #FFFFFF !important;
+
+    color: #152238 !important;
+
+    border: 1px solid #C9D5E3 !important;
+
+    border-radius: 7px !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none !important;
+
+    border-color: #2C7FB8 !important;
+
+    box-shadow:
+        0 0 0 3px rgba(44, 127, 184, 0.12) !important;
+}
+
+/* =========================
+   TABLAS
+========================= */
+
+table {
+    background: #FFFFFF;
+}
+
+thead {
+    background: #05254B !important;
+
+    color: #FFFFFF !important;
+}
+
+thead th {
+    color: #FFFFFF !important;
+}
+
+tbody tr:hover {
+    background: #F1F7FC !important;
+}
+
+/* =========================
+   ALERTAS
+========================= */
+
+.alert-success {
+    background: #EAF7F1 !important;
+    color: #166534 !important;
+}
+
+.alert-info {
+    background: #E8F4FC !important;
+    color: #075985 !important;
+}
+
+.alert-error,
+.alert-danger {
+    background: #FEECEC !important;
+    color: #991B1B !important;
+}
+
+/* =========================================================
+   FONDO INSTITUCIONAL GENERAL
+   Se aplica a TODO excepto la pantalla de login
+========================================================= */
+
+body:not(.login-page) {
+    min-height: 100vh;
+
+    background-image:
+        linear-gradient(
+            rgba(4, 25, 52, 0.50),
+            rgba(4, 25, 52, 0.58)
+        ),
+        url("/static/img/fondo-puce.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+
+/* El contenido principal deja ver la imagen */
+
+body:not(.login-page) main {
+    background: transparent !important;
+}
+
+
+/* Contenedores generales */
+
+body:not(.login-page) .content,
+body:not(.login-page) .main-content,
+body:not(.login-page) .page-content,
+body:not(.login-page) .container-fluid {
+    background: transparent !important;
+}
+
+
+/* Sidebar oscuro semitransparente */
+
+body:not(.login-page) .sidebar,
+body:not(.login-page) aside {
+    background:
+        rgba(4, 25, 52, 0.92) !important;
+
+    backdrop-filter: blur(8px);
+
+    border-right:
+        1px solid rgba(121, 185, 232, 0.20);
+}
+
+
+/* Tarjetas para que sigan siendo legibles */
+
+body:not(.login-page) .card,
+body:not(.login-page) .dashboard-card,
+body:not(.login-page) .panel {
+    background:
+        rgba(255, 255, 255, 0.94) !important;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.35) !important;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.14);
+
+    backdrop-filter: blur(7px);
+}
+
+
+/* Formularios */
+
+body:not(.login-page) form {
+    background:
+        rgba(255, 255, 255, 0.94);
+
+    border-radius: 10px;
+}
+
+
+/* Tablas */
+
+body:not(.login-page) table {
+    background:
+        rgba(255, 255, 255, 0.96) !important;
+}
+
+
+/* Encabezados internos */
+
+body:not(.login-page) .page-header,
+body:not(.login-page) .content-header {
+    background:
+        rgba(4, 25, 52, 0.88) !important;
+
+    backdrop-filter: blur(6px);
+
+    color: white !important;
+}
+
+
+/* =========================================================
+   LOGIN
+   IMPORTANTE:
+   fondo-puce.png NO se aplica al login
+========================================================= */
+
+body.login-page {
+    background-image: none !important;
+    background-attachment: initial !important;
+}
+
+
+
+/* =========================================================
+   FONDO GENERAL DEL SISTEMA
+   Se aplica a todas las páginas EXCEPTO login
+========================================================= */
+
+body:not(.login-page) {
+    min-height: 100vh !important;
+
+    background-image:
+        linear-gradient(
+            rgba(4, 25, 52, 0.55),
+            rgba(4, 25, 52, 0.62)
+        ),
+        url("/static/img/fondo-puce.png") !important;
+
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+
+    color: #152238;
+}
+
+
+/* Contenido principal transparente */
+
+body:not(.login-page) main,
+body:not(.login-page) .main-content,
+body:not(.login-page) .content,
+body:not(.login-page) .page-content,
+body:not(.login-page) .container-fluid {
+    background: transparent !important;
+}
+
+
+/* Sidebar */
+
+body:not(.login-page) .sidebar,
+body:not(.login-page) aside {
+    background: rgba(4, 25, 52, 0.94) !important;
+
+    border-right:
+        1px solid rgba(121, 185, 232, 0.20) !important;
+
+    backdrop-filter: blur(6px);
+}
+
+
+/* Texto del sidebar */
+
+body:not(.login-page) .sidebar,
+body:not(.login-page) .sidebar a,
+body:not(.login-page) .sidebar span,
+body:not(.login-page) .sidebar p,
+body:not(.login-page) aside,
+body:not(.login-page) aside a {
+    color: #E3EFF9 !important;
+}
+
+
+/* Hover del menú */
+
+body:not(.login-page) .sidebar a:hover,
+body:not(.login-page) aside a:hover {
+    background:
+        rgba(121, 185, 232, 0.14) !important;
+
+    color: #FFFFFF !important;
+}
+
+
+/* Tarjetas */
+
+body:not(.login-page) .card,
+body:not(.login-page) .dashboard-card,
+body:not(.login-page) .panel {
+    background:
+        rgba(255, 255, 255, 0.94) !important;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.35) !important;
+
+    border-radius: 10px !important;
+
+    box-shadow:
+        0 8px 22px rgba(0, 0, 0, 0.14) !important;
+
+    backdrop-filter: blur(6px);
+}
+
+
+/* Formularios */
+
+body:not(.login-page) form {
+    background:
+        rgba(255, 255, 255, 0.94) !important;
+
+    border-radius: 10px !important;
+}
+
+
+/* Inputs */
+
+body:not(.login-page) input,
+body:not(.login-page) select,
+body:not(.login-page) textarea {
+    background: #FFFFFF !important;
+
+    color: #152238 !important;
+
+    border:
+        1px solid #C8D5E3 !important;
+}
+
+
+/* Tablas */
+
+body:not(.login-page) table {
+    background:
+        rgba(255, 255, 255, 0.96) !important;
+}
+
+
+/* Encabezados de tablas */
+
+body:not(.login-page) thead {
+    background:
+        #05254B !important;
+
+    color: #FFFFFF !important;
+}
+
+body:not(.login-page) thead th {
+    color: #FFFFFF !important;
+}
+
+
+/* Encabezados superiores */
+
+body:not(.login-page) .page-header,
+body:not(.login-page) .content-header {
+    background:
+        rgba(4, 25, 52, 0.88) !important;
+
+    color: #FFFFFF !important;
+
+    backdrop-filter: blur(5px);
+}
+
+body:not(.login-page) .page-header h1,
+body:not(.login-page) .page-header h2,
+body:not(.login-page) .page-header p,
+body:not(.login-page) .content-header h1,
+body:not(.login-page) .content-header h2,
+body:not(.login-page) .content-header p {
+    color: #FFFFFF !important;
+}
+
+
+/* Botones principales */
+
+body:not(.login-page) .btn-primary,
+body:not(.login-page) button[type="submit"] {
+    background:
+        #0A4F8A !important;
+
+    border-color:
+        #0A4F8A !important;
+
+    color:
+        #FFFFFF !important;
+}
+
+
+/* =========================================================
+   LOGIN
+   NO USAR EL FONDO PUCE AQUÍ
+========================================================= */
+
+body.login-page {
+    background-image: none !important;
+    background-color: #FFFFFF !important;
+    background-attachment: initial !important;
+}
+
+body.login-page main,
+body.login-page .main-content,
+body.login-page .content {
+    background-image: none !important;
+}
+
+
+/* =========================================================
+   FONDO DEFINITIVO PUCE
+   TODAS LAS PÁGINAS MENOS LOGIN
+========================================================= */
+
+html {
+    min-height: 100%;
+}
+
+body:not(.login-page) {
+    min-height: 100vh !important;
+
+    background:
+        linear-gradient(
+            rgba(2, 20, 45, 0.20),
+            rgba(2, 20, 45, 0.28)
+        ),
+        url("/static/img/fondo-puce.png") center center / cover
+        no-repeat fixed !important;
+}
+
+
+/* Quitar fondos viejos de contenedores principales */
+
+body:not(.login-page) main,
+body:not(.login-page) .main-content,
+body:not(.login-page) .content,
+body:not(.login-page) .page-content,
+body:not(.login-page) .content-wrapper,
+body:not(.login-page) .dashboard-content,
+body:not(.login-page) .import-page,
+body:not(.login-page) .import-container,
+body:not(.login-page) .students-page,
+body:not(.login-page) .acts-page {
+    background-image: none !important;
+    background-color: transparent !important;
+}
+
+
+/* Encabezado superior */
+
+body:not(.login-page) .page-header,
+body:not(.login-page) .content-header,
+body:not(.login-page) header {
+    background:
+        rgba(3, 27, 55, 0.88) !important;
+
+    backdrop-filter: blur(5px);
+}
+
+
+/* Sidebar */
+
+body:not(.login-page) .sidebar,
+body:not(.login-page) aside {
+    background:
+        rgba(8, 23, 48, 0.96) !important;
+
+    backdrop-filter: blur(8px);
+}
+
+
+/* Tarjetas */
+
+body:not(.login-page) .card,
+body:not(.login-page) .panel,
+body:not(.login-page) .dashboard-card,
+body:not(.login-page) .form-card {
+    background:
+        rgba(4, 29, 57, 0.91) !important;
+
+    border:
+        1px solid rgba(67, 169, 224, 0.45) !important;
+
+    backdrop-filter: blur(7px);
+}
+
+
+/* Tablas y formularios */
+
+body:not(.login-page) table {
+    background:
+        rgba(4, 29, 57, 0.94) !important;
+}
+
+body:not(.login-page) form {
+    background-color:
+        transparent !important;
+}
+
+
+/* LOGIN: NO CAMBIAR */
+
+body.login-page {
+    background-image:
+        initial !important;
+}
+

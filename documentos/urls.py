@@ -1,4 +1,5 @@
-﻿from django.urls import path
+from .views_oficial import generar_oficial
+from django.urls import path
 
 from . import views
 
@@ -7,6 +8,24 @@ app_name = "documentos"
 
 
 urlpatterns = [
+
+    # GENERADOR OFICIAL PUCE TEC - PRIORIDAD
+    path(
+        "<int:pk>/generar/",
+        generar_oficial,
+        name="generar_oficial_prioridad",
+    ),
+
+    path(
+        "<int:pk>/generar-oficial/",
+        views.generar_documentos_oficiales,
+        name="generar_documentos_oficiales",
+    ),
+    path(
+        "<int:pk>/vista-previa/",
+        views.vista_previa_acta,
+        name="vista_previa_acta",
+    ),
     path(
         "",
         views.lista_actas,
@@ -55,3 +74,5 @@ urlpatterns = [
         name="eliminar_acta",
     ),
 ]
+
+

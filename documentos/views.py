@@ -711,3 +711,271 @@ def lista_actas(request):
 
 
 # GESTION_ACTAS_SAFE_END
+
+
+# === PUCETEC ACTAS OFICIALES START ===
+
+@login_required
+def vista_previa_acta(request, pk):
+    from django.shortcuts import get_object_or_404, render
+
+    from .models import Acta
+    from .acta_documentos import contexto_acta
+
+    acta = get_object_or_404(
+        Acta.objects.select_related("registro"),
+        pk=pk,
+    )
+
+    contexto = contexto_acta(acta)
+
+    return render(
+        request,
+        "documentos/vista_previa_acta.html",
+        contexto,
+    )
+
+
+@login_required
+def generar_documentos_oficiales(request, pk):
+    from django.contrib import messages
+    from django.conf import settings
+    from django.core.files.base import ContentFile
+    from django.shortcuts import get_object_or_404, redirect
+    from django.utils import timezone
+    from django.utils.text import slugify
+
+    from .models import Acta
+    from .acta_documentos import (
+        generar_pdf_oficial,
+        generar_word_oficial,
+    )
+
+    if request.method != "POST":
+        return redirect(
+            "documentos:vista_previa_acta",
+            pk=pk,
+        )
+
+    acta = get_object_or_404(
+        Acta.objects.select_related("registro"),
+        pk=pk,
+    )
+
+    logo_path = (
+        settings.BASE_DIR
+        / "static"
+        / "img"
+        / "logo-pucetec-actas.jpg"
+    )
+
+    if not logo_path.exists():
+        messages.error(
+            request,
+            "No se encontro el logo PUCE TEC.",
+        )
+
+        return redirect(
+            "documentos:vista_previa_acta",
+            pk=pk,
+        )
+
+    try:
+        contenido_word = generar_word_oficial(
+            acta,
+            logo_path,
+        )
+
+        contenido_pdf = generar_pdf_oficial(
+            acta,
+            logo_path,
+        )
+
+        nombre_base = slugify(
+            acta.numero_acta
+            or f"acta-{acta.pk}"
+        )
+
+        if not nombre_base:
+            nombre_base = f"acta-{acta.pk}"
+
+        acta.archivo_word.save(
+            f"{nombre_base}.docx",
+            ContentFile(contenido_word),
+            save=False,
+        )
+
+        acta.archivo_pdf.save(
+            f"{nombre_base}.pdf",
+            ContentFile(contenido_pdf),
+            save=False,
+        )
+
+        acta.fecha_generacion = timezone.now()
+
+        campos = [
+            "archivo_word",
+            "archivo_pdf",
+            "fecha_generacion",
+        ]
+
+        if acta.estado == "borrador":
+            acta.estado = "generada"
+            campos.append("estado")
+
+        acta.save(
+            update_fields=campos
+        )
+
+        messages.success(
+            request,
+            "Acta PUCE TEC generada correctamente "
+            "en Word y PDF.",
+        )
+
+    except Exception as exc:
+        messages.error(
+            request,
+            f"Error al generar el acta: {exc}",
+        )
+
+    return redirect(
+        "documentos:vista_previa_acta",
+        pk=acta.pk,
+    )
+
+# === PUCETEC ACTAS OFICIALES END ===
+
+# === GENERACION OFICIAL PUCETEC START ===
+
+@login_required
+def generar_documentos(request, pk):
+
+    from django.conf import settings
+    from django.contrib import messages
+    from django.core.files.base import ContentFile
+    from django.shortcuts import get_object_or_404, redirect
+    from django.utils import timezone
+    from django.utils.text import slugify
+
+    from .models import Acta
+
+    from .generador_actas_oficial import (
+        generar_pdf_oficial,
+        generar_word_oficial,
+    )
+
+    if request.method != "POST":
+        return redirect(
+            "documentos:detalle_acta",
+            pk=pk,
+        )
+
+    acta = get_object_or_404(
+        Acta.objects.select_related(
+            "registro"
+        ),
+        pk=pk,
+    )
+
+    logo = (
+        settings.BASE_DIR
+        / "static"
+        / "img"
+        / "logo-pucetec-actas.png"
+    )
+
+    if not logo.exists():
+        messages.error(
+            request,
+            "No se encontr? el logo PUCE TEC.",
+        )
+
+        return redirect(
+            "documentos:detalle_acta",
+            pk=acta.pk,
+        )
+
+    try:
+
+        word = generar_word_oficial(
+            acta,
+            logo,
+        )
+
+        pdf = generar_pdf_oficial(
+            acta,
+            logo,
+        )
+
+        nombre = slugify(
+            acta.numero_acta
+            or f"acta-{acta.pk}"
+        )
+
+        if not nombre:
+            nombre = f"acta-{acta.pk}"
+
+        # Eliminar documentos antiguos para no
+        # seguir descargando el formato anterior.
+
+        if acta.archivo_word:
+            acta.archivo_word.delete(
+                save=False
+            )
+
+        if acta.archivo_pdf:
+            acta.archivo_pdf.delete(
+                save=False
+            )
+
+        acta.archivo_word.save(
+            f"{nombre}.docx",
+            ContentFile(word),
+            save=False,
+        )
+
+        acta.archivo_pdf.save(
+            f"{nombre}.pdf",
+            ContentFile(pdf),
+            save=False,
+        )
+
+        acta.fecha_generacion = (
+            timezone.now()
+        )
+
+        campos = [
+            "archivo_word",
+            "archivo_pdf",
+            "fecha_generacion",
+        ]
+
+        if acta.estado == "borrador":
+            acta.estado = "generada"
+            campos.append("estado")
+
+        acta.save(
+            update_fields=campos
+        )
+
+        messages.success(
+            request,
+            "El Word y PDF fueron regenerados "
+            "con el formato oficial PUCE TEC.",
+        )
+
+    except Exception as error:
+
+        messages.error(
+            request,
+            "No se pudieron generar "
+            f"los documentos: {error}",
+        )
+
+    return redirect(
+        "documentos:detalle_acta",
+        pk=acta.pk,
+    )
+
+# === GENERACION OFICIAL PUCETEC END ===

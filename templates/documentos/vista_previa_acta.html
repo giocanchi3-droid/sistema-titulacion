@@ -1,0 +1,244 @@
+﻿{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Vista previa del acta
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{% static 'css/vista-previa-acta-oficial.css' %}?v=20260807-2208"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="preview-acta-page">
+
+    <div class="preview-acta-toolbar">
+
+        <div>
+            <h1>
+                Vista previa del acta
+            </h1>
+
+            <p>
+                {{ acta.numero_acta }}
+                ·
+                {{ titulo_documento }}
+            </p>
+        </div>
+
+        <div class="preview-acta-actions">
+
+            <a
+                class="edit"
+                href="{% url 'documentos:editar_acta' acta.pk %}"
+            >
+                Editar acta
+            </a>
+
+            <a
+                class="edit"
+                href="{% url 'estudiantes:editar' registro.pk %}"
+            >
+                Editar datos del estudiante
+            </a>
+
+            <form
+                method="post"
+                action="{% url 'documentos:generar_documentos_oficiales_oficiales' acta.pk %}"
+                style="display:inline; background:none !important; border:none !important; padding:0 !important;"
+            >
+                {% csrf_token %}
+
+                <button
+                    class="primary"
+                    type="submit"
+                >
+                    {% if acta.archivo_pdf %}
+                        Regenerar Word y PDF
+                    {% else %}
+                        Generar Word y PDF
+                    {% endif %}
+                </button>
+            </form>
+
+            {% if acta.archivo_word %}
+
+                <a
+                    href="{{ acta.archivo_word.url }}"
+                >
+                    Descargar Word
+                </a>
+
+            {% endif %}
+
+            {% if acta.archivo_pdf %}
+
+                <a
+                    href="{{ acta.archivo_pdf.url }}"
+                >
+                    Descargar PDF
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <div class="preview-document-background">
+
+        <article class="acta-oficial">
+
+            <div class="acta-oficial-header">
+
+                <div class="acta-logo-area">
+
+                    <img
+                        src="{% static 'img/logo-pucetec-actas.jpg' %}"
+                        alt="PUCE TEC"
+                    >
+
+                </div>
+
+
+                <div class="acta-unidad">
+
+                    UNIDAD ACADÉMICA
+                    ESPECIALIZADA EN
+
+                    <br>
+
+                    FORMACIÓN TÉCNICA
+                    Y TECNOLÓGICA
+
+                    <br>
+
+                    PUCE TEC
+
+                </div>
+
+            </div>
+
+
+            <h2 class="acta-titulo">
+
+                {{ titulo_documento }}
+
+            </h2>
+
+
+            <p class="acta-parrafo">
+
+                En la Ciudad de Quito el día,
+
+                <strong>
+                    {{ fecha_texto }}
+                </strong>,
+
+                dando cumplimiento a las
+                disposiciones en la normativa
+                legal vigente, se deja constancia
+                que el estudiante
+
+                <span class="acta-estudiante">
+                    {{ nombre_estudiante }}
+                </span>
+
+                con número de cédula
+
+                <strong>
+                    {{ cedula }}
+                </strong>
+
+                {{ frase_presentacion }}.
+
+            </p>
+
+
+            <p class="acta-parrafo">
+
+                Luego de la deliberación del
+                tribunal el estudiante ha obtenido
+                como resultado las siguientes
+                calificaciones, en la materia de
+
+                <strong>
+                    Integración Curricular
+                </strong>.
+
+            </p>
+
+
+            <table class="acta-calificaciones">
+
+                <tbody>
+
+                    {% for fila in calificaciones %}
+
+                        <tr>
+
+                            <td>
+                                {{ fila.label }}
+                            </td>
+
+                            <td>
+                                {{ fila.valor }}
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+
+            <p class="acta-aviso">
+
+                Se informa que esta nota y este
+                evento no constituyen una ceremonia
+                de graduación. De acuerdo con la
+                normativa vigente de la PUCE,
+                la Secretaría certificará el
+                cumplimiento de todos los requisitos
+                y notificará al estudiante
+                correspondiente.
+
+            </p>
+
+
+            <div class="acta-firmas">
+
+                {% for firma in firmas %}
+
+                    <div class="acta-firma">
+
+                        <div class="acta-firma-linea">
+                            Firma
+                        </div>
+
+                        <div class="acta-firma-nombre">
+                            {{ firma }}
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </article>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+

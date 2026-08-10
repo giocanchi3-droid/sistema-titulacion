@@ -1,0 +1,454 @@
+﻿/* =========================================================
+   FORCE OPAQUE UI
+   Fuerza toda la interfaz a fondos solidos, sin transparencia
+   ni blur. El fondo general puede seguir existiendo fuera de
+   los paneles, pero los componentes internos quedan opacos.
+========================================================= */
+
+:root {
+    --solid-sidebar: #071827;
+    --solid-header: #081b2c;
+    --solid-card: #0a2236;
+    --solid-card-2: #0b2740;
+    --solid-panel: #0b2235;
+    --solid-input: #071722;
+    --solid-table-head: #123a59;
+    --solid-table-row: #081d2d;
+    --solid-border: #1f5575;
+    --solid-text: #f3f8fc;
+    --solid-muted: #b7cad7;
+    --solid-primary: #2f8fd1;
+    --solid-primary-hover: #257bb5;
+    --solid-success: #1f8a55;
+    --solid-warning: #b47b18;
+    --solid-danger: #c73a3a;
+}
+
+/* ---------------------------------------------------------
+   BASE GENERAL
+--------------------------------------------------------- */
+
+body:not(.login-page) {
+    color: var(--solid-text) !important;
+}
+
+body:not(.login-page) .main-content,
+body:not(.login-page) .content-wrapper,
+body:not(.login-page) .page-content,
+body:not(.login-page) .page-wrapper,
+body:not(.login-page) main {
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+/* ---------------------------------------------------------
+   SIDEBAR / MENU
+--------------------------------------------------------- */
+
+body:not(.login-page) aside,
+body:not(.login-page) .sidebar,
+body:not(.login-page) .app-sidebar,
+body:not(.login-page) .side-menu,
+body:not(.login-page) .left-panel {
+    background: var(--solid-sidebar) !important;
+    background-color: var(--solid-sidebar) !important;
+    background-image: none !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-right: 1px solid #17374f !important;
+}
+
+/* ---------------------------------------------------------
+   TOPBAR / HEADER
+--------------------------------------------------------- */
+
+body:not(.login-page) header,
+body:not(.login-page) .page-header,
+body:not(.login-page) .content-header,
+body:not(.login-page) .topbar,
+body:not(.login-page) .top-bar,
+body:not(.login-page) .app-header {
+    background: var(--solid-header) !important;
+    background-color: var(--solid-header) !important;
+    background-image: none !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-bottom: 1px solid #1c4663 !important;
+}
+
+/* ---------------------------------------------------------
+   CONTENEDORES / CARDS / PANELES
+--------------------------------------------------------- */
+
+body:not(.login-page) .card,
+body:not(.login-page) .panel,
+body:not(.login-page) .section-card,
+body:not(.login-page) .hero-card,
+body:not(.login-page) .glass-card,
+body:not(.login-page) .dashboard-card,
+body:not(.login-page) .dashboard-panel,
+body:not(.login-page) .stat-card,
+body:not(.login-page) .metric-card,
+body:not(.login-page) .summary-card,
+body:not(.login-page) .progress-card,
+body:not(.login-page) .info-card,
+body:not(.login-page) .form-card,
+body:not(.login-page) .filter-card,
+body:not(.login-page) .upload-card,
+body:not(.login-page) .import-card,
+body:not(.login-page) .result-card,
+body:not(.login-page) .preview-card,
+body:not(.login-page) .form-panel,
+body:not(.login-page) .content-card,
+body:not(.login-page) .module-card,
+body:not(.login-page) .block-card,
+body:not(.login-page) .box,
+body:not(.login-page) .widget,
+body:not(.login-page) .table-card {
+    background: var(--solid-card) !important;
+    background-color: var(--solid-card) !important;
+    background-image: none !important;
+    opacity: 1 !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.22) !important;
+    border: 1px solid var(--solid-border) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Variante levemente distinta para secciones grandes */
+body:not(.login-page) .hero-card,
+body:not(.login-page) .dashboard-panel,
+body:not(.login-page) .section-card,
+body:not(.login-page) .module-card {
+    background: var(--solid-card-2) !important;
+    background-color: var(--solid-card-2) !important;
+}
+
+/* ---------------------------------------------------------
+   ELIMINAR ELEMENTOS DECORATIVOS TRANSLUCIDOS
+--------------------------------------------------------- */
+
+body:not(.login-page) .card::before,
+body:not(.login-page) .card::after,
+body:not(.login-page) .panel::before,
+body:not(.login-page) .panel::after,
+body:not(.login-page) .section-card::before,
+body:not(.login-page) .section-card::after,
+body:not(.login-page) .hero-card::before,
+body:not(.login-page) .hero-card::after,
+body:not(.login-page) .glass-card::before,
+body:not(.login-page) .glass-card::after,
+body:not(.login-page) .dashboard-card::before,
+body:not(.login-page) .dashboard-card::after,
+body:not(.login-page) .dashboard-panel::before,
+body:not(.login-page) .dashboard-panel::after,
+body:not(.login-page) .stat-card::before,
+body:not(.login-page) .stat-card::after,
+body:not(.login-page) .metric-card::before,
+body:not(.login-page) .metric-card::after,
+body:not(.login-page) .summary-card::before,
+body:not(.login-page) .summary-card::after,
+body:not(.login-page) .progress-card::before,
+body:not(.login-page) .progress-card::after,
+body:not(.login-page) .info-card::before,
+body:not(.login-page) .info-card::after,
+body:not(.login-page) .form-card::before,
+body:not(.login-page) .form-card::after,
+body:not(.login-page) .upload-card::before,
+body:not(.login-page) .upload-card::after,
+body:not(.login-page) .import-card::before,
+body:not(.login-page) .import-card::after,
+body:not(.login-page) .result-card::before,
+body:not(.login-page) .result-card::after,
+body:not(.login-page) .preview-card::before,
+body:not(.login-page) .preview-card::after,
+body:not(.login-page) .widget::before,
+body:not(.login-page) .widget::after {
+    content: none !important;
+    display: none !important;
+    background: none !important;
+    opacity: 0 !important;
+}
+
+/* ---------------------------------------------------------
+   FORMULARIOS
+--------------------------------------------------------- */
+
+body:not(.login-page) form,
+body:not(.login-page) .form-section,
+body:not(.login-page) fieldset,
+body:not(.login-page) .section-block,
+body:not(.login-page) .form-navigation,
+body:not(.login-page) .form-sidebar,
+body:not(.login-page) .step-sidebar,
+body:not(.login-page) .step-card,
+body:not(.login-page) .wizard-sidebar {
+    background: var(--solid-panel) !important;
+    background-color: var(--solid-panel) !important;
+    background-image: none !important;
+    opacity: 1 !important;
+    border: 1px solid var(--solid-border) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* ---------------------------------------------------------
+   INPUTS
+--------------------------------------------------------- */
+
+body:not(.login-page) input,
+body:not(.login-page) select,
+body:not(.login-page) textarea {
+    background: var(--solid-input) !important;
+    background-color: var(--solid-input) !important;
+    background-image: none !important;
+    color: var(--solid-text) !important;
+    border: 1px solid #2b6a8c !important;
+    opacity: 1 !important;
+    box-shadow: none !important;
+}
+
+body:not(.login-page) input::placeholder,
+body:not(.login-page) textarea::placeholder {
+    color: #90aabc !important;
+}
+
+body:not(.login-page) input:focus,
+body:not(.login-page) select:focus,
+body:not(.login-page) textarea:focus {
+    background: var(--solid-input) !important;
+    border-color: #58afe2 !important;
+    box-shadow: 0 0 0 3px rgba(88,175,226,0.14) !important;
+    outline: none !important;
+}
+
+/* ---------------------------------------------------------
+   BOTONES
+--------------------------------------------------------- */
+
+body:not(.login-page) .btn,
+body:not(.login-page) button,
+body:not(.login-page) input[type="submit"],
+body:not(.login-page) input[type="button"] {
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+body:not(.login-page) .btn-primary,
+body:not(.login-page) .button-primary,
+body:not(.login-page) .action-primary {
+    background: var(--solid-primary) !important;
+    background-color: var(--solid-primary) !important;
+    background-image: none !important;
+    color: #ffffff !important;
+    border: 1px solid #4eb2ea !important;
+}
+
+body:not(.login-page) .btn-primary:hover,
+body:not(.login-page) .button-primary:hover,
+body:not(.login-page) .action-primary:hover {
+    background: var(--solid-primary-hover) !important;
+    background-color: var(--solid-primary-hover) !important;
+}
+
+body:not(.login-page) .btn-secondary,
+body:not(.login-page) .btn-outline,
+body:not(.login-page) .button-secondary {
+    background: #0f2d44 !important;
+    background-color: #0f2d44 !important;
+    background-image: none !important;
+    color: #ffffff !important;
+    border: 1px solid #2d6e91 !important;
+}
+
+body:not(.login-page) .btn-success {
+    background: var(--solid-success) !important;
+    border-color: #31aa6d !important;
+    color: #ffffff !important;
+}
+
+body:not(.login-page) .btn-warning {
+    background: var(--solid-warning) !important;
+    border-color: #d89a2b !important;
+    color: #ffffff !important;
+}
+
+body:not(.login-page) .btn-danger,
+body:not(.login-page) .logout-button,
+body:not(.login-page) .logout {
+    background: var(--solid-danger) !important;
+    border-color: #eb5a5a !important;
+    color: #ffffff !important;
+}
+
+/* ---------------------------------------------------------
+   TABLAS
+--------------------------------------------------------- */
+
+body:not(.login-page) table {
+    background: var(--solid-table-row) !important;
+    background-color: var(--solid-table-row) !important;
+    background-image: none !important;
+    opacity: 1 !important;
+    border: 1px solid var(--solid-border) !important;
+    border-collapse: collapse !important;
+}
+
+body:not(.login-page) thead,
+body:not(.login-page) thead tr,
+body:not(.login-page) thead th {
+    background: var(--solid-table-head) !important;
+    background-color: var(--solid-table-head) !important;
+    background-image: none !important;
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+body:not(.login-page) tbody,
+body:not(.login-page) tbody tr,
+body:not(.login-page) tbody td {
+    background: var(--solid-table-row) !important;
+    background-color: var(--solid-table-row) !important;
+    background-image: none !important;
+    color: var(--solid-text) !important;
+    opacity: 1 !important;
+}
+
+body:not(.login-page) tbody tr:hover,
+body:not(.login-page) tbody tr:hover td {
+    background: #0d2940 !important;
+    background-color: #0d2940 !important;
+}
+
+/* ---------------------------------------------------------
+   BADGES / ETIQUETAS
+--------------------------------------------------------- */
+
+body:not(.login-page) .badge,
+body:not(.login-page) .tag,
+body:not(.login-page) .status-badge,
+body:not(.login-page) .pill {
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+body:not(.login-page) .badge-info,
+body:not(.login-page) .status-generada,
+body:not(.login-page) .status-activo {
+    background: #1170b1 !important;
+    color: #ffffff !important;
+}
+
+body:not(.login-page) .badge-success,
+body:not(.login-page) .status-aprobado {
+    background: #1d8a56 !important;
+    color: #ffffff !important;
+}
+
+body:not(.login-page) .badge-warning,
+body:not(.login-page) .status-pendiente {
+    background: #aa6d12 !important;
+    color: #ffffff !important;
+}
+
+body:not(.login-page) .badge-danger,
+body:not(.login-page) .status-anulada,
+body:not(.login-page) .status-error {
+    background: #b23939 !important;
+    color: #ffffff !important;
+}
+
+/* ---------------------------------------------------------
+   ZONAS DE SUBIDA / IMPORTACION
+--------------------------------------------------------- */
+
+body:not(.login-page) .upload-area,
+body:not(.login-page) .drop-zone,
+body:not(.login-page) .dropzone,
+body:not(.login-page) .import-result,
+body:not(.login-page) .upload-box,
+body:not(.login-page) .file-box {
+    background: #081d2d !important;
+    background-color: #081d2d !important;
+    background-image: none !important;
+    opacity: 1 !important;
+    border: 1px dashed #2f82af !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* ---------------------------------------------------------
+   TEXTO MUTED
+--------------------------------------------------------- */
+
+body:not(.login-page) .text-muted,
+body:not(.login-page) small,
+body:not(.login-page) .muted,
+body:not(.login-page) .subtitle,
+body:not(.login-page) .helper-text {
+    color: var(--solid-muted) !important;
+}
+
+/* ---------------------------------------------------------
+   SELECTORES DE NAVEGACION LATERAL DE FORMULARIOS
+--------------------------------------------------------- */
+
+body:not(.login-page) .step-item,
+body:not(.login-page) .nav-step,
+body:not(.login-page) .section-link,
+body:not(.login-page) .wizard-step {
+    background: #12314b !important;
+    background-color: #12314b !important;
+    background-image: none !important;
+    color: #ffffff !important;
+    opacity: 1 !important;
+    border: 1px solid #2d6e91 !important;
+}
+
+body:not(.login-page) .step-item.active,
+body:not(.login-page) .nav-step.active,
+body:not(.login-page) .section-link.active,
+body:not(.login-page) .wizard-step.active {
+    background: #1f7fb8 !important;
+    background-color: #1f7fb8 !important;
+    color: #ffffff !important;
+    border-color: #63b9ea !important;
+}
+
+/* ---------------------------------------------------------
+   CUALQUIER COSA QUE USE OPACITY/BLUR DENTRO DEL APP
+--------------------------------------------------------- */
+
+body:not(.login-page) [class*="glass"],
+body:not(.login-page) [class*="blur"],
+body:not(.login-page) [class*="transparent"] {
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* ---------------------------------------------------------
+   SEGURIDAD EXTRA PARA DIVS IMPORTANTES
+--------------------------------------------------------- */
+
+body:not(.login-page) .dashboard-grid > div,
+body:not(.login-page) .stats-grid > div,
+body:not(.login-page) .cards-grid > div,
+body:not(.login-page) .form-grid > div,
+body:not(.login-page) .content-grid > div,
+body:not(.login-page) .row > div > .card,
+body:not(.login-page) .row > div > .panel {
+    background-color: var(--solid-card) !important;
+    background-image: none !important;
+    opacity: 1 !important;
+}
+
+/* Login no se toca */
+body.login-page,
+body.login-page * {
+    backdrop-filter: none;
+}

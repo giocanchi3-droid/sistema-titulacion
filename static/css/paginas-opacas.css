@@ -1,0 +1,282 @@
+﻿
+/* =========================================================
+   PÁGINAS INTERNAS 100% OPACAS
+   Mantiene visible el fondo únicamente FUERA de los paneles
+========================================================= */
+
+:root {
+    --panel-solid: #091D2C;
+    --panel-solid-2: #0B2235;
+    --panel-solid-3: #0D2940;
+    --input-solid: #061925;
+    --table-solid: #071D2C;
+    --table-head-solid: #15415F;
+    --border-solid: #245A78;
+}
+
+
+/* =========================================================
+   CLASE APLICADA AUTOMÁTICAMENTE POR JAVASCRIPT
+========================================================= */
+
+body.app-page main .force-solid-panel {
+    background: var(--panel-solid) !important;
+    background-color: var(--panel-solid) !important;
+    background-image: none !important;
+
+    opacity: 1 !important;
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+
+    isolation: isolate !important;
+}
+
+
+/* Eliminar transparencias internas decorativas */
+
+body.app-page main .force-solid-panel::before,
+body.app-page main .force-solid-panel::after {
+    background-image: none !important;
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+body.app-page main [class*="hero"],
+body.app-page main [class*="welcome"],
+body.app-page main [class*="dashboard-card"],
+body.app-page main [class*="stat-card"],
+body.app-page main [class*="metric-card"],
+body.app-page main [class*="summary-card"],
+body.app-page main [class*="indicator"],
+body.app-page main [class*="progress-card"],
+body.app-page main [class*="overview"] {
+    background: var(--panel-solid) !important;
+    background-color: var(--panel-solid) !important;
+    background-image: none !important;
+
+    opacity: 1 !important;
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+
+/* =========================================================
+   GESTIÓN DE ESTUDIANTES
+========================================================= */
+
+body.app-page main [class*="student-card"],
+body.app-page main [class*="students-card"],
+body.app-page main [class*="records"],
+body.app-page main [class*="registry"],
+body.app-page main [class*="filters"],
+body.app-page main [class*="filter-card"],
+body.app-page main [class*="search-card"],
+body.app-page main [class*="search-panel"] {
+    background: var(--panel-solid) !important;
+    background-color: var(--panel-solid) !important;
+    background-image: none !important;
+
+    opacity: 1 !important;
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+
+/* =========================================================
+   NUEVO REGISTRO
+========================================================= */
+
+body.app-page main [class*="form-card"],
+body.app-page main [class*="form-section"],
+body.app-page main [class*="form-panel"],
+body.app-page main [class*="section-card"],
+body.app-page main [class*="wizard"],
+body.app-page main [class*="step-card"],
+body.app-page main [class*="form-navigation"],
+body.app-page main [class*="form-sidebar"],
+body.app-page main fieldset {
+    background: var(--panel-solid) !important;
+    background-color: var(--panel-solid) !important;
+    background-image: none !important;
+
+    opacity: 1 !important;
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+
+/* Navegación del formulario */
+
+body.app-page main [class*="step-item"],
+body.app-page main [class*="nav-step"],
+body.app-page main [class*="section-link"] {
+    background: #123B57 !important;
+    background-color: #123B57 !important;
+    background-image: none !important;
+
+    opacity: 1 !important;
+
+    backdrop-filter: none !important;
+}
+
+
+/* =========================================================
+   GESTIÓN DE ACTAS
+========================================================= */
+
+body.app-page main [class*="act-card"],
+body.app-page main [class*="acts-card"],
+body.app-page main [class*="document"],
+body.app-page main [class*="document-card"],
+body.app-page main [class*="registry-card"],
+body.app-page main [class*="table-card"] {
+    background: var(--panel-solid) !important;
+    background-color: var(--panel-solid) !important;
+    background-image: none !important;
+
+    opacity: 1 !important;
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+
+/* =========================================================
+   IMPORTAR EXCEL
+========================================================= */
+
+body.app-page main [class*="import-card"],
+body.app-page main [class*="import-panel"],
+body.app-page main [class*="upload"],
+body.app-page main [class*="dropzone"],
+body.app-page main [class*="drop-zone"],
+body.app-page main [class*="result-card"],
+body.app-page main [class*="result-panel"],
+body.app-page main [class*="excel-card"] {
+    background: var(--panel-solid) !important;
+    background-color: var(--panel-solid) !important;
+    background-image: none !important;
+
+    opacity: 1 !important;
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+
+/* =========================================================
+   TARJETAS GENÉRICAS DENTRO DEL MAIN
+========================================================= */
+
+body.app-page main .card,
+body.app-page main .panel,
+body.app-page main article {
+    background: var(--panel-solid) !important;
+    background-color: var(--panel-solid) !important;
+    background-image: none !important;
+
+    opacity: 1 !important;
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+
+/* =========================================================
+   INPUTS TOTALMENTE SÓLIDOS
+========================================================= */
+
+body.app-page main input,
+body.app-page main select,
+body.app-page main textarea {
+    background: var(--input-solid) !important;
+    background-color: var(--input-solid) !important;
+    background-image: none !important;
+
+    opacity: 1 !important;
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+
+/* =========================================================
+   TABLAS TOTALMENTE SÓLIDAS
+========================================================= */
+
+body.app-page main table {
+    background: var(--table-solid) !important;
+    background-color: var(--table-solid) !important;
+    background-image: none !important;
+
+    opacity: 1 !important;
+
+    backdrop-filter: none !important;
+}
+
+
+body.app-page main table thead,
+body.app-page main table thead tr,
+body.app-page main table thead th {
+    background: var(--table-head-solid) !important;
+    background-color: var(--table-head-solid) !important;
+    background-image: none !important;
+
+    opacity: 1 !important;
+}
+
+
+body.app-page main table tbody,
+body.app-page main table tbody tr,
+body.app-page main table tbody td {
+    background: var(--table-solid) !important;
+    background-color: var(--table-solid) !important;
+    background-image: none !important;
+
+    opacity: 1 !important;
+}
+
+
+/* =========================================================
+   BLOQUES GRANDES CON BORDE REDONDEADO
+========================================================= */
+
+body.app-page main .solid-auto-panel {
+    background: var(--panel-solid) !important;
+    background-color: var(--panel-solid) !important;
+    background-image: none !important;
+
+    opacity: 1 !important;
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+
+/* =========================================================
+   IMPORTANTE:
+   NO quitar el fondo de main/body
+========================================================= */
+
+body.app-page main {
+    background-color: transparent !important;
+}
+
+
+/* LOGIN NO SE TOCA */
+
+body.login-page .force-solid-panel,
+body.login-page .solid-auto-panel {
+    background: initial;
+}
+

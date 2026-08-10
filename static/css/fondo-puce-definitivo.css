@@ -1,0 +1,333 @@
+﻿
+/* ==========================================================
+   FONDO PUCE DEFINITIVO 2026
+   Se aplica únicamente a páginas internas.
+   LOGIN EXCLUIDO.
+========================================================== */
+
+
+/* ----------------------------------------------------------
+   FONDO PRINCIPAL
+---------------------------------------------------------- */
+
+html {
+    min-height: 100%;
+}
+
+body.app-page {
+    min-height: 100vh !important;
+
+    background-color: #041934 !important;
+
+    background-image:
+        linear-gradient(
+            rgba(3, 22, 47, 0.18),
+            rgba(3, 22, 47, 0.25)
+        ),
+        url("/static/img/fondo-puce-nuevo-2026.png") !important;
+
+    background-position:
+        center center !important;
+
+    background-size:
+        cover !important;
+
+    background-repeat:
+        no-repeat !important;
+
+    background-attachment:
+        fixed !important;
+}
+
+
+/* ==========================================================
+   ELIMINAR CUALQUIER IMAGEN DE FONDO ANTERIOR
+========================================================== */
+
+body.app-page * {
+    background-image:
+        none !important;
+}
+
+body.app-page *::before,
+body.app-page *::after {
+    background-image:
+        none !important;
+}
+
+
+/* El fondo nuevo SOLO vuelve a colocarse en BODY */
+
+body.app-page {
+    background-image:
+        linear-gradient(
+            rgba(3, 22, 47, 0.18),
+            rgba(3, 22, 47, 0.25)
+        ),
+        url("/static/img/fondo-puce-nuevo-2026.png") !important;
+}
+
+
+/* ==========================================================
+   ESTRUCTURA PRINCIPAL TRANSPARENTE
+========================================================== */
+
+body.app-page main,
+body.app-page .main,
+body.app-page .main-content,
+body.app-page .content,
+body.app-page .content-wrapper,
+body.app-page .page-content,
+body.app-page .page-wrapper,
+body.app-page .page-container,
+body.app-page .dashboard-content,
+body.app-page .workspace,
+body.app-page .workspace-content,
+body.app-page .layout-content,
+body.app-page .app-content,
+body.app-page .import-page,
+body.app-page .import-container,
+body.app-page .students-page,
+body.app-page .acts-page {
+    background-color:
+        transparent !important;
+
+    background-image:
+        none !important;
+}
+
+
+/* ==========================================================
+   SIDEBAR
+========================================================== */
+
+body.app-page aside,
+body.app-page .sidebar {
+    background-color:
+        rgba(7, 23, 48, 0.96) !important;
+
+    background-image:
+        none !important;
+
+    backdrop-filter:
+        blur(8px);
+
+    border-right:
+        1px solid rgba(96, 180, 230, 0.20) !important;
+}
+
+
+body.app-page aside a,
+body.app-page .sidebar a {
+    color:
+        #75C8F5 !important;
+}
+
+
+body.app-page aside a:hover,
+body.app-page .sidebar a:hover {
+    color:
+        #FFFFFF !important;
+
+    background-color:
+        rgba(26, 119, 175, 0.18) !important;
+}
+
+
+/* ==========================================================
+   ENCABEZADO SUPERIOR
+========================================================== */
+
+body.app-page header,
+body.app-page .page-header,
+body.app-page .content-header,
+body.app-page .topbar,
+body.app-page .top-bar {
+    background-color:
+        rgba(3, 27, 55, 0.90) !important;
+
+    background-image:
+        none !important;
+
+    color:
+        #FFFFFF !important;
+
+    backdrop-filter:
+        blur(7px);
+}
+
+
+/* ==========================================================
+   TARJETAS
+========================================================== */
+
+body.app-page .card,
+body.app-page .panel,
+body.app-page .dashboard-card,
+body.app-page .form-card,
+body.app-page .info-card,
+body.app-page .stat-card {
+    background-color:
+        rgba(3, 29, 57, 0.91) !important;
+
+    background-image:
+        none !important;
+
+    color:
+        #EAF5FF !important;
+
+    border:
+        1px solid rgba(48, 155, 214, 0.48) !important;
+
+    backdrop-filter:
+        blur(7px);
+}
+
+
+/* ==========================================================
+   FORMULARIOS
+========================================================== */
+
+body.app-page form {
+    background-image:
+        none !important;
+}
+
+
+body.app-page input,
+body.app-page select,
+body.app-page textarea {
+    background-color:
+        rgba(4, 35, 64, 0.96) !important;
+
+    background-image:
+        none !important;
+
+    color:
+        #FFFFFF !important;
+
+    border:
+        1px solid #247EAF !important;
+}
+
+
+body.app-page input:focus,
+body.app-page select:focus,
+body.app-page textarea:focus {
+    border-color:
+        #52BDF1 !important;
+
+    outline:
+        none !important;
+
+    box-shadow:
+        0 0 0 3px rgba(82, 189, 241, 0.15) !important;
+}
+
+
+/* ==========================================================
+   TABLAS
+========================================================== */
+
+body.app-page table {
+    background-color:
+        rgba(3, 28, 54, 0.94) !important;
+
+    background-image:
+        none !important;
+
+    color:
+        #EAF5FF !important;
+}
+
+
+body.app-page thead,
+body.app-page thead tr,
+body.app-page thead th {
+    background-color:
+        #06365F !important;
+
+    background-image:
+        none !important;
+
+    color:
+        #FFFFFF !important;
+}
+
+
+body.app-page tbody tr {
+    background-image:
+        none !important;
+}
+
+
+body.app-page tbody tr:hover {
+    background-color:
+        rgba(21, 100, 150, 0.25) !important;
+}
+
+
+/* ==========================================================
+   BOTONES
+========================================================== */
+
+body.app-page button,
+body.app-page .btn-primary,
+body.app-page input[type="submit"] {
+    background-color:
+        #087BB7 !important;
+
+    background-image:
+        none !important;
+
+    color:
+        #FFFFFF !important;
+
+    border-color:
+        #159DDD !important;
+}
+
+
+body.app-page button:hover,
+body.app-page .btn-primary:hover {
+    background-color:
+        #0A92D3 !important;
+}
+
+
+/* Cerrar sesión se mantiene rojo */
+
+body.app-page .logout,
+body.app-page .logout-button,
+body.app-page .btn-danger {
+    background-color:
+        #E5252A !important;
+
+    color:
+        #FFFFFF !important;
+}
+
+
+/* ==========================================================
+   TEXTOS
+========================================================== */
+
+body.app-page h1,
+body.app-page h2,
+body.app-page h3,
+body.app-page h4 {
+    color:
+        #FFFFFF;
+}
+
+
+/* ==========================================================
+   LOGIN
+   NO MODIFICAR SU FONDO
+========================================================== */
+
+body.login-page {
+    background-image:
+        none !important;
+}
+

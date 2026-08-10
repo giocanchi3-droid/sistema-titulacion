@@ -1,4 +1,4 @@
-{% load static %}
+﻿{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -30,9 +30,33 @@
     rel="stylesheet"
     href="{% static 'css/escala-ui.css' %}?v=7"
 >
-</head>
 
-<body class="bg-slate-100 text-slate-800 {% if user.is_authenticated %}app-authenticated{% else %}app-login{% endif %}">
+    <!-- Fondo PUCE definitivo -->
+    <link
+        rel="stylesheet"
+        href="{% static 'css/fondo-puce-definitivo.css' %}?v=20260807-2137"
+    >
+
+
+    <link rel="stylesheet" href="{% static 'css/puce-color-refresh.css' %}?v=20260807-colors">
+
+    <link rel="stylesheet" href="{% static "css/force-opaque-ui.css" %}">
+
+    <!-- Opacidad definitiva de paneles internos -->
+    
+
+
+    <!-- Opacidad definitiva de paneles internos -->
+    <link
+        rel="stylesheet"
+        href="{% static 'css/paginas-opacas.css' %}?v=20260807-2153"
+    >
+
+
+    <!-- Vista previa oficial de actas -->
+    </head>
+
+<body class="{% if request.resolver_match.url_name == 'login' %}login-page{% else %}app-page{% endif %} bg-slate-100 text-slate-800 {% if user.is_authenticated %}app-authenticated{% else %}app-login{% endif %}">
 
 {% if user.is_authenticated %}
 
@@ -190,8 +214,27 @@
 <script
     src="{% static 'js/escala-ui.js' %}?v=restaurado1"
 ></script>
-</body>
+
+    <!-- Corrección automática de paneles transparentes -->
+    
+
+
+    <!-- Corrección automática de paneles transparentes -->
+    <script
+        src="{% static 'js/paginas-opacas.js' %}?v=20260807-2153">
+    </script>
+
+
+    <!-- Vista previa oficial de actas -->
+    </body>
 </html>
+
+
+
+
+
+
+
 
 
 
