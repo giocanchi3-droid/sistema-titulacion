@@ -51,6 +51,44 @@
     cursor: pointer;
 }
 
+.app-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    background: #ffffff;
+    color: #0f172a;
+    padding: 0.85rem 1rem;
+}
+
+.app-alert-success {
+    border-color: #86efac;
+    background: #f0fdf4;
+}
+
+.app-alert-warning {
+    border-color: #fcd34d;
+    background: #fffbeb;
+}
+
+.app-alert-error {
+    border-color: #fca5a5;
+    background: #fef2f2;
+}
+
+.alert-content {
+    flex: 1;
+}
+
+.alert-close:focus-visible,
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.menu-link:focus-visible {
+    outline: 3px solid #fbbf24;
+    outline-offset: 2px;
+}
+
 
 
 

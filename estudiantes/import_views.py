@@ -22,16 +22,28 @@ def importar_registros_excel(request):
                     form.cleaned_data["archivo"]
                 )
 
-                messages.success(
-                    request,
-                    (
-                        "La matriz fue procesada correctamente. "
-                        f"Registros creados: "
-                        f"{resultado['creados']}. "
-                        f"Registros actualizados: "
-                        f"{resultado['actualizados']}."
-                    ),
+                mensaje = (
+                    "La matriz fue procesada. "
+                    f"Registros creados: {resultado['creados']}. "
+                    f"Registros actualizados: "
+                    f"{resultado['actualizados']}."
                 )
+
+                if resultado["errores"]:
+                    messages.warning(
+                        request,
+                        (
+                            f"{mensaje} "
+                            f"Filas con errores: "
+                            f"{len(resultado['errores'])}. "
+                            "Revise el detalle antes de continuar."
+                        ),
+                    )
+                else:
+                    messages.success(
+                        request,
+                        mensaje,
+                    )
 
             except ValueError as error:
                 messages.error(

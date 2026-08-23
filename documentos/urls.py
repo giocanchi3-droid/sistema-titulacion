@@ -51,7 +51,7 @@ urlpatterns = [
     ),
 
     path(
-        "<int:pk>/generar/",
+        "<int:pk>/generar-legacy/",
         views.generar_acta,
         name="generar_acta",
     ),

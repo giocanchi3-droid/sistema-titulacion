@@ -1,4 +1,6 @@
-﻿from django.conf import settings
+﻿import logging
+
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
@@ -11,6 +13,9 @@ from .acta_formato_oficial import (
     crear_pdf,
     crear_word,
 )
+
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -99,8 +104,8 @@ def generar_oficial(request, pk):
             timezone.now()
         )
 
-        if acta.estado == "borrador":
-            acta.estado = "generada"
+        if acta.estado == Acta.ESTADOS[0][0]:
+            acta.estado = Acta.ESTADOS[1][0]
 
         acta.save()
 
@@ -111,9 +116,14 @@ def generar_oficial(request, pk):
         )
 
     except Exception as error:
+        logger.exception(
+            "Error al generar el acta oficial %s",
+            acta.pk,
+        )
         messages.error(
             request,
-            f"Error generando el acta: {error}"
+            "No fue posible generar el acta. "
+            "Verifique los datos e inténtelo nuevamente."
         )
 
     return redirect(

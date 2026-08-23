@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -8,6 +10,9 @@ from estudiantes.models import RegistroTitulacion
 from .forms import ActaForm
 from .models import Acta
 from .services import generar_archivos_acta
+
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -554,6 +559,7 @@ def _ga_build_row(acta):
         ),
         "url_generar": _ga_reverse_first(
             [
+                "generar_oficial_prioridad",
                 "generar_documentos",
                 "generar_acta",
                 "regenerar_acta",
@@ -819,8 +825,8 @@ def generar_documentos_oficiales(request, pk):
             "fecha_generacion",
         ]
 
-        if acta.estado == "borrador":
-            acta.estado = "generada"
+        if acta.estado == Acta.ESTADOS[0][0]:
+            acta.estado = Acta.ESTADOS[1][0]
             campos.append("estado")
 
         acta.save(
@@ -834,9 +840,14 @@ def generar_documentos_oficiales(request, pk):
         )
 
     except Exception as exc:
+        logger.exception(
+            "Error al generar documentos oficiales para el acta %s",
+            acta.pk,
+        )
         messages.error(
             request,
-            f"Error al generar el acta: {exc}",
+            "No fue posible generar el acta. "
+            "Verifique los datos e inténtelo nuevamente.",
         )
 
     return redirect(
@@ -951,8 +962,8 @@ def generar_documentos(request, pk):
             "fecha_generacion",
         ]
 
-        if acta.estado == "borrador":
-            acta.estado = "generada"
+        if acta.estado == Acta.ESTADOS[0][0]:
+            acta.estado = Acta.ESTADOS[1][0]
             campos.append("estado")
 
         acta.save(
@@ -966,11 +977,15 @@ def generar_documentos(request, pk):
         )
 
     except Exception as error:
+        logger.exception(
+            "Error al regenerar documentos oficiales para el acta %s",
+            acta.pk,
+        )
 
         messages.error(
             request,
-            "No se pudieron generar "
-            f"los documentos: {error}",
+            "No fue posible generar los documentos. "
+            "Verifique los datos e inténtelo nuevamente.",
         )
 
     return redirect(

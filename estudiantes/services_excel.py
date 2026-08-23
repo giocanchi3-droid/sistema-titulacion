@@ -1,4 +1,5 @@
-﻿import re
+﻿import logging
+import re
 import unicodedata
 from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
@@ -8,6 +9,9 @@ from django.db import transaction
 from openpyxl import load_workbook
 
 from .models import RegistroTitulacion
+
+
+logger = logging.getLogger(__name__)
 
 
 ENCABEZADOS_ESPERADOS = {
@@ -677,13 +681,14 @@ def importar_excel(archivo):
             )
 
         except Exception as error:
+            logger.exception(
+                "Error inesperado al procesar la fila %s",
+                numero_fila,
+            )
             errores.append(
                 {
                     "fila": numero_fila,
-                    "error": (
-                        "Error inesperado al procesar la fila: "
-                        f"{error}"
-                    ),
+                    "error": "No fue posible procesar esta fila.",
                 }
             )
 
