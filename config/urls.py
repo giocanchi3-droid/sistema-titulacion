@@ -1,13 +1,22 @@
 ﻿from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.auth.views import LoginView
 from django.urls import include, path
+
+from core.forms import LoginForm
 
 
 urlpatterns = [
     path(
         "admin/",
         admin.site.urls,
+    ),
+
+    path(
+        "cuentas/login/",
+        LoginView.as_view(authentication_form=LoginForm),
+        name="login",
     ),
 
     path(

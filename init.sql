@@ -1,0 +1,28 @@
+﻿-- =========================================================
+-- SISTEMA DE TITULACIÓN PUCETEC
+-- PostgreSQL 16
+-- =========================================================
+
+-- Base de datos:
+-- pucetec_titulacion
+
+-- Las tablas del sistema son gestionadas por Django ORM.
+--
+-- Para crear/actualizar las tablas:
+--
+-- python manage.py makemigrations
+-- python manage.py migrate
+--
+-- Aplicaciones principales:
+--   estudiantes
+--   documentos
+--   procesos
+--   core
+--
+-- Django también gestiona:
+--   usuarios
+--   permisos
+--   sesiones
+--   migraciones
+--
+-- =========================================================

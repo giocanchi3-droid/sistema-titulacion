@@ -1,0 +1,269 @@
+body.app-page {
+    color: #e9f0f3 !important;
+    background-color: #041934 !important;
+    background-image:
+        linear-gradient(
+            rgba(3, 22, 47, 0.22),
+            rgba(3, 22, 47, 0.30)
+        ),
+        url("/static/img/fondo-puce-nuevo-2026.png") !important;
+    background-size: cover !important;
+    background-attachment: fixed !important;
+}
+
+body.app-page .app-main > header {
+    background: rgba(19, 25, 28, 0.98) !important;
+    border-bottom-color: rgba(128, 148, 151, 0.28) !important;
+    color: #f4f8fa !important;
+}
+
+body.app-page .app-main > header p {
+    color: #b8c8cf !important;
+}
+
+body.app-page aside.app-sidebar {
+    background: #111f29 !important;
+    border-right-color: #46555a !important;
+}
+
+body.app-page aside.app-sidebar .border-slate-700 {
+    border-color: #335565 !important;
+}
+
+body.app-page aside.app-sidebar .text-blue-300 {
+    color: #e2b866 !important;
+}
+
+body.app-page aside.app-sidebar .text-slate-300 {
+    color: #b9c8ce !important;
+}
+
+body.app-page .menu-link {
+    color: #d4e0e4 !important;
+}
+
+body.app-page .menu-link:hover {
+    color: #ffffff !important;
+    background: #244352 !important;
+}
+
+body.app-page .app-main > div.p-4 > .mb-6 > div,
+body.app-page .card,
+body.app-page .panel,
+body.app-page .dashboard-card,
+body.app-page .form-card,
+body.app-page .info-card,
+body.app-page .stat-card,
+body.app-page .dashboard-pro-card,
+body.app-page .students-panel,
+body.app-page .ga-panel,
+body.app-page .acta-form-form-card,
+body.app-page .new-acta-form-card,
+body.app-page .expediente-card,
+body.app-page .excel-import-card {
+    background: #202a2d !important;
+    border-color: #53676b !important;
+    color: #e9f0f3 !important;
+    box-shadow: 0 10px 26px rgba(3, 13, 19, 0.25) !important;
+}
+
+body.app-page input,
+body.app-page select,
+body.app-page textarea {
+    background: #171f22 !important;
+    border-color: #5c7073 !important;
+    color: #f1f6f8 !important;
+}
+
+body.app-page input::placeholder,
+body.app-page textarea::placeholder {
+    color: #9eb1b9 !important;
+}
+
+body.app-page input:focus,
+body.app-page select:focus,
+body.app-page textarea:focus {
+    border-color: #66b5c6 !important;
+    box-shadow: 0 0 0 3px rgba(102, 181, 198, 0.18) !important;
+}
+
+body.app-page button:not(.sidebar-toggle):not(.sidebar-close),
+body.app-page .btn-primary,
+body.app-page .students-primary-button,
+body.app-page .ga-primary-button,
+body.app-page .new-acta-submit-button {
+    background: #478fa3 !important;
+    border-color: #7bc3d0 !important;
+    color: #ffffff !important;
+}
+
+body.app-page button:not(.sidebar-toggle):not(.sidebar-close):hover,
+body.app-page .btn-primary:hover,
+body.app-page .students-primary-button:hover,
+body.app-page .ga-primary-button:hover,
+body.app-page .new-acta-submit-button:hover {
+    background: #367486 !important;
+}
+
+body.app-page .btn-secondary,
+body.app-page .btn-outline,
+body.app-page .students-secondary-button,
+body.app-page .ga-clear-button {
+    background: #303b3e !important;
+    border-color: #718387 !important;
+    color: #edf4f6 !important;
+}
+
+body.app-page table {
+    background: #202a2d !important;
+    border-color: #53676b !important;
+}
+
+body.app-page thead,
+body.app-page thead tr,
+body.app-page thead th {
+    background: #35484c !important;
+    color: #eef7ff !important;
+}
+
+body.app-page tbody tr {
+    background: #202a2d !important;
+    color: #e9f0f3 !important;
+}
+
+body.app-page tbody tr:hover {
+    background: #304145 !important;
+}
+
+body.app-page .badge-success,
+body.app-page .status-success,
+body.app-page .estado-aprobado,
+body.app-page .estado-generada {
+    background: rgba(61, 157, 119, 0.22) !important;
+    color: #a6e0c1 !important;
+}
+
+body.app-page .badge-warning,
+body.app-page .status-warning,
+body.app-page .estado-pendiente,
+body.app-page .estado-borrador {
+    background: rgba(206, 158, 67, 0.22) !important;
+    color: #f0d08e !important;
+}
+
+body.app-page .new-acta-errors,
+body.app-page .new-acta-global-errors,
+body.app-page .acta-form-error-summary,
+body.app-page .excel-import-errors {
+    background: rgba(164, 67, 67, 0.22) !important;
+    border-color: #b87575 !important;
+    color: #ffd2d2 !important;
+}
+
+body.app-authenticated .app-main > div.p-4 {
+    padding-top: 10px !important;
+}
+
+body.app-authenticated .students-page,
+body.app-authenticated .acta-form-page,
+body.app-authenticated .ga-page,
+body.app-authenticated .actas-management-page {
+    padding-top: 0 !important;
+}
+
+body.app-authenticated .students-hero,
+body.app-authenticated .acta-form-hero,
+body.app-authenticated .ga-hero,
+body.app-authenticated .actas-management-hero {
+    background: linear-gradient(
+        135deg,
+        rgba(8, 24, 40, 0.98),
+        rgba(31, 45, 55, 0.96)
+    ) !important;
+    border-color: rgba(91, 157, 190, 0.48) !important;
+    box-shadow: 0 12px 28px rgba(2, 12, 22, 0.28) !important;
+}
+
+body.app-authenticated .students-hero::after,
+body.app-authenticated .acta-form-hero::after,
+body.app-authenticated .ga-hero::after,
+body.app-authenticated .actas-management-hero::after {
+    border-color: rgba(211, 165, 72, 0.12) !important;
+}
+
+body.app-authenticated .students-stat-card,
+body.app-authenticated .ga-stat-card,
+body.app-authenticated .actas-management-stat-card,
+body.app-authenticated .acta-form-progress-card {
+    background: linear-gradient(
+        145deg,
+        rgba(14, 30, 42, 0.97),
+        rgba(38, 47, 52, 0.95)
+    ) !important;
+    border-color: rgba(91, 157, 190, 0.38) !important;
+    color: #e9f0f3 !important;
+}
+
+body.app-authenticated .students-stat-card::before,
+body.app-authenticated .ga-stat-card::before,
+body.app-authenticated .actas-management-stat-card::before {
+    background: #398fac !important;
+}
+
+body.app-authenticated .students-stat-card:nth-child(2)::before,
+body.app-authenticated .ga-stat-card:nth-child(2)::before,
+body.app-authenticated .actas-management-stat-card:nth-child(2)::before {
+    background: #d4a64b !important;
+}
+
+body.app-authenticated .students-stat-card:nth-child(3)::before,
+body.app-authenticated .ga-stat-card:nth-child(3)::before,
+body.app-authenticated .actas-management-stat-card:nth-child(3)::before {
+    background: #3b9b7c !important;
+}
+
+body.app-authenticated .students-stat-card:nth-child(4)::before,
+body.app-authenticated .ga-stat-card:nth-child(4)::before,
+body.app-authenticated .actas-management-stat-card:nth-child(4)::before {
+    background: #c66a68 !important;
+}
+
+body.app-authenticated .students-stat-card h1,
+body.app-authenticated .students-stat-card h2,
+body.app-authenticated .students-stat-card h3,
+body.app-authenticated .ga-stat-card h1,
+body.app-authenticated .ga-stat-card h2,
+body.app-authenticated .ga-stat-card h3,
+body.app-authenticated .actas-management-stat-card h1,
+body.app-authenticated .actas-management-stat-card h2,
+body.app-authenticated .actas-management-stat-card h3,
+body.app-authenticated .acta-form-progress-card strong {
+    color: #e9f0f3 !important;
+}
+
+body.app-authenticated .students-eyebrow,
+body.app-authenticated .acta-form-eyebrow,
+body.app-authenticated .ga-eyebrow,
+body.app-authenticated .actas-management-eyebrow {
+    color: #e2b866 !important;
+}
+
+body.app-authenticated .students-description,
+body.app-authenticated .acta-form-description,
+body.app-authenticated .ga-description,
+body.app-authenticated .actas-management-description {
+    color: #c5d0d5 !important;
+}
+
+body.app-authenticated .students-primary-button,
+body.app-authenticated .ga-primary-button,
+body.app-authenticated .actas-management-create {
+    background: linear-gradient(135deg, #3f9bc4, #176487) !important;
+    border-color: #65b4d5 !important;
+}
+
+@media (max-width: 759px) {
+    body.app-authenticated .app-main > div.p-4 {
+        padding-top: 8px !important;
+    }
+}

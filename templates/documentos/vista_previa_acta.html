@@ -48,7 +48,7 @@ Vista previa del acta
 
             <form
                 method="post"
-                action="{% url 'documentos:generar_documentos_oficiales_oficiales' acta.pk %}"
+                action="{% url 'documentos:generar_oficial_prioridad' acta.pk %}"
                 style="display:inline; background:none !important; border:none !important; padding:0 !important;"
             >
                 {% csrf_token %}

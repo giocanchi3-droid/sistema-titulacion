@@ -2,7 +2,7 @@
    ESCALA GLOBAL AMPLIADA PUCE TEC
 
    Navegador al 75 %:
-   0.75 x 1.35 = 1.0125
+    0.95 x 1.05 = 0.9975
    El sistema se verá aproximadamente como al 100 %.
 
    Navegador al 100 %:
@@ -28,13 +28,13 @@
 
     body.app-authenticated .puce-content-scale,
     body.system-page .puce-content-scale {
-        width: 74.074074% !important;
-        min-width: 74.074074% !important;
+        width: 95.238095% !important;
+        min-width: 95.238095% !important;
         max-width: none !important;
 
-        min-height: 74.074074vh !important;
+        min-height: 95.238095vh !important;
 
-        zoom: 1.35 !important;
+        zoom: 1.05 !important;
         transform-origin: top left !important;
     }
 
@@ -47,13 +47,13 @@
     body.app-authenticated .puce-main-scaled,
     body.system-page .puce-ui-scaled,
     body.system-page .puce-main-scaled {
-        width: 74.074074% !important;
-        min-width: 74.074074% !important;
+        width: 95.238095% !important;
+        min-width: 95.238095% !important;
         max-width: none !important;
 
-        min-height: 74.074074vh !important;
+        min-height: 95.238095vh !important;
 
-        zoom: 1.35 !important;
+        zoom: 1.05 !important;
         transform-origin: top left !important;
     }
 
@@ -129,7 +129,7 @@
         min-width: 83.333333% !important;
         max-width: none !important;
 
-        zoom: 1.20 !important;
+        zoom: 1.02 !important;
         transform-origin: top left !important;
     }
 }

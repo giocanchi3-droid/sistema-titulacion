@@ -11,3 +11,6 @@ staticfiles/
 .idea/
 *.py[cod]
 *.log
+config/settings_sqlite_temp.py
+db.sqlite3.backup-migracion
+datos_migracion.json

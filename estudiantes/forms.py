@@ -168,3 +168,34 @@ class RegistroTitulacionForm(forms.ModelForm):
             )
 
         return cedula
+
+    def _limpiar_nombre(self, nombre, etiqueta):
+        nombre = " ".join(nombre.split())
+
+        if not nombre:
+            return nombre
+
+        if not all(
+            caracter.isalpha()
+            or caracter.isspace()
+            or caracter in "-'"
+            for caracter in nombre
+        ):
+            raise forms.ValidationError(
+                f"{etiqueta} solo puede contener letras, espacios, "
+                "guion y apóstrofe."
+            )
+
+        return nombre
+
+    def clean_nombres_completos(self):
+        return self._limpiar_nombre(
+            self.cleaned_data["nombres_completos"],
+            "El nombre completo",
+        )
+
+    def clean_nombres_completos_tutor(self):
+        return self._limpiar_nombre(
+            self.cleaned_data["nombres_completos_tutor"],
+            "El nombre del tutor",
+        )

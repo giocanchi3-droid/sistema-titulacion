@@ -1,0 +1,201 @@
+body.app-authenticated {
+    font-size: 16px;
+}
+
+body.app-authenticated main {
+    font-size: 1.05rem;
+}
+
+body.app-authenticated .menu-link {
+    font-size: 1.05rem !important;
+    line-height: 1.4;
+}
+
+body.app-authenticated main > header p {
+    font-size: 1rem !important;
+}
+
+body.app-authenticated main > header h2 {
+    font-size: 1.45rem !important;
+}
+
+body.app-authenticated button,
+body.app-authenticated a.btn-primary,
+body.app-authenticated a.btn-secondary,
+body.app-authenticated input,
+body.app-authenticated select,
+body.app-authenticated textarea {
+    font-size: 1.05rem !important;
+}
+
+body.app-authenticated input,
+body.app-authenticated select,
+body.app-authenticated textarea {
+    line-height: 1.45;
+}
+
+body.app-authenticated label,
+body.app-authenticated .new-acta-label,
+body.app-authenticated .students-filter-label,
+body.app-authenticated .ga-filter-label {
+    font-size: 1rem !important;
+}
+
+body.app-authenticated .dashboard-pro,
+body.app-authenticated .students-page,
+body.app-authenticated .ga-page,
+body.app-authenticated .new-acta-page,
+body.app-authenticated .excel-import-pro,
+body.app-authenticated .expediente,
+body.app-authenticated .acta-detail {
+    font-size: 1.05rem;
+}
+
+body.app-authenticated .dashboard-pro-description,
+body.app-authenticated .students-description,
+body.app-authenticated .ga-description,
+body.app-authenticated .new-acta-header-content p,
+body.app-authenticated .new-acta-help,
+body.app-authenticated .new-acta-field-errors span,
+body.app-authenticated .excel-import-pro p {
+    font-size: 1rem !important;
+    line-height: 1.5;
+}
+
+body.app-authenticated .dashboard-pro-stat-label,
+body.app-authenticated .dashboard-pro-stat-detail,
+body.app-authenticated .students-stat-label,
+body.app-authenticated .students-stat-detail,
+body.app-authenticated .ga-stat-label,
+body.app-authenticated .ga-stat-description,
+body.app-authenticated .new-acta-eyebrow,
+body.app-authenticated .new-acta-status-dot,
+body.app-authenticated .excel-import-pro label,
+body.app-authenticated .expediente-label,
+body.app-authenticated .expediente-meta {
+    font-size: 1rem !important;
+    line-height: 1.45;
+}
+
+body.app-authenticated .dashboard-pro-card-description,
+body.app-authenticated .dashboard-pro-progress-summary-item,
+body.app-authenticated .students-filter-indicator,
+body.app-authenticated .ga-filter-active,
+body.app-authenticated .expediente-badge {
+    font-size: 1rem !important;
+}
+
+body.app-authenticated .students-table,
+body.app-authenticated .ga-table,
+body.app-authenticated .expediente-information,
+body.app-authenticated .acta-detail table {
+    font-size: 1rem !important;
+}
+
+body.app-authenticated .dashboard-pro-description,
+body.app-authenticated .dashboard-pro-card-description,
+body.app-authenticated .dashboard-pro-stat-label,
+body.app-authenticated .dashboard-pro-stat-detail,
+body.app-authenticated .students-description,
+body.app-authenticated .students-stat-label,
+body.app-authenticated .students-stat-detail,
+body.app-authenticated .students-panel-description,
+body.app-authenticated .ga-description,
+body.app-authenticated .ga-stat-label,
+body.app-authenticated .ga-stat-description,
+body.app-authenticated .ga-panel-description,
+body.app-authenticated .new-acta-header-content p,
+body.app-authenticated .new-acta-help,
+body.app-authenticated .new-acta-required-message,
+body.app-authenticated .expediente-meta,
+body.app-authenticated .expediente-label,
+body.app-authenticated .expediente-card-description,
+body.app-authenticated .excel-import-pro p,
+body.app-authenticated .excel-import-pro label,
+body.app-authenticated .dashboard-pro-eyebrow,
+body.app-authenticated .dashboard-pro-status-badge,
+body.app-authenticated .students-eyebrow,
+body.app-authenticated .students-filter-indicator,
+body.app-authenticated .ga-eyebrow,
+body.app-authenticated .ga-filter-active,
+body.app-authenticated .new-acta-eyebrow,
+body.app-authenticated .expediente-badge {
+    font-size: 1rem !important;
+    line-height: 1.45;
+}
+
+body.app-authenticated .dashboard-pro-title,
+body.app-authenticated .students-title,
+body.app-authenticated .ga-title,
+body.app-authenticated .new-acta-header h1,
+body.app-authenticated .expediente-name {
+    font-size: 1.8rem !important;
+    line-height: 1.2;
+}
+
+body.app-authenticated .dashboard-pro-card-title,
+body.app-authenticated .students-panel-title,
+body.app-authenticated .ga-panel-title,
+body.app-authenticated .new-acta-form-card h2,
+body.app-authenticated .expediente-card-title {
+    font-size: 1.3rem !important;
+    line-height: 1.3;
+}
+
+body.app-authenticated .new-acta-errors,
+body.app-authenticated .new-acta-global-errors,
+body.app-authenticated .acta-form-errors,
+body.app-authenticated .excel-import-errors {
+    font-size: 1rem !important;
+    line-height: 1.5;
+}
+
+body.app-authenticated .btn-primary,
+body.app-authenticated .btn-secondary,
+body.app-authenticated .students-primary-button,
+body.app-authenticated .ga-primary-button,
+body.app-authenticated .new-acta-submit-button {
+    min-height: 44px;
+}
+
+body.app-login .puce-login-institution {
+    font-size: 13px !important;
+}
+
+body.app-login .puce-login-title {
+    font-size: 26px !important;
+}
+
+body.app-login .puce-login-description {
+    font-size: 15px !important;
+}
+
+body.app-login .puce-login-label {
+    font-size: 15px !important;
+}
+
+body.app-login .puce-login-input {
+    font-size: 16px !important;
+}
+
+body.app-login .puce-login-button {
+    font-size: 16px !important;
+}
+
+body.app-login .puce-login-alert {
+    font-size: 14px !important;
+}
+
+body.app-login .puce-login-footer {
+    font-size: 12px !important;
+}
+
+@media (max-width: 759px) {
+    body.app-authenticated main > header h2 {
+        font-size: 1.3rem !important;
+    }
+
+    body.app-authenticated .menu-link {
+        padding: 0.8rem 0.9rem;
+    }
+}

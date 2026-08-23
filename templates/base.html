@@ -28,7 +28,7 @@
 >
 <link
     rel="stylesheet"
-    href="{% static 'css/escala-ui.css' %}?v=7"
+    href="{% static 'css/escala-ui.css' %}?v=20260822-105"
 >
 
     <!-- Fondo PUCE definitivo -->
@@ -42,6 +42,10 @@
 
     <link rel="stylesheet" href="{% static "css/force-opaque-ui.css" %}">
 
+    <link rel="stylesheet" href="{% static 'css/legibilidad-global.css' %}?v=20260822-balanced">
+
+    <link rel="stylesheet" href="{% static 'css/menu-responsive.css' %}?v=20260822-menu2">
+
     <!-- Opacidad definitiva de paneles internos -->
     
 
@@ -52,6 +56,11 @@
         href="{% static 'css/paginas-opacas.css' %}?v=20260807-2153"
     >
 
+    <link
+        rel="stylesheet"
+        href="{% static 'css/ui-polish.css' %}?v=20260822-6"
+    >
+
 
     <!-- Vista previa oficial de actas -->
     </head>
@@ -60,22 +69,35 @@
 
 {% if user.is_authenticated %}
 
-<div class="min-h-screen lg:flex">
+<div class="app-shell min-h-screen lg:flex">
 
-    <aside class="bg-slate-900 text-white lg:w-72">
+    <aside
+        id="appSidebar"
+        class="app-sidebar bg-slate-900 text-white lg:w-72"
+    >
 
         <div class="border-b border-slate-700 p-6">
-            <p class="text-xs font-semibold uppercase tracking-widest text-blue-300">
+            <p class="sidebar-text text-xs font-semibold uppercase tracking-widest text-blue-300">
                 PUCE TEC
             </p>
 
-            <h1 class="mt-2 text-xl font-bold">
+            <h1 class="sidebar-text mt-2 text-xl font-bold">
                 Sistema de Titulación
             </h1>
 
-            <p class="mt-3 text-sm text-slate-300">
+            <p class="sidebar-text mt-3 text-sm text-slate-300">
                 Usuario: {{ user.username }}
             </p>
+
+            <button
+                id="closeSidebar"
+                class="sidebar-close"
+                type="button"
+                aria-label="Cerrar menú"
+                title="Cerrar menú"
+            >
+                &times;
+            </button>
         </div>
 
         <nav class="space-y-1 p-4">
@@ -84,7 +106,7 @@
                 href="{% url 'core:dashboard' %}"
                 class="menu-link"
             >
-                Dashboard
+                <span class="sidebar-text">Panel de control</span>
             </a>
 
 
@@ -92,14 +114,14 @@
                 href="{% url 'estudiantes:lista' %}"
                 class="menu-link"
             >
-                Gestión de estudiantes
+                <span class="sidebar-text">Estudiantes</span>
             </a>
 
             <a
                 href="{% url 'estudiantes:crear' %}"
                 class="menu-link"
             >
-                Nuevo registro
+                <span class="sidebar-text">Registrar estudiante</span>
             </a>
 
 
@@ -107,14 +129,14 @@
                 href="{% url 'documentos:lista_actas' %}"
                 class="menu-link"
             >
-                Gestión de actas
+                <span class="sidebar-text">Actas de titulación</span>
             </a>
 
             <a
                 href="{% url 'documentos:crear_acta' %}"
                 class="menu-link"
             >
-                Nueva acta
+                <span class="sidebar-text">Crear acta</span>
             </a>
 
 
@@ -122,7 +144,7 @@
                 href="{% url 'estudiantes:importar' %}"
                 class="menu-link"
             >
-                Importar Excel
+                <span class="sidebar-text">Importar estudiantes</span>
             </a>
 
             {% if user.is_staff %}
@@ -130,7 +152,7 @@
                     href="/admin/"
                     class="menu-link"
                 >
-                    Administración
+                    <span class="sidebar-text">Administración del sistema</span>
                 </a>
             {% endif %}
 
@@ -148,7 +170,7 @@
                     type="submit"
                     class="w-full rounded-lg bg-red-600 px-4 py-2 text-left font-semibold hover:bg-red-700"
                 >
-                    Cerrar sesión
+                        <span class="sidebar-text">Cerrar sesión</span>
                 </button>
 
             </form>
@@ -157,9 +179,27 @@
 
     </aside>
 
-    <main class="min-w-0 flex-1">
+    <div
+        id="sidebarOverlay"
+        class="sidebar-overlay"
+        aria-hidden="true"
+    ></div>
+
+    <main class="app-main min-w-0 flex-1">
 
         <header class="border-b bg-white px-6 py-4 shadow-sm">
+
+            <button
+                id="sidebarToggle"
+                class="sidebar-toggle"
+                type="button"
+                aria-controls="appSidebar"
+                aria-expanded="false"
+                aria-label="Abrir menú"
+                title="Abrir menú"
+            >
+                <span aria-hidden="true">&#9776;</span>
+            </button>
 
             <p class="text-sm text-slate-500">
                 Automatización del proceso de titulación
@@ -209,7 +249,7 @@
 
 
 <script
-    src="{% static 'js/app.js' %}?v=restaurado1"
+    src="{% static 'js/app.js' %}?v=20260822-menu2"
 ></script>
 <script
     src="{% static 'js/escala-ui.js' %}?v=restaurado1"
