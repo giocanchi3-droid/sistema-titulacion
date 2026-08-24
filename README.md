@@ -27,10 +27,11 @@ pip install django
 django-admin startproject config .
 
 
+# Crear la base de datos en PostgreSQL usando psycopg
+python -c "import psycopg; conn = psycopg.connect('dbname=postgres user=postgres password=(contraseña aqui) host=127.0.0.1 port=5432', autocommit=True); conn.execute('CREATE DATABASE sistema_titulacion'); conn.close(); print('¡Base de datos creada exitosamente!')"
 
-# BASE DE DATOS Y SERVIDOR LOCAL
-
-# Aplicar migraciones pendientes
+# Generar y aplicar las migraciones
+python manage.py makemigrations
 python manage.py migrate
 
 # Crear usuario administrador

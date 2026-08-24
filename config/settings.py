@@ -84,7 +84,7 @@ DATABASES = {
         ),
         "PASSWORD": config(
             "DB_PASSWORD",
-            default="",
+            default="gio2006",
         ),
         "HOST": config(
             "DB_HOST",
