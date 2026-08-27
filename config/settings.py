@@ -1,5 +1,6 @@
 ﻿from pathlib import Path
 
+import dj_database_url
 from decouple import Csv, config
 
 
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -71,31 +73,42 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": config(
-            "DB_NAME",
-            default="pucetec_titulacion",
-        ),
-        "USER": config(
-            "DB_USER",
-            default="postgres",
-        ),
-        "PASSWORD": config(
-            "DB_PASSWORD",
-            default="gio2006",
-        ),
-        "HOST": config(
-            "DB_HOST",
-            default="127.0.0.1",
-        ),
-        "PORT": config(
-            "DB_PORT",
-            default="5432",
-        ),
+DATABASE_URL = config("DATABASE_URL", default="")
+
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+        )
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": config(
+                "DB_NAME",
+                default="pucetec_titulacion",
+            ),
+            "USER": config(
+                "DB_USER",
+                default="postgres",
+            ),
+            "PASSWORD": config(
+                "DB_PASSWORD",
+                default="gio2006",
+            ),
+            "HOST": config(
+                "DB_HOST",
+                default="127.0.0.1",
+            ),
+            "PORT": config(
+                "DB_PORT",
+                default="5432",
+            ),
+        }
+    }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -132,13 +145,19 @@ TIME_ZONE = "America/Guayaquil"
 USE_I18N = True
 
 USE_TZ = True
-STATIC_URL = '/static/'
+
+
+STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STATICFILES_STORAGE = (
+    "whitenoise.storage.CompressedManifestStaticFilesStorage"
+)
 
 
 MEDIA_URL = "/media/"
@@ -162,8 +181,9 @@ REST_FRAMEWORK = {
     ],
 }
 
+
 # EXCEL_UPLOAD_LIMIT_START
-# TamaÃ±o mÃ¡ximo permitido para una matriz Excel: 100 MB.
+# Tamaño máximo permitido para una matriz Excel: 100 MB.
 MAX_EXCEL_UPLOAD_SIZE = 100 * 1024 * 1024
 
 # Margen adicional para el cuerpo completo de la solicitud.
@@ -173,5 +193,3 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 110 * 1024 * 1024
 # evitando mantener archivos grandes completamente en memoria RAM.
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024
 # EXCEL_UPLOAD_LIMIT_END
-
-
