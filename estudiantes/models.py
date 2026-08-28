@@ -38,7 +38,9 @@ class RegistroTitulacion(models.Model):
         ("APROBADO", "Aprobado"),
     ]
 
-    # 1-9: Información personal e institucional
+    # ============================================================
+    # 1-9: INFORMACIÓN PERSONAL E INSTITUCIONAL
+    # ============================================================
 
     id_banner = models.CharField(
         "ID_BANNER",
@@ -91,7 +93,9 @@ class RegistroTitulacion(models.Model):
         blank=True,
     )
 
-    # 10-17: Información académica
+    # ============================================================
+    # 10-17: INFORMACIÓN ACADÉMICA
+    # ============================================================
 
     numero_cohorte = models.CharField(
         "NÚMERO DE COHORTE",
@@ -144,7 +148,9 @@ class RegistroTitulacion(models.Model):
         blank=True,
     )
 
-    # 18-21: Prácticas y servicio comunitario
+    # ============================================================
+    # 18-21: PRÁCTICAS Y SERVICIO COMUNITARIO
+    # ============================================================
 
     materia_practicas_pre_profesionales = models.CharField(
         "MATERIA PRÁCTICAS PRE PROFESIONALES",
@@ -172,7 +178,9 @@ class RegistroTitulacion(models.Model):
         blank=True,
     )
 
-    # 22-24: Tutor y tema
+    # ============================================================
+    # 22-24: TUTOR Y TEMA
+    # ============================================================
 
     nombres_completos_tutor = models.CharField(
         "NOMBRES COMPLETOS TUTOR",
@@ -191,7 +199,9 @@ class RegistroTitulacion(models.Model):
         blank=True,
     )
 
-    # 25-32: Miembros del tribunal
+    # ============================================================
+    # 25-32: MIEMBROS DEL TRIBUNAL
+    # ============================================================
 
     primer_miembro_tribunal = models.CharField(
         "1er MIEMBRO DE TRIBUNAL - APELLIDOS Y NOMBRES COMPLETOS",
@@ -218,13 +228,13 @@ class RegistroTitulacion(models.Model):
     )
 
     tercer_miembro_tribunal = models.CharField(
-        "3ter MIEMBRO DE TRIBUNAL - NOMBRES COMPLETOS",
+        "3er MIEMBRO DE TRIBUNAL - NOMBRES COMPLETOS",
         max_length=200,
         blank=True,
     )
 
     tercer_miembro_id_docente = models.CharField(
-        "3ter MIEMBRO DE TRIBUNAL - ID DOCENTE",
+        "3er MIEMBRO DE TRIBUNAL - ID DOCENTE",
         max_length=30,
         blank=True,
     )
@@ -241,7 +251,9 @@ class RegistroTitulacion(models.Model):
         blank=True,
     )
 
-    # 33-38: Calificaciones
+    # ============================================================
+    # 33-38: CALIFICACIONES
+    # ============================================================
 
     proyecto_escrito = models.DecimalField(
         "PROYECTO ESCRITO",
@@ -297,7 +309,9 @@ class RegistroTitulacion(models.Model):
         validators=VALIDADORES_NOTA,
     )
 
-    # 39-44: Observaciones, envío y grado
+    # ============================================================
+    # 39-44: OBSERVACIONES, ENVÍO Y GRADO
+    # ============================================================
 
     observacion_puce_tec = models.TextField(
         "OBSERVACIÓN PUCE TEC",
@@ -322,15 +336,19 @@ class RegistroTitulacion(models.Model):
     )
 
     fecha_grado = models.DateField(
-        "Fecha de Grado",
+        "FECHA DE GRADO",
         null=True,
         blank=True,
     )
 
     observacion_secretaria = models.TextField(
-        "Observación Secretaría",
+        "OBSERVACIÓN SECRETARÍA",
         blank=True,
     )
+
+    # ============================================================
+    # CONTROL DEL SISTEMA
+    # ============================================================
 
     fecha_creacion = models.DateTimeField(
         auto_now_add=True,
@@ -350,9 +368,19 @@ class RegistroTitulacion(models.Model):
 
 
 class Programa(models.Model):
-    codigo = models.CharField(max_length=30, unique=True)
-    descripcion = models.CharField(max_length=250)
-    activo = models.BooleanField(default=True)
+
+    codigo = models.CharField(
+        max_length=30,
+        unique=True,
+    )
+
+    descripcion = models.CharField(
+        max_length=250,
+    )
+
+    activo = models.BooleanField(
+        default=True,
+    )
 
     class Meta:
         ordering = ["codigo"]
@@ -364,20 +392,47 @@ class Programa(models.Model):
 
 
 class HistorialExpediente(models.Model):
+
     registro = models.ForeignKey(
         RegistroTitulacion,
         on_delete=models.CASCADE,
         related_name="historial_cambios",
     )
-    responsable = models.CharField(max_length=150, default="Sistema")
-    campo = models.CharField(max_length=100)
-    valor_anterior = models.TextField(blank=True)
-    valor_nuevo = models.TextField(blank=True)
-    accion = models.CharField(max_length=30, default="EDICION")
-    observacion = models.TextField(blank=True)
-    fecha = models.DateTimeField(auto_now_add=True)
+
+    responsable = models.CharField(
+        max_length=150,
+        default="Sistema",
+    )
+
+    campo = models.CharField(
+        max_length=100,
+    )
+
+    valor_anterior = models.TextField(
+        blank=True,
+    )
+
+    valor_nuevo = models.TextField(
+        blank=True,
+    )
+
+    accion = models.CharField(
+        max_length=30,
+        default="EDICION",
+    )
+
+    observacion = models.TextField(
+        blank=True,
+    )
+
+    fecha = models.DateTimeField(
+        auto_now_add=True,
+    )
 
     class Meta:
         ordering = ["-fecha"]
         verbose_name = "Cambio del expediente"
         verbose_name_plural = "Cambios del expediente"
+
+    def __str__(self):
+        return f"{self.registro} - {self.campo} - {self.accion}"

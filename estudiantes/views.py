@@ -329,7 +329,7 @@ def crear_registro(request):
                 pk=registro.pk,
             )
     else:
-        form = RegistroTitulacionForm(programas=opciones_programas())
+        form = RegistroTitulacionForm()
 
     contexto = {
         "form": form,
@@ -458,4 +458,5 @@ def eliminar_registro(request, pk):
             "registro": registro,
         },
     )
+
 
