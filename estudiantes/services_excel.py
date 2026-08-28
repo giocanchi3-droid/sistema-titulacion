@@ -607,9 +607,12 @@ def guardar_registro(datos, usuario=None):
     registro.save()
 
     if programa:
-        Programa.objects.get_or_create(
+        Programa.objects.update_or_create(
             codigo=programa,
-            defaults={"descripcion": valores["programa_desc"] or programa},
+            defaults={
+                "descripcion": valores["programa_desc"] or programa,
+                "activo": True,
+            },
         )
 
     responsable = getattr(usuario, "username", None) or "Importación Excel"

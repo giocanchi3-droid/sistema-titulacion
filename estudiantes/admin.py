@@ -1,6 +1,43 @@
 ﻿from django.contrib import admin
 
-from .models import RegistroTitulacion
+from .models import HistorialExpediente, Programa, RegistroTitulacion
+
+
+@admin.register(Programa)
+class ProgramaAdmin(admin.ModelAdmin):
+    list_display = ("codigo", "descripcion", "activo")
+    list_filter = ("activo",)
+    search_fields = ("codigo", "descripcion")
+
+
+@admin.register(HistorialExpediente)
+class HistorialExpedienteAdmin(admin.ModelAdmin):
+    list_display = (
+        "fecha",
+        "registro",
+        "responsable",
+        "campo",
+        "accion",
+        "valor_anterior",
+        "valor_nuevo",
+    )
+    list_filter = ("accion", "responsable")
+    search_fields = (
+        "registro__cedula",
+        "registro__nombres_completos",
+        "responsable",
+        "campo",
+    )
+    readonly_fields = (
+        "registro",
+        "responsable",
+        "campo",
+        "valor_anterior",
+        "valor_nuevo",
+        "accion",
+        "observacion",
+        "fecha",
+    )
 
 
 @admin.register(RegistroTitulacion)
