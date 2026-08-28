@@ -383,7 +383,6 @@ body:not(.login-page) .file-box {
 
 /* ---------------------------------------------------------
    TEXTO MUTED
---------------------------------------------------------- */
 
 body:not(.login-page) .text-muted,
 body:not(.login-page) small,
@@ -400,7 +399,6 @@ body:not(.login-page) .helper-text {
 body:not(.login-page) .step-item,
 body:not(.login-page) .nav-step,
 body:not(.login-page) .section-link,
-body:not(.login-page) .wizard-step {
     background: #12314b !important;
     background-color: #12314b !important;
     background-image: none !important;
@@ -415,6 +413,41 @@ body:not(.login-page) .section-link.active,
 body:not(.login-page) .wizard-step.active {
     background: #1f7fb8 !important;
     background-color: #1f7fb8 !important;
+
+/* ---------------------------------------------------------
+   CONTRASTE DE BLOQUES DE DATOS
+--------------------------------------------------------- */
+
+body.app-page main .bg-slate-50,
+body.app-page main .bg-gray-50,
+body.app-page main .bg-white {
+    background: #f4f7fb !important;
+    background-color: #f4f7fb !important;
+    color: #152238 !important;
+}
+
+body.app-page main .bg-slate-50 *,
+body.app-page main .bg-gray-50 *,
+body.app-page main .bg-white * {
+    color: #152238 !important;
+}
+
+body.app-page main .text-slate-500,
+body.app-page main .text-slate-600,
+body.app-page main .text-gray-500,
+body.app-page main .text-gray-600 {
+    color: #475569 !important;
+}
+
+body.app-page main .text-blue-700,
+body.app-page main .text-blue-800 {
+    color: #0a4f8a !important;
+}
+
+body.app-page main .text-red-700,
+body.app-page main .text-red-800 {
+    color: #b91c1c !important;
+}
     color: #ffffff !important;
     border-color: #63b9ea !important;
 }
