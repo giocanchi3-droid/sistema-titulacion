@@ -19,7 +19,8 @@ def importar_registros_excel(request):
         if form.is_valid():
             try:
                 resultado = importar_excel(
-                    form.cleaned_data["archivo"]
+                    form.cleaned_data["archivo"],
+                    usuario=request.user,
                 )
 
                 mensaje = (

@@ -45,6 +45,12 @@ urlpatterns = [
     ),
 
     path(
+        "<int:pk>/exportar-excel/",
+        views.exportar_registro,
+        name="exportar_excel",
+    ),
+
+    path(
         "<int:pk>/eliminar/",
         views.eliminar_registro,
         name="eliminar",

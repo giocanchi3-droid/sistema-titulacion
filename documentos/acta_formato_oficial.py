@@ -77,7 +77,19 @@ def miembro(registro, numero):
         getattr(registro, campo, "")
     )
 
-    return nombre.upper() if nombre else "0"
+    return nombre.upper() if nombre else ""
+
+
+def miembros_tribunal(registro, cantidad_maxima=4):
+    miembros = []
+
+    for numero in range(1, cantidad_maxima + 1):
+        nombre = miembro(registro, numero)
+
+        if nombre:
+            miembros.append(nombre)
+
+    return miembros
 
 
 def datos_acta(acta):
@@ -131,11 +143,7 @@ def datos_acta(acta):
             ),
         ]
 
-        firmas = [
-            miembro(r, 1),
-            miembro(r, 2),
-            miembro(r, 3),
-        ]
+        firmas = miembros_tribunal(r, 3)
 
     else:
         titulo = "Registro de Defensa oral"
@@ -184,12 +192,7 @@ def datos_acta(acta):
             ),
         ]
 
-        firmas = [
-            miembro(r, 1),
-            miembro(r, 2),
-            miembro(r, 3),
-            miembro(r, 4),
-        ]
+        firmas = miembros_tribunal(r, 4)
 
     return {
         "complexivo": complexivo,
@@ -619,24 +622,15 @@ def crear_pdf(acta, logo):
     # FIRMAS
     # --------------------------------------------------------
 
-    if d["complexivo"]:
-        posiciones = [
-            (18, 265, False),
-            (ancho - 178, 265, False),
-            (18, 115, True),
-        ]
+    numero_firmas = len(d["firmas"])
+    if numero_firmas == 2:
+        posiciones = [(18, 180, True), (ancho - 178, 180, True)]
+    elif numero_firmas == 3:
+        posiciones = [(18, 220, True), (ancho - 178, 220, True), (ancho / 2 - 80, 100, True)]
     else:
-        posiciones = [
-            (18, 275, True),
-            (ancho - 178, 275, True),
-            (18, 120, True),
-            (ancho - 178, 120, True),
-        ]
+        posiciones = [(18, 220, True), (ancho - 178, 220, True), (18, 95, True), (ancho - 178, 95, True)]
 
-    for posicion, nombre in zip(
-        posiciones,
-        d["firmas"]
-    ):
+    for posicion, nombre in zip(posiciones, d["firmas"]):
         firma_pdf(
             pdf,
             posicion[0],
@@ -932,8 +926,10 @@ def crear_word(acta, logo):
     sin_bordes(firmas)
 
     indice = 0
+    numero_firmas = len(d["firmas"])
+    filas = 1 if numero_firmas == 2 else 2
 
-    for fila in range(2):
+    for fila in range(filas):
         for col in range(2):
             celda = firmas.cell(
                 fila,
@@ -956,15 +952,7 @@ def crear_word(acta, logo):
                     "____________________________\n"
                 )
 
-                mostrar_firma = (
-                    not d["complexivo"]
-                    or indice == 2
-                )
-
-                if mostrar_firma:
-                    p.add_run(
-                        "Firma\n"
-                    )
+                p.add_run("Firma\n")
 
                 p.add_run(
                     d["firmas"][indice]

@@ -45,6 +45,14 @@
                 Editar información
             </a>
 
+            <a
+                href="{% url 'estudiantes:exportar_excel' registro.pk %}"
+                class="btn-secondary"
+                download
+            >
+                Descargar Excel
+            </a>
+
         </div>
 
     </div>

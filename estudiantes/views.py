@@ -2,10 +2,12 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import RegistroTitulacionForm
-from .models import RegistroTitulacion
+from .models import HistorialExpediente, Programa, RegistroTitulacion
+from .services_excel import exportar_registro_excel
 
 
 SECCIONES = [
@@ -143,6 +145,36 @@ def construir_secciones_detalle(registro):
     return secciones
 
 
+def registrar_cambios(registro, anterior, usuario, accion="EDICION"):
+    responsable = getattr(usuario, "username", None) or "Sistema"
+
+    for campo in RegistroTitulacionForm.Meta.fields:
+        viejo = str(getattr(anterior, campo, "") or "")
+        nuevo = str(getattr(registro, campo, "") or "")
+
+        if viejo != nuevo:
+            HistorialExpediente.objects.create(
+                registro=registro,
+                responsable=responsable,
+                campo=registro._meta.get_field(campo).verbose_name,
+                valor_anterior=viejo,
+                valor_nuevo=nuevo,
+                accion=accion,
+            )
+
+
+def opciones_programas():
+    return Programa.objects.filter(activo=True)
+
+
+def guardar_programa_catalogo(registro):
+    if registro.programa and registro.programa_desc:
+        Programa.objects.get_or_create(
+            codigo=registro.programa,
+            defaults={"descripcion": registro.programa_desc},
+        )
+
+
 @login_required
 def lista_registros(request):
     consulta = request.GET.get("q", "").strip()
@@ -271,10 +303,21 @@ def lista_registros(request):
 @login_required
 def crear_registro(request):
     if request.method == "POST":
-        form = RegistroTitulacionForm(request.POST)
+        form = RegistroTitulacionForm(
+            request.POST,
+            programas=opciones_programas(),
+        )
 
         if form.is_valid():
             registro = form.save()
+            guardar_programa_catalogo(registro)
+            anterior = RegistroTitulacion()
+            registrar_cambios(
+                registro,
+                anterior,
+                request.user,
+                accion="CREACION",
+            )
 
             messages.success(
                 request,
@@ -286,13 +329,14 @@ def crear_registro(request):
                 pk=registro.pk,
             )
     else:
-        form = RegistroTitulacionForm()
+        form = RegistroTitulacionForm(programas=opciones_programas())
 
     contexto = {
         "form": form,
         "titulo": "Registrar información de titulación",
         "texto_boton": "Guardar toda la información",
         "secciones": construir_secciones_formulario(form),
+        "programas_catalogo": form.programas_catalogo,
     }
 
     return render(
@@ -313,10 +357,14 @@ def editar_registro(request, pk):
         form = RegistroTitulacionForm(
             request.POST,
             instance=registro,
+            programas=opciones_programas(),
         )
 
         if form.is_valid():
+            anterior = RegistroTitulacion.objects.get(pk=registro.pk)
             registro = form.save()
+            guardar_programa_catalogo(registro)
+            registrar_cambios(registro, anterior, request.user)
 
             messages.success(
                 request,
@@ -330,6 +378,7 @@ def editar_registro(request, pk):
     else:
         form = RegistroTitulacionForm(
             instance=registro,
+            programas=opciones_programas(),
         )
 
     contexto = {
@@ -338,6 +387,7 @@ def editar_registro(request, pk):
         "titulo": "Editar información de titulación",
         "texto_boton": "Guardar cambios",
         "secciones": construir_secciones_formulario(form),
+        "programas_catalogo": form.programas_catalogo,
     }
 
     return render(
@@ -366,6 +416,20 @@ def detalle_registro(request, pk):
         "estudiantes/detalle.html",
         contexto,
     )
+
+
+@login_required
+def exportar_registro(request, pk):
+    registro = get_object_or_404(RegistroTitulacion, pk=pk)
+    contenido = exportar_registro_excel(registro)
+    respuesta = HttpResponse(
+        contenido,
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+    respuesta["Content-Disposition"] = (
+        f'attachment; filename="estudiante-{registro.cedula}.xlsx"'
+    )
+    return respuesta
 
 
 @login_required

@@ -347,3 +347,37 @@ class RegistroTitulacion(models.Model):
 
     def __str__(self):
         return f"{self.cedula} - {self.nombres_completos}"
+
+
+class Programa(models.Model):
+    codigo = models.CharField(max_length=30, unique=True)
+    descripcion = models.CharField(max_length=250)
+    activo = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["codigo"]
+        verbose_name = "Programa"
+        verbose_name_plural = "Programas"
+
+    def __str__(self):
+        return f"{self.codigo} - {self.descripcion}"
+
+
+class HistorialExpediente(models.Model):
+    registro = models.ForeignKey(
+        RegistroTitulacion,
+        on_delete=models.CASCADE,
+        related_name="historial_cambios",
+    )
+    responsable = models.CharField(max_length=150, default="Sistema")
+    campo = models.CharField(max_length=100)
+    valor_anterior = models.TextField(blank=True)
+    valor_nuevo = models.TextField(blank=True)
+    accion = models.CharField(max_length=30, default="EDICION")
+    observacion = models.TextField(blank=True)
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-fecha"]
+        verbose_name = "Cambio del expediente"
+        verbose_name_plural = "Cambios del expediente"

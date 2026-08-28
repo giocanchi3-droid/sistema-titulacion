@@ -7,11 +7,60 @@ from decimal import Decimal, InvalidOperation
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from openpyxl import load_workbook
+from openpyxl import Workbook
 
-from .models import RegistroTitulacion
+from .models import HistorialExpediente, Programa, RegistroTitulacion
 
 
 logger = logging.getLogger(__name__)
+
+
+EXPORTAR_CAMPOS = [
+    ("ID BANNER", "id_banner"),
+    ("NOMBRES COMPLETOS", "nombres_completos"),
+    ("CEDULA", "cedula"),
+    ("CELULAR", "celular"),
+    ("CORREO PERSONAL", "correo_personal"),
+    ("CORREO INSTITUC", "correo_instituc"),
+    ("SEDE", "sede"),
+    ("PROGRAMA", "programa"),
+    ("PROGAMA DESC", "programa_desc"),
+    ("NUMERO DE COHORTE", "numero_cohorte"),
+    ("PERIODO DE INGRESO", "periodo_ingreso"),
+    ("NIVEL2", "nivel2"),
+    ("MODALIDAD DE TITULACION", "modalidad_titulacion"),
+    ("MATRICULA UIC", "matricula_uic"),
+    ("PERIODO DE TITULACION SENESCYT", "periodo_titulacion_senescyt"),
+    ("ESTADO", "estado"),
+    ("CUMPLIMIENTO DE IDIOMA", "cumplimiento_idioma"),
+    ("MATERIA PRACTICAS PRE PROFESIONALES", "materia_practicas_pre_profesionales"),
+    ("HORAS 240", "horas_240"),
+    ("MATERIA SERVICIO COMUNITARIO", "materia_servicio_comunitario"),
+    ("HORAS 120", "horas_120"),
+    ("NOMBRES COMPLETOS TUTOR", "nombres_completos_tutor"),
+    ("ID TUTOR", "id_tutor"),
+    ("TEMA", "tema"),
+    ("1ER MIEMBREO DE TRIBUNAL APELLIDOS Y NOMBRES COMPLETOS", "primer_miembro_tribunal"),
+    ("1ER MIEMBRO DE TRIBUNAL ID DOCENTE", "primer_miembro_id_docente"),
+    ("2DO MIEMBRO DE TRIBUNAL APELLIDOS Y NOMBRES COMPLETOS", "segundo_miembro_tribunal"),
+    ("2DO MIEMBRO DE TRIBUNAL ID DOCENTE", "segundo_miembro_id_docente"),
+    ("3TER MIEMBRO DE TRIBUNAL NOMBRES COMPLETOS", "tercer_miembro_tribunal"),
+    ("3TER MIEMBRO DE TRIBUNAL ID DOCENTE", "tercer_miembro_id_docente"),
+    ("4TO MIEMBRO DE TRIBUNAL", "cuarto_miembro_tribunal"),
+    ("4TO MIEMBRO DE TRIBUNAL ID DOCENTE", "cuarto_miembro_id_docente"),
+    ("PROYECTO ESCRITO", "proyecto_escrito"),
+    ("DEFENSA ORAL", "defensa_oral"),
+    ("NOTA FINAL", "nota_final"),
+    ("EXAMEN TEORICO COMPLEXIVO", "examen_teorico_complexivo"),
+    ("EXAMEN TEORICO PRACTICO", "examen_teorico_practico"),
+    ("NOTA FINAL2", "nota_final2"),
+    ("OBSERVACION PUCE TEC", "observacion_puce_tec"),
+    ("OBSERVACIONES DE SECRETARIA GENERAL", "observaciones_secretaria_general"),
+    ("NUEVA OBSERVACION PUCE TEC", "nueva_observacion_puce_tec"),
+    ("ESTADO DE ENVIO DE REGISTRO", "estado_envio_registro"),
+    ("FECHA DE GRADO", "fecha_grado"),
+    ("OBSERVACION SECRETARIA", "observacion_secretaria"),
+]
 
 
 ENCABEZADOS_ESPERADOS = {
@@ -306,7 +355,7 @@ def obtener(datos, encabezado):
     )
 
 
-def guardar_registro(datos):
+def guardar_registro(datos, usuario=None):
     cedula = convertir_cedula(
         obtener(datos, "CEDULA")
     )
@@ -535,10 +584,17 @@ def guardar_registro(datos):
 
     creado = registro is None
 
+    anterior = {}
+
     if creado:
         registro = RegistroTitulacion(
             cedula=cedula
         )
+    else:
+        anterior = {
+            campo: str(getattr(registro, campo, "") or "")
+            for campo in valores
+        }
 
     for campo, valor in valores.items():
         setattr(
@@ -550,10 +606,29 @@ def guardar_registro(datos):
     registro.full_clean()
     registro.save()
 
+    if programa:
+        Programa.objects.get_or_create(
+            codigo=programa,
+            defaults={"descripcion": valores["programa_desc"] or programa},
+        )
+
+    responsable = getattr(usuario, "username", None) or "Importación Excel"
+    for campo, valor in valores.items():
+        nuevo = str(valor or "")
+        if creado or anterior.get(campo, "") != nuevo:
+            HistorialExpediente.objects.create(
+                registro=registro,
+                responsable=responsable,
+                campo=registro._meta.get_field(campo).verbose_name,
+                valor_anterior=anterior.get(campo, ""),
+                valor_nuevo=nuevo,
+                accion="IMPORTACION" if creado else "EDICION",
+            )
+
     return registro, creado
 
 
-def importar_excel(archivo):
+def importar_excel(archivo, usuario=None):
     try:
         libro = load_workbook(
             archivo,
@@ -642,7 +717,8 @@ def importar_excel(archivo):
         try:
             with transaction.atomic():
                 registro, creado = guardar_registro(
-                    datos
+                    datos,
+                    usuario=usuario,
                 )
 
                 cedulas_procesadas.add(
@@ -700,3 +776,29 @@ def importar_excel(archivo):
         "errores": errores,
         "total_correctos": creados + actualizados,
     }
+
+
+def exportar_registro_excel(registro):
+    libro = Workbook()
+    hoja = libro.active
+    hoja.title = "Matriz de titulación"
+    hoja.append([encabezado for encabezado, campo in EXPORTAR_CAMPOS])
+
+    fila = []
+    for encabezado, campo in EXPORTAR_CAMPOS:
+        valor = getattr(registro, campo, "")
+        if campo == "fecha_grado" and valor:
+            valor = valor.strftime("%d/%m/%Y")
+        fila.append(valor if valor is not None else "")
+
+    hoja.append(fila)
+    hoja.freeze_panes = "A2"
+
+    for columna in hoja.columns:
+        ancho = min(max(len(str(celda.value or "")) for celda in columna) + 2, 40)
+        hoja.column_dimensions[columna[0].column_letter].width = ancho
+
+    salida = BytesIO()
+    libro.save(salida)
+    salida.seek(0)
+    return salida.getvalue()

@@ -270,6 +270,18 @@
 
                                 <div class="acta-form-control-wrapper">
                                     {{ campo }}
+
+                                    {% if campo.name == "programa" or campo.name == "programa_desc" %}
+                                        <datalist id="opciones-{{ campo.name }}">
+                                            {% for programa in programas_catalogo %}
+                                                {% if campo.name == "programa" %}
+                                                    <option value="{{ programa.codigo }}">
+                                                {% else %}
+                                                    <option value="{{ programa.descripcion }}">
+                                                {% endif %}
+                                            {% endfor %}
+                                        </datalist>
+                                    {% endif %}
                                 </div>
 
                                 {% if campo.help_text %}

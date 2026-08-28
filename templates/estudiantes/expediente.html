@@ -577,8 +577,8 @@
                                 <tr>
                                     <th>Fecha</th>
                                     <th>Responsable</th>
-                                    <th>Acción</th>
-                                    <th>Observación</th>
+                                    <th>Campo</th>
+                                    <th>Cambio realizado</th>
                                 </tr>
                             </thead>
 
@@ -596,11 +596,17 @@
                                         </td>
 
                                         <td>
-                                            {{ movimiento.accion|default:movimiento.estado_nuevo }}
+                                            {{ movimiento.campo|default:movimiento.accion }}
                                         </td>
 
                                         <td>
-                                            {{ movimiento.observacion|default:"Sin observación" }}
+                                            <span class="historial-anterior">
+                                                {{ movimiento.valor_anterior|default:"Vacío" }}
+                                            </span>
+                                            &rarr;
+                                            <strong>
+                                                {{ movimiento.valor_nuevo|default:"Vacío" }}
+                                            </strong>
                                         </td>
                                     </tr>
 

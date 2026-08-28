@@ -5,6 +5,15 @@ from .models import RegistroTitulacion
 
 class RegistroTitulacionForm(forms.ModelForm):
 
+    def __init__(self, *args, programas=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.programas_catalogo = list(programas or [])
+
+        for nombre in ("programa", "programa_desc"):
+            self.fields[nombre].widget.attrs["list"] = (
+                f"opciones-{nombre}"
+            )
+
     class Meta:
         model = RegistroTitulacion
 
