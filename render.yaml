@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: pucetec-titulacion
+    runtime: python
+    buildCommand: bash build.sh
+    startCommand: gunicorn config.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.14.6
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "*"

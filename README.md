@@ -41,6 +41,20 @@ python manage.py createsuperuser
 python manage.py runserver
 
 
+# DESPLIEGUE EN RENDER
+
+# Build Command
+bash build.sh
+
+# Start Command
+gunicorn config.wsgi:application
+
+# Variables obligatorias
+# DATABASE_URL: URL interna de PostgreSQL de Render
+# SECRET_KEY: clave secreta de producción
+# DEBUG=False
+
+
 # COMANDO RÁPIDO PARA SESIONES POSTERIORES
 
 # Set-ExecutionPolicy -Scope Process RemoteSigned; .\.venv\Scripts\Activate.ps1; python manage.py runserver

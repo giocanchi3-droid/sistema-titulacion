@@ -3,6 +3,7 @@ import re
 import unicodedata
 from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
+from io import BytesIO
 
 from django.core.exceptions import ValidationError
 from django.db import transaction
