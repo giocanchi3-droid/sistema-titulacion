@@ -1,4 +1,8 @@
-from .views_oficial import generar_oficial
+from .views_oficial import (
+    generar_oficial,
+    generar_pdf_memoria,
+    generar_word_memoria,
+)
 from django.urls import path
 
 from . import views
@@ -30,6 +34,16 @@ urlpatterns = [
         "<int:pk>/descargar/<str:tipo>/",
         views.descargar_documento,
         name="descargar_documento",
+    ),
+    path(
+        "<int:pk>/generar-word/",
+        generar_word_memoria,
+        name="generar_word_memoria",
+    ),
+    path(
+        "<int:pk>/generar-pdf/",
+        generar_pdf_memoria,
+        name="generar_pdf_memoria",
     ),
     path(
         "",

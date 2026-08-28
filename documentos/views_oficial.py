@@ -1,9 +1,11 @@
 ﻿import logging
+from io import BytesIO
 
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
+from django.http import FileResponse, Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from django.utils.text import slugify
@@ -16,6 +18,73 @@ from .acta_formato_oficial import (
 
 
 logger = logging.getLogger(__name__)
+
+
+def _documento_en_memoria(acta, tipo):
+    logo = (
+        settings.BASE_DIR
+        / "static"
+        / "img"
+        / "logo-pucetec-oficial.png"
+    )
+
+    if not logo.exists():
+        raise Http404("No se encontró el logo PUCE TEC.")
+
+    try:
+        if tipo == "word":
+            contenido = crear_word(acta, logo)
+            nombre = "docx"
+            content_type = (
+                "application/vnd.openxmlformats-officedocument."
+                "wordprocessingml.document"
+            )
+            as_attachment = True
+        else:
+            contenido = crear_pdf(acta, logo)
+            nombre = "pdf"
+            content_type = "application/pdf"
+            as_attachment = False
+    except Exception:
+        logger.exception(
+            "Error al generar el documento %s del acta %s",
+            tipo,
+            acta.pk,
+        )
+        return HttpResponse(
+            "No fue posible generar el documento.",
+            status=500,
+        )
+
+    filename = (
+        f"{slugify(acta.numero_acta or f'acta-{acta.pk}')}"
+        f"-PUCETEC-OFICIAL.{nombre}"
+    )
+
+    return FileResponse(
+        BytesIO(contenido),
+        as_attachment=as_attachment,
+        filename=filename,
+        content_type=content_type,
+    )
+
+
+@login_required
+def generar_word_memoria(request, pk):
+    acta = get_object_or_404(
+        Acta.objects.select_related("registro"),
+        pk=pk,
+    )
+    return _documento_en_memoria(acta, "word")
+
+
+@login_required
+def generar_pdf_memoria(request, pk):
+    acta = get_object_or_404(
+        Acta.objects.select_related("registro"),
+        pk=pk,
+    )
+    return _documento_en_memoria(acta, "pdf")
 
 
 @login_required
@@ -99,15 +168,6 @@ def generar_oficial(request, pk):
             ContentFile(word),
             save=False
         )
-
-        if not acta.archivo_pdf.storage.exists(
-            acta.archivo_pdf.name
-        ) or not acta.archivo_word.storage.exists(
-            acta.archivo_word.name
-        ):
-            raise OSError(
-                "El almacenamiento no confirmó la escritura de los documentos."
-            )
 
         acta.fecha_generacion = (
             timezone.now()

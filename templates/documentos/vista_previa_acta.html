@@ -65,25 +65,13 @@ Vista previa del acta
                 </button>
             </form>
 
-            {% if acta.archivo_word %}
+            <a href="{% url 'documentos:generar_word_memoria' acta.pk %}">
+                Descargar Word
+            </a>
 
-                <a
-                    href="{{ acta.archivo_word.url }}"
-                >
-                    Descargar Word
-                </a>
-
-            {% endif %}
-
-            {% if acta.archivo_pdf %}
-
-                <a
-                    href="{{ acta.archivo_pdf.url }}"
-                >
-                    Descargar PDF
-                </a>
-
-            {% endif %}
+            <a href="{% url 'documentos:generar_pdf_memoria' acta.pk %}">
+                Descargar PDF
+            </a>
 
         </div>
 

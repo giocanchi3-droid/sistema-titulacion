@@ -268,7 +268,6 @@
                     action="{% url 'documentos:generar_oficial_prioridad' acta.pk %}"
                     class="mt-4"
                 >
-
                     {% csrf_token %}
 
                     <button
@@ -277,33 +276,25 @@
                     >
                         Generar Word y PDF
                     </button>
-
                 </form>
 
-
-                {% if acta.archivo_word %}
-
+                <div class="mt-4">
                     <a
-                        href="{{ acta.archivo_word.url }}"
-                        class="btn-secondary mt-3 block text-center"
+                        href="{% url 'documentos:generar_word_memoria' acta.pk %}"
+                        class="btn-primary w-full block text-center"
                     >
-                        Descargar Word
+                        Generar Word
                     </a>
 
-                {% endif %}
-
-
-                {% if acta.archivo_pdf %}
-
                     <a
-                        href="{{ acta.archivo_pdf.url }}"
-                        target="_blank"
-                        class="btn-secondary mt-3 block text-center"
+                        href="{% url 'documentos:generar_pdf_memoria' acta.pk %}"
+                        class="btn-primary mt-3 w-full block text-center"
                     >
                         Abrir PDF
                     </a>
 
-                {% endif %}
+                </div>
+
 
             </section>
 
