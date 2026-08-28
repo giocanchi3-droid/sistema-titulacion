@@ -399,6 +399,7 @@ body:not(.login-page) .helper-text {
 body:not(.login-page) .step-item,
 body:not(.login-page) .nav-step,
 body:not(.login-page) .section-link,
+body:not(.login-page) .wizard-step {
     background: #12314b !important;
     background-color: #12314b !important;
     background-image: none !important;
@@ -413,43 +414,52 @@ body:not(.login-page) .section-link.active,
 body:not(.login-page) .wizard-step.active {
     background: #1f7fb8 !important;
     background-color: #1f7fb8 !important;
+    color: #ffffff !important;
+    border-color: #63b9ea !important;
+}
 
 /* ---------------------------------------------------------
-   CONTRASTE DE BLOQUES DE DATOS
+   BLOQUES DE DATOS AZULES Y LEGIBLES
 --------------------------------------------------------- */
 
 body.app-page main .bg-slate-50,
 body.app-page main .bg-gray-50,
 body.app-page main .bg-white {
-    background: #f4f7fb !important;
-    background-color: #f4f7fb !important;
-    color: #152238 !important;
+    background: #123b57 !important;
+    background-color: #123b57 !important;
+    color: #ffffff !important;
 }
 
 body.app-page main .bg-slate-50 *,
 body.app-page main .bg-gray-50 *,
 body.app-page main .bg-white * {
-    color: #152238 !important;
+    color: #ffffff !important;
+}
+
+body.app-page main .bg-slate-50 .text-slate-500,
+body.app-page main .bg-gray-50 .text-slate-500,
+body.app-page main .bg-white .text-slate-500,
+body.app-page main .bg-slate-50 .text-gray-500,
+body.app-page main .bg-gray-50 .text-gray-500,
+body.app-page main .bg-white .text-gray-500 {
+    color: #c9e5f5 !important;
 }
 
 body.app-page main .text-slate-500,
 body.app-page main .text-slate-600,
 body.app-page main .text-gray-500,
 body.app-page main .text-gray-600 {
-    color: #475569 !important;
+    color: #c9e5f5 !important;
 }
 
 body.app-page main .text-blue-700,
 body.app-page main .text-blue-800 {
-    color: #0a4f8a !important;
+    color: #8ed3f2 !important;
 }
 
 body.app-page main .text-red-700,
 body.app-page main .text-red-800 {
-    color: #b91c1c !important;
-}
-    color: #ffffff !important;
-    border-color: #63b9ea !important;
+    color: #ffb4b4 !important;
 }
 
 /* ---------------------------------------------------------
