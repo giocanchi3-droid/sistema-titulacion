@@ -3,7 +3,7 @@ import logging
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.http import FileResponse, Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 
 from estudiantes.models import RegistroTitulacion
@@ -232,16 +232,11 @@ def descargar_documento(request, pk, tipo):
         raise Http404("El documento todavía no ha sido generado.")
 
     try:
-        archivo.open("rb")
-    except (FileNotFoundError, OSError):
+        url = archivo.url
+    except (FileNotFoundError, OSError, ValueError):
         raise Http404("El documento no existe en el almacenamiento configurado.")
 
-    return FileResponse(
-        archivo,
-        as_attachment=True,
-        filename=archivo.name.rsplit("/", 1)[-1],
-        content_type=content_type,
-    )
+    return HttpResponseRedirect(url)
 
 
 @login_required
