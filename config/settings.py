@@ -1,4 +1,5 @@
-﻿from pathlib import Path
+﻿import os
+from pathlib import Path
 
 import dj_database_url
 from decouple import Csv, config
@@ -160,17 +161,11 @@ STATICFILES_STORAGE = (
 )
 
 
-MEDIA_URL = "/media/"
-
-RENDER = config("RENDER", default=False, cast=bool)
-MEDIA_ROOT_CONFIG = config("MEDIA_ROOT", default="")
-
-if MEDIA_ROOT_CONFIG:
-    MEDIA_ROOT = Path(MEDIA_ROOT_CONFIG)
-elif RENDER:
-    MEDIA_ROOT = Path("/var/data/media")
-else:
-    MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = os.environ.get("MEDIA_URL", "/media/")
+MEDIA_ROOT = os.environ.get(
+    "MEDIA_ROOT",
+    os.path.join(BASE_DIR, "media"),
+)
 
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

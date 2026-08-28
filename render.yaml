@@ -15,9 +15,9 @@ services:
         generateValue: true
       - key: DEBUG
         value: "False"
-      - key: RENDER
-        value: "True"
       - key: MEDIA_ROOT
         value: /var/data/media
+      - key: MEDIA_URL
+        value: /media/
       - key: ALLOWED_HOSTS
         value: "*"
