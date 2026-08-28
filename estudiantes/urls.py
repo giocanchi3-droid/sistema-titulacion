@@ -27,6 +27,12 @@ urlpatterns = [
     ),
 
     path(
+        "programas/nuevo/",
+        views.crear_programa,
+        name="crear_programa",
+    ),
+
+    path(
         "importar/",
         import_views.importar_registros_excel,
         name="importar",

@@ -2,10 +2,11 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import RegistroTitulacionForm
+from .forms import ProgramaForm, RegistroTitulacionForm
 from .models import HistorialExpediente, Programa, RegistroTitulacion
 from .services_excel import exportar_registro_excel
 
@@ -329,7 +330,7 @@ def crear_registro(request):
                 pk=registro.pk,
             )
     else:
-        form = RegistroTitulacionForm()
+        form = RegistroTitulacionForm(programas=opciones_programas())
 
     contexto = {
         "form": form,
@@ -344,6 +345,27 @@ def crear_registro(request):
         "estudiantes/formulario.html",
         contexto,
     )
+
+
+@login_required
+@require_POST
+def crear_programa(request):
+    form = ProgramaForm(request.POST)
+    if not form.is_valid():
+        return JsonResponse(
+            {"ok": False, "errors": form.errors.get_json_data()},
+            status=400,
+        )
+
+    programa = form.save(commit=False)
+    programa.activo = True
+    programa.save()
+    return JsonResponse({
+        "ok": True,
+        "codigo": programa.codigo,
+        "descripcion": programa.descripcion,
+        "label": str(programa),
+    })
 
 
 @login_required

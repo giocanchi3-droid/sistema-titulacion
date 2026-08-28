@@ -269,18 +269,34 @@
                                 </label>
 
                                 <div class="acta-form-control-wrapper">
-                                    {{ campo }}
-
-                                    {% if campo.name == "programa" or campo.name == "programa_desc" %}
-                                        <datalist id="opciones-{{ campo.name }}">
+                                    {% if campo.name == "programa" %}
+                                        <select
+                                            name="programa"
+                                            id="{{ campo.id_for_label }}"
+                                            class="form-control"
+                                            required
+                                            data-programa-select
+                                        >
+                                            <option value="">Seleccione un programa</option>
                                             {% for programa in programas_catalogo %}
-                                                {% if campo.name == "programa" %}
-                                                    <option value="{{ programa.codigo }}">
-                                                {% else %}
-                                                    <option value="{{ programa.descripcion }}">
-                                                {% endif %}
+                                                <option
+                                                    value="{{ programa.codigo }}"
+                                                    data-description="{{ programa.descripcion }}"
+                                                    {% if programa.codigo == campo.value %}selected{% endif %}
+                                                >
+                                                    {{ programa.codigo }} - {{ programa.descripcion }}
+                                                </option>
                                             {% endfor %}
-                                        </datalist>
+                                        </select>
+                                        <button
+                                            type="button"
+                                            class="acta-form-secondary-button"
+                                            data-open-programa-modal
+                                        >
+                                            + Agregar nuevo programa
+                                        </button>
+                                    {% else %}
+                                        {{ campo }}
                                     {% endif %}
                                 </div>
 
@@ -383,8 +399,77 @@
 
 </section>
 
+<div
+    id="programa-modal"
+    hidden
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="programa-modal-title"
+>
+    <div>
+        <h2 id="programa-modal-title">Agregar nuevo programa</h2>
+        <label for="nuevo-programa-codigo">Código</label>
+        <input id="nuevo-programa-codigo" type="text" maxlength="30">
+        <label for="nuevo-programa-descripcion">Descripción</label>
+        <input id="nuevo-programa-descripcion" type="text" maxlength="250">
+        <p data-programa-error role="alert"></p>
+        <button type="button" data-close-programa-modal>Cancelar</button>
+        <button type="button" data-save-programa>Guardar programa</button>
+    </div>
+</div>
+
 <script
     src="{% static 'js/crear-acta-profesional.js' %}?v=1"
 ></script>
+<script>
+(function () {
+    const select = document.querySelector("[data-programa-select]");
+    const description = document.querySelector("[data-programa-description]");
+    const modal = document.querySelector("#programa-modal");
+    const error = document.querySelector("[data-programa-error]");
+    const codigo = document.querySelector("#nuevo-programa-codigo");
+    const descripcion = document.querySelector("#nuevo-programa-descripcion");
+
+    if (!select || !description || !modal) return;
+
+    function actualizarDescripcion() {
+        const option = select.options[select.selectedIndex];
+        description.value = option ? option.dataset.description || "" : "";
+    }
+
+    select.addEventListener("change", actualizarDescripcion);
+    actualizarDescripcion();
+
+    document.querySelector("[data-open-programa-modal]").addEventListener("click", function () {
+        error.textContent = "";
+        modal.hidden = false;
+        codigo.focus();
+    });
+    document.querySelector("[data-close-programa-modal]").addEventListener("click", function () {
+        modal.hidden = true;
+    });
+    document.querySelector("[data-save-programa]").addEventListener("click", async function () {
+        const token = document.querySelector("input[name=csrfmiddlewaretoken]").value;
+        const respuesta = await fetch("{% url 'estudiantes:crear_programa' %}", {
+            method: "POST",
+            headers: {"X-CSRFToken": token, "Content-Type": "application/x-www-form-urlencoded"},
+            body: new URLSearchParams({codigo: codigo.value, descripcion: descripcion.value})
+        });
+        const datos = await respuesta.json();
+        if (!respuesta.ok) {
+            error.textContent = Object.values(datos.errors || {}).flat().map(item => item.message).join(" ") || "No se pudo guardar el programa.";
+            return;
+        }
+        const option = new Option(datos.label, datos.codigo);
+        option.dataset.description = datos.descripcion;
+        select.add(option);
+        select.value = datos.codigo;
+        actualizarDescripcion();
+        modal.hidden = true;
+        codigo.value = "";
+        descripcion.value = "";
+    });
+}());
+</script>
 
 {% endblock %}

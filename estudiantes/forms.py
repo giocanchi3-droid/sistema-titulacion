@@ -1,17 +1,46 @@
 ﻿from django import forms
-from .models import RegistroTitulacion
+from .models import Programa, RegistroTitulacion
 
 
 class RegistroTitulacionForm(forms.ModelForm):
 
     def __init__(self, *args, programas=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self.programas_catalogo = list(programas or [])
+        self.programas_catalogo = list(
+            programas if programas is not None
+            else Programa.objects.filter(activo=True)
+        )
+        self.fields["programa"].widget = forms.Select(
+            choices=[
+                (programa.codigo, str(programa))
+                for programa in self.programas_catalogo
+            ],
+            attrs={"class": "form-control", "data-programa-select": "true"},
+        )
+        self.fields["programa_desc"].widget.attrs.update({
+            "readonly": "readonly",
+            "data-programa-description": "true",
+        })
 
-        for nombre in ("programa", "programa_desc"):
-            self.fields[nombre].widget.attrs["list"] = (
-                f"opciones-{nombre}"
+    def clean_programa(self):
+        codigo = self.cleaned_data["programa"].strip().upper()
+        programa = Programa.objects.filter(
+            codigo=codigo,
+            activo=True,
+        ).first()
+        if programa is None:
+            raise forms.ValidationError(
+                "Seleccione un programa activo del catálogo."
             )
+        return programa.codigo
+
+    def clean(self):
+        cleaned_data = super().clean()
+        codigo = cleaned_data.get("programa")
+        if codigo:
+            programa = Programa.objects.get(codigo=codigo, activo=True)
+            cleaned_data["programa_desc"] = programa.descripcion
+        return cleaned_data
 
     class Meta:
         model = RegistroTitulacion
@@ -122,3 +151,24 @@ class RegistroTitulacionForm(forms.ModelForm):
             "examen_teorico_practico": forms.NumberInput(attrs={"min": "0", "max": "10", "step": "0.01"}),
             "nota_final2": forms.NumberInput(attrs={"min": "0", "max": "10", "step": "0.01"}),
         }
+
+
+class ProgramaForm(forms.ModelForm):
+
+    class Meta:
+        model = Programa
+        fields = ["codigo", "descripcion"]
+
+    def clean_codigo(self):
+        codigo = " ".join(self.cleaned_data["codigo"].upper().split())
+        if Programa.objects.filter(codigo=codigo).exists():
+            raise forms.ValidationError(
+                "Ya existe un programa con ese código."
+            )
+        return codigo
+
+    def clean_descripcion(self):
+        descripcion = " ".join(self.cleaned_data["descripcion"].split())
+        if not descripcion:
+            raise forms.ValidationError("La descripción es obligatoria.")
+        return descripcion
