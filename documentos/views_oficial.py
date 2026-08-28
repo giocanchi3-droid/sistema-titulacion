@@ -100,6 +100,15 @@ def generar_oficial(request, pk):
             save=False
         )
 
+        if not acta.archivo_pdf.storage.exists(
+            acta.archivo_pdf.name
+        ) or not acta.archivo_word.storage.exists(
+            acta.archivo_word.name
+        ):
+            raise OSError(
+                "El almacenamiento no confirmó la escritura de los documentos."
+            )
+
         acta.fecha_generacion = (
             timezone.now()
         )

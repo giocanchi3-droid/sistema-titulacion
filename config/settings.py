@@ -163,8 +163,11 @@ STATICFILES_STORAGE = (
 MEDIA_URL = "/media/"
 
 RENDER = config("RENDER", default=False, cast=bool)
+MEDIA_ROOT_CONFIG = config("MEDIA_ROOT", default="")
 
-if RENDER:
+if MEDIA_ROOT_CONFIG:
+    MEDIA_ROOT = Path(MEDIA_ROOT_CONFIG)
+elif RENDER:
     MEDIA_ROOT = Path("/var/data/media")
 else:
     MEDIA_ROOT = BASE_DIR / "media"

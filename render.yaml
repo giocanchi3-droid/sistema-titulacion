@@ -17,5 +17,7 @@ services:
         value: "False"
       - key: RENDER
         value: "True"
+      - key: MEDIA_ROOT
+        value: /var/data/media
       - key: ALLOWED_HOSTS
         value: "*"
