@@ -284,7 +284,7 @@
                 {% if acta.archivo_word %}
 
                     <a
-                        href="{{ acta.archivo_word.url }}"
+                        href="{% url 'documentos:descargar_documento' acta.pk 'word' %}"
                         class="btn-secondary mt-3 block text-center"
                     >
                         Descargar Word
@@ -296,7 +296,7 @@
                 {% if acta.archivo_pdf %}
 
                     <a
-                        href="{{ acta.archivo_pdf.url }}"
+                        href="{% url 'documentos:descargar_documento' acta.pk 'pdf' %}"
                         target="_blank"
                         class="btn-secondary mt-3 block text-center"
                     >

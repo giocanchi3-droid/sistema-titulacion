@@ -3,6 +3,7 @@ import logging
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 
 from estudiantes.models import RegistroTitulacion
@@ -210,6 +211,36 @@ def generar_acta(request, pk):
     return redirect(
         "documentos:detalle_acta",
         pk=acta.pk,
+    )
+
+
+@login_required
+def descargar_documento(request, pk, tipo):
+    acta = get_object_or_404(Acta, pk=pk)
+    campos = {
+        "word": ("archivo_word", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
+        "pdf": ("archivo_pdf", "application/pdf"),
+    }
+
+    if tipo not in campos:
+        raise Http404("Tipo de documento no válido.")
+
+    campo, content_type = campos[tipo]
+    archivo = getattr(acta, campo)
+
+    if not archivo:
+        raise Http404("El documento todavía no ha sido generado.")
+
+    try:
+        archivo.open("rb")
+    except (FileNotFoundError, OSError):
+        raise Http404("El documento no existe en el almacenamiento configurado.")
+
+    return FileResponse(
+        archivo,
+        as_attachment=True,
+        filename=archivo.name.rsplit("/", 1)[-1],
+        content_type=content_type,
     )
 
 

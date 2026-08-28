@@ -27,6 +27,11 @@ urlpatterns = [
         name="vista_previa_acta",
     ),
     path(
+        "<int:pk>/descargar/<str:tipo>/",
+        views.descargar_documento,
+        name="descargar_documento",
+    ),
+    path(
         "",
         views.lista_actas,
         name="lista_actas",

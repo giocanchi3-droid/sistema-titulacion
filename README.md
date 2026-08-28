@@ -53,6 +53,14 @@ gunicorn config.wsgi:application
 # DATABASE_URL: URL interna de PostgreSQL de Render
 # SECRET_KEY: clave secreta de producción
 # DEBUG=False
+# RENDER=True
+
+# Persistent Disk de Render
+# Nombre: pucetec-media
+# Mount Path: /var/data
+# Tamaño: 1 GB mínimo
+# MEDIA_ROOT se configura automáticamente como /var/data/media.
+# El disco persistente es necesario para conservar Word y PDF entre deploys.
 
 
 # COMANDO RÁPIDO PARA SESIONES POSTERIORES

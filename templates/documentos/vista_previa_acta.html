@@ -68,7 +68,7 @@ Vista previa del acta
             {% if acta.archivo_word %}
 
                 <a
-                    href="{{ acta.archivo_word.url }}"
+                    href="{% url 'documentos:descargar_documento' acta.pk 'word' %}"
                 >
                     Descargar Word
                 </a>
@@ -78,7 +78,7 @@ Vista previa del acta
             {% if acta.archivo_pdf %}
 
                 <a
-                    href="{{ acta.archivo_pdf.url }}"
+                    href="{% url 'documentos:descargar_documento' acta.pk 'pdf' %}"
                 >
                     Descargar PDF
                 </a>
