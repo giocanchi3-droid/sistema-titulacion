@@ -120,6 +120,93 @@ ENCABEZADOS_ESPERADOS = {
     "OBSERVACION SECRETARIA",
 }
 
+COLUMN_ALIASES = {
+    "id_banner": {
+        "ID BANNER",
+        "ID BANNER ",
+        "ID_BANNER",
+        "IDBANNER",
+        "ID BANNER ESTUDIANTE",
+    },
+    "cedula": {
+        "CEDULA",
+        "CEDULA ESTUDIANTE",
+        "CEDULA IDENTIDAD",
+        "CÉDULA",
+        "CI",
+    },
+    "nombres_completos": {
+        "NOMBRES COMPLETOS",
+        "NOMBRES",
+        "NOMBRES COMPLETOS ESTUDIANTE",
+        "NOMBRE COMPLETO",
+        "NOMBRES COMPLETOS",
+    },
+    "celular": {"CELULAR", "TELEFONO", "TELÉFONO", "MOVIL"},
+    "correo_personal": {"CORREO PERSONAL", "EMAIL PERSONAL", "CORREO ELECTRONICO PERSONAL"},
+    "correo_instituc": {"CORREO INSTITUC", "CORREO INSTITUCIONAL", "EMAIL INSTITUCIONAL", "CORREO ELECTRONICO INSTITUCIONAL"},
+    "sede": {"SEDE", "SEDE ACADEMICA", "SEDE PRINCIPAL"},
+    "programa": {"PROGRAMA", "PROGRAMA"},
+    "programa_desc": {"PROGAMA DESC", "PROGAMA_DESC", "PROGRAMA DESC", "DESCRIPCION PROGRAMA", "DESCRIPCIÓN PROGRAMA", "DESCRIPCION DEL PROGRAMA"},
+    "numero_cohorte": {"NUMERO DE COHORTE", "NÚMERO DE COHORTE", "COHORTE"},
+    "periodo_ingreso": {"PERIODO DE INGRESO", "PERIODO INGRESO"},
+    "nivel2": {"NIVEL2", "NIVEL 2", "NIVEL"},
+    "modalidad_titulacion": {"MODALIDAD DE TITULACION", "MODALIDAD DE TITULACIÓN", "MODALIDAD"},
+    "matricula_uic": {"MATRICULA UIC", "MATRÍCULA UIC", "MATRICULA"},
+    "periodo_titulacion_senescyt": {"PERIODO DE TITULACION SENESCYT", "PERIODO TITULACION SENESCYT", "PERIODO DE TITULACIÓN SENESCYT"},
+    "estado": {"ESTADO", "ESTADO ESTUDIANTE"},
+    "cumplimiento_idioma": {"CUMPLIMIENTO DE IDIOMA", "IDIOMA"},
+    "materia_practicas_pre_profesionales": {"MATERIA PRACTICAS PRE PROFESIONALES", "MATERIA PRÁCTICAS PRE PROFESIONALES", "PRÁCTICAS PREPROFESIONALES"},
+    "horas_240": {"HORAS 240", "H 240", "HORAS240"},
+    "materia_servicio_comunitario": {"MATERIA SERVICIO COMUNITARIO", "MATERIA SERVICIO COMUNITARIO "},
+    "horas_120": {"HORAS 120", "H 120", "HORAS120"},
+    "nombres_completos_tutor": {"NOMBRES COMPLETOS TUTOR", "TUTOR"},
+    "id_tutor": {"ID TUTOR", "ID_TUTOR"},
+    "tema": {"TEMA", "TEMA PROYECTO"},
+    "primer_miembro_tribunal": {"1ER MIEMBRO DE TRIBUNAL APELLIDOS Y NOMBRES COMPLETOS", "1ER MIEMBREO DE TRIBUNAL APELLIDOS Y NOMBRES COMPLETOS"},
+    "primer_miembro_id_docente": {"1ER MIEMBRO DE TRIBUNAL ID DOCENTE", "ID DOCENTE 1"},
+    "segundo_miembro_tribunal": {"2DO MIEMBRO DE TRIBUNAL APELLIDOS Y NOMBRES COMPLETOS", "2DO MIEMBREO DE TRIBUNAL APELLIDOS Y NOMBRES COMPLETOS"},
+    "segundo_miembro_id_docente": {"2DO MIEMBRO DE TRIBUNAL ID DOCENTE", "ID DOCENTE 2"},
+    "tercer_miembro_tribunal": {"3ER MIEMBRO DE TRIBUNAL NOMBRES COMPLETOS", "3TER MIEMBRO DE TRIBUNAL NOMBRES COMPLETOS"},
+    "tercer_miembro_id_docente": {"3ER MIEMBRO DE TRIBUNAL ID DOCENTE", "3TER MIEMBRO DE TRIBUNAL ID DOCENTE", "ID DOCENTE 3"},
+    "cuarto_miembro_tribunal": {"4TO MIEMBRO DE TRIBUNAL", "4TO MIEMBRO DE TRIBUNAL NOMBRES COMPLETOS"},
+    "cuarto_miembro_id_docente": {"4TO MIEMBRO DE TRIBUNAL ID DOCENTE", "ID DOCENTE 4"},
+    "proyecto_escrito": {"PROYECTO ESCRITO"},
+    "defensa_oral": {"DEFENSA ORAL"},
+    "nota_final": {"NOTA FINAL"},
+    "examen_teorico_complexivo": {"EXAMEN TEORICO COMPLEXIVO", "EXAMEN TEÓRICO COMPLEXIVO"},
+    "examen_teorico_practico": {"EXAMEN TEORICO PRACTICO", "EXAMEN TEÓRICO PRÁCTICO"},
+    "nota_final2": {"NOTA FINAL2", "NOTA FINAL 2"},
+    "observacion_puce_tec": {"OBSERVACION PUCE TEC", "OBSERVACIÓN PUCE TEC"},
+    "observaciones_secretaria_general": {"OBSERVACIONES DE SECRETARIA GENERAL", "OBSERVACIONES DE SECRETARÍA GENERAL"},
+    "nueva_observacion_puce_tec": {"NUEVA OBSERVACION PUCE TEC", "NUEVA OBSERVACIÓN PUCE TEC"},
+    "estado_envio_registro": {"ESTADO DE ENVIO DE REGISTRO", "ESTADO DE ENVÍO DE REGISTRO"},
+    "fecha_grado": {"FECHA DE GRADO", "FECHA GRADO"},
+    "observacion_secretaria": {"OBSERVACION SECRETARIA", "OBSERVACIÓN SECRETARÍA", "OBSERVACION SECRETARIA GENERAL"},
+}
+
+
+def resolver_campo(encabezado):
+    normalizado = normalizar(encabezado)
+
+    for campo, aliases in COLUMN_ALIASES.items():
+        if normalizado in aliases:
+            return campo
+
+    normalizado_sin_espacios = normalizado.replace(" ", "")
+    for campo, aliases in COLUMN_ALIASES.items():
+        alias_normalizado = {
+            normalizar(alias)
+            for alias in aliases
+        }
+        if normalizado_sin_espacios in {
+            alias.replace(" ", "")
+            for alias in alias_normalizado
+        }:
+            return campo
+
+    return None
+
 
 def normalizar(valor):
     """
@@ -351,15 +438,36 @@ def convertir_estado_envio(valor):
 
 
 def obtener(datos, encabezado):
-    return datos.get(
-        normalizar(encabezado)
-    )
+    if not isinstance(datos, dict):
+        return ""
+
+    if encabezado in datos:
+        return datos[encabezado]
+
+    clave = normalizar(encabezado)
+    for nombre, valor in datos.items():
+        if normalizar(nombre) == clave:
+            return valor
+
+    return None
 
 
 def guardar_registro(datos, usuario=None):
     cedula = convertir_cedula(
         obtener(datos, "CEDULA")
     )
+    id_banner = convertir_texto(
+        obtener(datos, "ID_BANNER")
+    )
+
+    if not cedula and id_banner:
+        registro_existente = (
+            RegistroTitulacion.objects.filter(id_banner=id_banner)
+            .order_by("-fecha_actualizacion")
+            .first()
+        )
+        if registro_existente:
+            cedula = registro_existente.cedula
 
     nombres = convertir_texto(
         obtener(datos, "NOMBRES COMPLETOS")
@@ -583,19 +691,28 @@ def guardar_registro(datos, usuario=None):
         cedula=cedula
     ).first()
 
+    if registro is None and id_banner:
+        registro = RegistroTitulacion.objects.filter(
+            id_banner=id_banner
+        ).order_by("-fecha_actualizacion").first()
+
     creado = registro is None
 
     anterior = {}
 
     if creado:
         registro = RegistroTitulacion(
-            cedula=cedula
+            cedula=cedula,
+            id_banner=id_banner,
         )
     else:
         anterior = {
             campo: str(getattr(registro, campo, "") or "")
             for campo in valores
         }
+
+    if not registro.id_banner and id_banner:
+        registro.id_banner = id_banner
 
     for campo, valor in valores.items():
         setattr(
@@ -608,10 +725,14 @@ def guardar_registro(datos, usuario=None):
     registro.save()
 
     if programa:
+        descripcion_programa = (
+            convertir_texto(valores.get("programa_desc"))
+            or (Programa.objects.filter(codigo=programa).first().descripcion if Programa.objects.filter(codigo=programa).exists() else programa)
+        )
         Programa.objects.update_or_create(
             codigo=programa,
             defaults={
-                "descripcion": valores["programa_desc"] or programa,
+                "descripcion": descripcion_programa,
                 "activo": True,
             },
         )
@@ -645,74 +766,107 @@ def importar_excel(archivo, usuario=None):
         ) from error
 
     hoja = libro.active
-    filas = hoja.iter_rows(values_only=True)
+    filas = list(hoja.iter_rows(values_only=True))
 
-    encabezados_originales = next(
-        filas,
-        None,
-    )
-
-    if not encabezados_originales:
+    if not filas or not any(
+        valor not in (None, "")
+        for valor in filas[0]
+    ):
+        libro.close()
         raise ValueError(
             "El archivo Excel está vacío."
         )
 
+    encabezados_originales = filas[0]
     encabezados = [
         normalizar(encabezado)
         for encabezado in encabezados_originales
     ]
 
-    encabezados_encontrados = {
-        encabezado
-        for encabezado in encabezados
-        if encabezado
-    }
+    campos_encontrados = set()
+    for encabezado in encabezados:
+        campo = resolver_campo(encabezado)
+        if campo:
+            campos_encontrados.add(campo)
 
-    faltantes = sorted(
-        ENCABEZADOS_ESPERADOS
-        - encabezados_encontrados
-    )
-
-    if faltantes:
+    if not campos_encontrados:
+        libro.close()
         raise ValueError(
-            "La matriz no tiene todos los encabezados requeridos. "
-            "Faltan: "
-            + ", ".join(faltantes)
+            "La matriz no contiene encabezados reconocidos para importar estudiantes."
+        )
+
+    identificadores_requeridos = {"cedula", "id_banner"}
+    if not identificadores_requeridos.intersection(campos_encontrados):
+        libro.close()
+        raise ValueError(
+            "La matriz debe incluir al menos una columna de identificación (CÉDULA o ID_BANNER)."
+        )
+
+    columnas_minimas = {"cedula", "nombres_completos", "programa"}
+    faltantes = sorted(columnas_minimas - campos_encontrados)
+    if faltantes:
+        libro.close()
+        raise ValueError(
+            "La matriz debe incluir las columnas mínimas para importar estudiantes: "
+            + ", ".join(
+                [
+                    "CEDULA",
+                    "NOMBRES COMPLETOS",
+                    "PROGRAMA",
+                ]
+            )
+            + ". Faltan: " + ", ".join(faltantes)
         )
 
     creados = 0
     actualizados = 0
+    ignoradas = 0
     errores = []
-    cedulas_procesadas = set()
+    identificadores_procesados = set()
 
     for numero_fila, valores_fila in enumerate(
-        filas,
+        filas[1:],
         start=2,
     ):
         if not any(
             valor not in (None, "")
             for valor in valores_fila
         ):
+            ignoradas += 1
             continue
 
-        datos = dict(
-            zip(
-                encabezados,
-                valores_fila,
-            )
-        )
+        datos = {}
+        for indice, valor in enumerate(valores_fila):
+            encabezado = encabezados_originales[indice]
+            campo = resolver_campo(encabezado)
+            if campo:
+                datos[campo] = valor
 
         cedula_fila = convertir_cedula(
             obtener(datos, "CEDULA")
         )
+        id_banner_fila = convertir_texto(
+            obtener(datos, "ID_BANNER")
+        )
+        identificador_fila = cedula_fila or id_banner_fila
 
-        if cedula_fila in cedulas_procesadas:
+        if not cedula_fila and not id_banner_fila:
+            errores.append(
+                {
+                    "fila": numero_fila,
+                    "error": "La cédula está vacía y no existe un ID_BANNER válido para identificar al estudiante.",
+                }
+            )
+            ignoradas += 1
+            continue
+
+        if identificador_fila in identificadores_procesados:
             errores.append(
                 {
                     "fila": numero_fila,
                     "error": (
-                        f"La cédula {cedula_fila} "
-                        "está repetida dentro del Excel."
+                        f"El estudiante con identificador {identificador_fila} "
+                        "está repetido dentro del Excel."
                     ),
                 }
             )
@@ -725,8 +879,8 @@ def importar_excel(archivo, usuario=None):
                     usuario=usuario,
                 )
 
-                cedulas_procesadas.add(
-                    registro.cedula
+                identificadores_procesados.add(
+                    registro.cedula or registro.id_banner or identificador_fila
                 )
 
                 if creado:
@@ -777,6 +931,7 @@ def importar_excel(archivo, usuario=None):
     return {
         "creados": creados,
         "actualizados": actualizados,
+        "ignoradas": ignoradas,
         "errores": errores,
         "total_correctos": creados + actualizados,
     }

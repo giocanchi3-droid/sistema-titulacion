@@ -39,6 +39,12 @@ urlpatterns = [
     ),
 
     path(
+        "importar-excel/",
+        import_views.importar_registros_excel,
+        name="importar_excel",
+    ),
+
+    path(
         "<int:pk>/",
         views.detalle_registro,
         name="detalle",
