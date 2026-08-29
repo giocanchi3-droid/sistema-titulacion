@@ -438,16 +438,36 @@ def convertir_estado_envio(valor):
 
 
 def obtener(datos, encabezado):
+    """
+    Obtiene un valor del diccionario utilizando:
+    - la clave exacta,
+    - el nombre normalizado,
+    - el nombre interno del campo,
+    - o cualquiera de sus aliases.
+    """
+
     if not isinstance(datos, dict):
-        return ""
+        return None
 
     if encabezado in datos:
         return datos[encabezado]
 
-    clave = normalizar(encabezado)
+    clave_normalizada = normalizar(encabezado)
+
     for nombre, valor in datos.items():
-        if normalizar(nombre) == clave:
+        if normalizar(nombre) == clave_normalizada:
             return valor
+
+    for campo, aliases in COLUMN_ALIASES.items():
+        nombres_validos = {normalizar(campo)}
+        nombres_validos.update(
+            normalizar(alias)
+            for alias in aliases
+        )
+
+        if clave_normalizada in nombres_validos:
+            if campo in datos:
+                return datos[campo]
 
     return None
 
