@@ -1,5 +1,6 @@
 import io
 
+from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from openpyxl import Workbook
@@ -10,6 +11,13 @@ from .services_excel import convertir_nota, importar_excel
 
 
 class ImportarExcelTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="testuser",
+            email="test@example.com",
+            password="testpass123",
+        )
+
     def _crear_archivo_excel(self, filas):
         libro = Workbook()
         hoja = libro.active
@@ -178,3 +186,59 @@ class ImportarExcelTests(TestCase):
         self.assertEqual(resultado["actualizados"], 0)
         self.assertEqual(resultado["ignoradas"], 1)
         self.assertGreater(len(resultado["errores"]), 0)
+
+    def test_importar_excel_get_request_returns_200(self):
+        """GET /estudiantes/importar-excel/ debe devolver 200 y mostrar el formulario."""
+        self.client.login(username="testuser", password="testpass123")
+        response = self.client.get("/estudiantes/importar-excel/")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Importar estudiantes", response.content)
+        self.assertIn(b"Procesar matriz", response.content)
+
+    def test_importar_excel_get_request_contains_form(self):
+        """El formulario debe estar presente en GET."""
+        self.client.login(username="testuser", password="testpass123")
+        response = self.client.get("/estudiantes/importar-excel/")
+        self.assertIn(b"multipart/form-data", response.content)
+
+    def test_importar_excel_requires_login(self):
+        """Acceso sin autenticación debe redirigir a login."""
+        response = self.client.get("/estudiantes/importar-excel/")
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/cuentas/login/", response.url)
+
+    def test_post_with_valid_excel_creates_students(self):
+        """POST con un Excel válido debe crear estudiantes y mostrar resultado."""
+        self.client.login(username="testuser", password="testpass123")
+
+        filas = [
+            [
+                "CEDULA",
+                "NOMBRES COMPLETOS",
+                "PROGRAMA",
+                "PROGAMA_DESC",
+            ],
+            [
+                "0102030409",
+                "Carlos López",
+                "TQ02",
+                "TG Desarrollo de Software",
+            ],
+        ]
+
+        archivo = self._crear_archivo_excel(filas)
+        response = self.client.post(
+            "/estudiantes/importar-excel/",
+            {"archivo": archivo},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(RegistroTitulacion.objects.filter(cedula="0102030409").exists())
+
+    def test_post_without_file_shows_form(self):
+        """POST sin archivo debe mostrar formulario con error."""
+        self.client.login(username="testuser", password="testpass123")
+        response = self.client.post("/estudiantes/importar-excel/", {})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Importar estudiantes", response.content)
+

@@ -1,14 +1,12 @@
 ﻿from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django.views.decorators.http import require_POST
 
 from .import_forms import ImportarExcelForm
 from .services_excel import importar_excel
 
 
 @login_required
-@require_POST
 def importar_registros_excel(request):
     resultado = None
 
