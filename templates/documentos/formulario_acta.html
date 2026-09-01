@@ -9,12 +9,12 @@
     Crear acta
 {% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/nueva-acta.css' %}?v=6">
+{% endblock %}
+
 {% block content %}
 
-<link
-    rel="stylesheet"
-    href="{% static 'css/nueva-acta.css' %}?v=5"
->
 
 <section class="new-acta-page">
 
@@ -155,6 +155,8 @@
 
                         {% for campo in form.visible_fields %}
 
+                            {% if not es_creacion or campo.name != "estado" %}
+
                             <div
                                 class="new-acta-field {% if campo.errors %}has-error{% endif %}"
                                 data-new-acta-field
@@ -199,6 +201,8 @@
                                 {% endif %}
 
                             </div>
+
+                            {% endif %}
 
                         {% endfor %}
 

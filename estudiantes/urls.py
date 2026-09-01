@@ -9,6 +9,8 @@ app_name = "estudiantes"
 
 
 urlpatterns = [
+    path("buscar/", views.buscar_estudiante, name="buscar_estudiante"),
+    path("descargar-seleccionados/", views.descargar_seleccionados, name="descargar_seleccionados"),
     path("auditoria/", views.auditoria, name="auditoria"),
     path("auditoria/<int:pk>/revertir/", views.revertir_cambio, name="revertir_cambio"),
     path("<int:pk>/historial/", views.historial_registro, name="historial"),

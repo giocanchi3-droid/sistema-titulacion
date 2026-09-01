@@ -974,10 +974,21 @@ def exportar_registro_excel(registro):
 
     hoja.append(fila)
     hoja.freeze_panes = "A2"
+    hoja.auto_filter.ref = hoja.dimensions
+
+    from openpyxl.styles import Alignment, Font, PatternFill
+
+    for celda in hoja[1]:
+        celda.fill = PatternFill("solid", fgColor="0B5D8A")
+        celda.font = Font(color="FFFFFF", bold=True)
+        celda.alignment = Alignment(horizontal="center")
 
     for columna in hoja.columns:
         ancho = min(max(len(str(celda.value or "")) for celda in columna) + 2, 40)
         hoja.column_dimensions[columna[0].column_letter].width = ancho
+    for indice, (_, campo) in enumerate(EXPORTAR_CAMPOS, start=1):
+        if campo == "fecha_grado":
+            hoja.cell(2, indice).number_format = "dd/mm/yyyy"
 
     salida = BytesIO()
     libro.save(salida)

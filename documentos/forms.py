@@ -32,6 +32,10 @@ class ActaForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        if not self.instance.pk:
+            self.fields["estado"].initial = "BORRADOR"
+            self.fields["estado"].required = False
+
         self.fields["registro"].queryset = (
             RegistroTitulacion.objects
             .all()

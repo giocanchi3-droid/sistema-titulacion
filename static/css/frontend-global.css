@@ -1,0 +1,402 @@
+:root {
+    --ui-ink: #eaf4fb;
+    --ui-muted: #9bb7ca;
+    --ui-panel: rgba(7, 27, 47, 0.94);
+    --ui-panel-raised: rgba(10, 39, 65, 0.96);
+    --ui-border: rgba(102, 190, 235, 0.3);
+    --ui-border-strong: rgba(105, 211, 255, 0.62);
+    --ui-accent: #38bdf8;
+    --ui-accent-strong: #0ea5e9;
+    --ui-danger: #fb7185;
+    --ui-success: #34d399;
+    --ui-radius: 14px;
+    --ui-shadow: 0 14px 35px rgba(0, 0, 0, 0.24);
+}
+
+body.app-authenticated {
+    font-family: "Aptos", "Segoe UI", sans-serif;
+    letter-spacing: 0;
+}
+
+body.app-authenticated .app-main > header {
+    min-height: 78px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+    border-bottom-color: var(--ui-border) !important;
+}
+
+body.app-authenticated .app-main > header p {
+    margin: 0;
+    color: var(--ui-muted) !important;
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+}
+
+body.app-authenticated .app-main > header h2 {
+    margin: 0;
+    color: var(--ui-ink) !important;
+    font-size: 1.25rem;
+    font-weight: 750;
+}
+
+body.app-authenticated .app-main-header {
+    position: relative;
+}
+
+body.app-authenticated .app-sidebar {
+    border-right: 1px solid var(--ui-border) !important;
+    background: linear-gradient(180deg, #07182b 0%, #061323 100%) !important;
+}
+
+body.app-authenticated .app-sidebar > div:first-child {
+    border-bottom-color: var(--ui-border) !important;
+    background: rgba(4, 19, 35, 0.72);
+}
+
+body.app-authenticated .menu-link {
+    position: relative;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    border: 1px solid transparent;
+    color: #b9d2e2 !important;
+    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+body.app-authenticated .menu-link:hover,
+body.app-authenticated .menu-link.is-active {
+    border-color: var(--ui-border);
+    color: #ffffff !important;
+    background: rgba(14, 112, 164, 0.27) !important;
+    transform: translateX(2px);
+}
+
+body.app-authenticated .menu-link.is-active::before {
+    position: absolute;
+    left: -1px;
+    width: 3px;
+    height: 22px;
+    border-radius: 0 4px 4px 0;
+    background: var(--ui-accent);
+    content: "";
+}
+
+body.app-authenticated .card,
+body.app-authenticated .dashboard-pro-card,
+body.app-authenticated .students-panel,
+body.app-authenticated .new-acta-form-card,
+body.app-authenticated .new-acta-sidebar > section {
+    border-radius: var(--ui-radius) !important;
+    border-color: var(--ui-border) !important;
+    box-shadow: var(--ui-shadow) !important;
+}
+
+body.app-authenticated table thead th {
+    background: #0d3a5a !important;
+    color: #f5fbff !important;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+body.app-authenticated table tbody tr {
+    transition: background 0.16s ease;
+}
+
+body.app-authenticated table tbody tr:hover {
+    background: rgba(56, 189, 248, 0.09) !important;
+}
+
+body.app-authenticated input:not([type="checkbox"]):not([type="radio"]),
+body.app-authenticated select,
+body.app-authenticated textarea {
+    border-color: var(--ui-border) !important;
+    border-radius: 9px !important;
+    color: var(--ui-ink) !important;
+    background: rgba(3, 19, 34, 0.94) !important;
+    transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+}
+
+body.app-authenticated input:not([type="checkbox"]):not([type="radio"]):focus,
+body.app-authenticated select:focus,
+body.app-authenticated textarea:focus {
+    border-color: var(--ui-border-strong) !important;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.16) !important;
+}
+
+body.app-authenticated .btn-primary,
+body.app-authenticated .btn-secondary,
+body.app-authenticated button,
+body.app-authenticated .students-primary-button,
+body.app-authenticated .students-search-button,
+body.app-authenticated .new-acta-submit-button {
+    min-height: 40px;
+    border-radius: 9px !important;
+    font-weight: 700;
+    transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+}
+
+body.app-authenticated .btn-primary:hover,
+body.app-authenticated .students-primary-button:hover,
+body.app-authenticated .students-search-button:hover,
+body.app-authenticated .new-acta-submit-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(14, 165, 233, 0.22);
+}
+
+body.app-authenticated .btn-secondary:hover {
+    border-color: var(--ui-border-strong) !important;
+}
+
+body.app-authenticated .app-message {
+    border: 1px solid var(--ui-border) !important;
+    border-left: 4px solid var(--ui-accent) !important;
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    color: var(--ui-ink) !important;
+    background: var(--ui-panel-raised) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+body.app-authenticated .app-message.success { border-left-color: var(--ui-success) !important; }
+body.app-authenticated .app-message.warning { border-left-color: #fbbf24 !important; }
+body.app-authenticated .app-message.error { border-left-color: var(--ui-danger) !important; }
+
+@media (max-width: 760px) {
+    body.app-authenticated .app-main-header {
+        padding-right: 16px !important;
+        padding-left: 78px !important;
+    }
+
+    body.app-authenticated .sidebar-toggle {
+        top: 13px;
+        left: 14px;
+        width: 44px;
+        height: 44px;
+    }
+
+    body.app-authenticated .app-main > header {
+        min-height: 72px;
+        padding-top: 12px !important;
+        padding-bottom: 12px !important;
+    }
+
+    body.app-authenticated .app-main > header h2 {
+        font-size: 1.05rem;
+    }
+
+    body.app-authenticated .card,
+    body.app-authenticated .dashboard-pro-card,
+    body.app-authenticated .students-panel,
+    body.app-authenticated .new-acta-form-card {
+        border-radius: 11px !important;
+    }
+
+    body.app-authenticated .btn-primary,
+    body.app-authenticated .btn-secondary,
+    body.app-authenticated .students-primary-button,
+    body.app-authenticated .students-search-button,
+    body.app-authenticated .new-acta-submit-button {
+        max-width: 100%;
+        white-space: normal;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.app-authenticated *,
+    body.app-authenticated *::before,
+    body.app-authenticated *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}
+
+/* Shared page rhythm for the existing module-specific layouts. */
+body.app-authenticated .dashboard-pro,
+body.app-authenticated .students-page,
+body.app-authenticated .acta-form-page,
+body.app-authenticated .new-acta-page,
+body.app-authenticated .ga-page,
+body.app-authenticated .preview-acta-page,
+body.app-authenticated .expediente {
+    max-width: 1540px;
+    margin-inline: auto;
+}
+
+body.app-authenticated .dashboard-pro-hero,
+body.app-authenticated .students-hero,
+body.app-authenticated .ga-hero,
+body.app-authenticated .new-acta-header,
+body.app-authenticated .acta-form-hero,
+body.app-authenticated .expediente-header {
+    isolation: isolate;
+}
+
+body.app-authenticated .dashboard-pro-stat,
+body.app-authenticated .students-stat-card,
+body.app-authenticated .ga-stat-card {
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+body.app-authenticated .dashboard-pro-stat:hover,
+body.app-authenticated .students-stat-card:hover,
+body.app-authenticated .ga-stat-card:hover {
+    border-color: var(--ui-border-strong) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.28) !important;
+}
+
+body.app-authenticated .students-table-wrapper,
+body.app-authenticated .ga-table-wrapper,
+body.app-authenticated .preview-acta-content,
+body.app-authenticated .expediente-table-wrapper {
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+}
+
+body.app-authenticated .student-actions,
+body.app-authenticated .ga-actions,
+body.app-authenticated .preview-acta-actions,
+body.app-authenticated .expediente-actions,
+body.app-authenticated .new-acta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+body.app-authenticated .students-empty,
+body.app-authenticated .ga-empty,
+body.app-authenticated .empty-state {
+    padding: 44px 20px;
+    text-align: center;
+}
+
+body.app-authenticated .students-control,
+body.app-authenticated .ga-control,
+body.app-authenticated .acta-form-control,
+body.app-authenticated .new-acta-control input,
+body.app-authenticated .new-acta-control select,
+body.app-authenticated .new-acta-control textarea {
+    min-height: 42px;
+}
+
+body.app-authenticated .students-pagination,
+body.app-authenticated .ga-pagination {
+    margin-top: 18px;
+}
+
+body.app-authenticated .app-content {
+    min-width: 0;
+}
+
+body.app-authenticated .app-page-surface > .mb-6 {
+    position: relative;
+    padding-bottom: 4px;
+}
+
+body.app-authenticated .app-page-surface > .mb-6 h1 {
+    color: var(--ui-ink) !important;
+    font-size: clamp(1.35rem, 2.3vw, 2rem);
+    letter-spacing: -0.01em;
+}
+
+body.app-authenticated .app-page-surface > .mb-6 p {
+    color: var(--ui-muted) !important;
+}
+
+body.app-authenticated .app-page-surface .card {
+    background: var(--ui-panel-raised) !important;
+}
+
+body.app-authenticated .app-page-surface .rounded-lg.bg-slate-50 {
+    border: 1px solid rgba(102, 190, 235, 0.18);
+    background: rgba(8, 39, 64, 0.72) !important;
+}
+
+body.app-authenticated .app-page-surface .rounded-lg.bg-slate-50 dt {
+    color: var(--ui-muted) !important;
+}
+
+body.app-authenticated .app-page-surface .rounded-lg.bg-slate-50 dd {
+    color: var(--ui-ink) !important;
+}
+
+body.app-authenticated .app-page-surface form.card,
+body.app-authenticated .app-page-surface > .card {
+    overflow: hidden;
+}
+
+body.app-authenticated .app-page-surface button[type="submit"]:not(:disabled) {
+    cursor: pointer;
+}
+
+body.app-authenticated .app-page-surface button[type="submit"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+body.login-page {
+    font-family: "Aptos", "Segoe UI", sans-serif;
+}
+
+body.login-page .puce-login-card {
+    border-color: rgba(255, 255, 255, 0.84);
+    box-shadow: 0 24px 70px rgba(1, 16, 37, 0.5) !important;
+}
+
+body.login-page .puce-login-input:focus-visible,
+body.login-page .puce-login-button:focus-visible {
+    outline: 3px solid rgba(56, 189, 248, 0.48);
+    outline-offset: 3px;
+}
+
+body.login-page .puce-login-button {
+    min-height: 48px;
+    letter-spacing: 0.01em;
+}
+
+@media (max-width: 760px) {
+    body.app-authenticated .dashboard-pro,
+    body.app-authenticated .students-page,
+    body.app-authenticated .acta-form-page,
+    body.app-authenticated .new-acta-page,
+    body.app-authenticated .ga-page,
+    body.app-authenticated .preview-acta-page,
+    body.app-authenticated .expediente {
+        width: 100%;
+        padding: 14px;
+    }
+
+    body.app-authenticated .dashboard-pro-hero,
+    body.app-authenticated .students-hero,
+    body.app-authenticated .ga-hero,
+    body.app-authenticated .new-acta-header,
+    body.app-authenticated .acta-form-hero,
+    body.app-authenticated .expediente-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    body.app-authenticated .dashboard-pro-period,
+    body.app-authenticated .acta-form-progress-card {
+        width: 100%;
+        min-width: 0;
+        flex-basis: auto;
+        text-align: left;
+    }
+
+    body.app-authenticated .preview-acta-actions a,
+    body.app-authenticated .preview-acta-actions button,
+    body.app-authenticated .expediente-actions a,
+    body.app-authenticated .expediente-actions button {
+        max-width: 100%;
+        white-space: normal;
+    }
+}

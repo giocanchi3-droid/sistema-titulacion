@@ -126,6 +126,7 @@ def crear_acta(request):
             "form": form,
             "titulo": "Crear acta",
             "texto_boton": "Guardar acta",
+            "es_creacion": True,
         },
     )
 

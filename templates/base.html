@@ -61,6 +61,14 @@
         href="{% static 'css/ui-polish.css' %}?v=20260822-6"
     >
 
+    {% block extra_css %}
+    {% endblock %}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/frontend-global.css' %}?v=2"
+    >
+
 
     <!-- Vista previa oficial de actas -->
     </head>
@@ -104,7 +112,8 @@
 
             <a
                 href="{% url 'core:dashboard' %}"
-                class="menu-link"
+                class="menu-link {% if request.resolver_match.url_name == 'dashboard' %}is-active{% endif %}"
+                {% if request.resolver_match.url_name == 'dashboard' %}aria-current="page"{% endif %}
             >
                 <span class="sidebar-text">Panel de control</span>
             </a>
@@ -112,14 +121,15 @@
 
             <a
                 href="{% url 'estudiantes:lista' %}"
-                class="menu-link"
+                class="menu-link {% if request.resolver_match.app_name == 'estudiantes' and request.resolver_match.url_name == 'lista' %}is-active{% endif %}"
+                {% if request.resolver_match.app_name == 'estudiantes' and request.resolver_match.url_name == 'lista' %}aria-current="page"{% endif %}
             >
                 <span class="sidebar-text">Estudiantes</span>
             </a>
 
             <a
                 href="{% url 'estudiantes:crear' %}"
-                class="menu-link"
+                class="menu-link {% if request.resolver_match.url_name == 'crear' %}is-active{% endif %}"
             >
                 <span class="sidebar-text">Registrar estudiante</span>
             </a>
@@ -127,14 +137,14 @@
 
             <a
                 href="{% url 'documentos:lista_actas' %}"
-                class="menu-link"
+                class="menu-link {% if request.resolver_match.app_name == 'documentos' and request.resolver_match.url_name == 'lista_actas' %}is-active{% endif %}"
             >
                 <span class="sidebar-text">Actas de titulación</span>
             </a>
 
             <a
                 href="{% url 'documentos:crear_acta' %}"
-                class="menu-link"
+                class="menu-link {% if request.resolver_match.url_name == 'crear_acta' %}is-active{% endif %}"
             >
                 <span class="sidebar-text">Crear acta</span>
             </a>
@@ -142,7 +152,7 @@
 
             <a
                 href="{% url 'estudiantes:importar' %}"
-                class="menu-link"
+                class="menu-link {% if request.resolver_match.url_name == 'importar' or request.resolver_match.url_name == 'importar_excel' %}is-active{% endif %}"
             >
                 <span class="sidebar-text">Importar estudiantes</span>
             </a>
@@ -150,7 +160,7 @@
             {% if user.is_staff %}
                 <a
                     href="{% url 'estudiantes:auditoria' %}"
-                    class="menu-link"
+                    class="menu-link {% if request.resolver_match.url_name == 'auditoria' %}is-active{% endif %}"
                 >
                     <span class="sidebar-text">Historial de cambios</span>
                 </a>
@@ -196,7 +206,7 @@
 
     <main class="app-main min-w-0 flex-1">
 
-        <header class="border-b bg-white px-6 py-4 shadow-sm">
+        <header class="app-main-header border-b bg-white px-6 py-4 shadow-sm">
 
             <button
                 id="sidebarToggle"
@@ -222,7 +232,7 @@
 
         </header>
 
-        <div class="p-4 md:p-8">
+        <div class="app-content p-4 md:p-8">
 
             {% if messages %}
 
@@ -230,7 +240,7 @@
 
                     {% for message in messages %}
 
-                        <div class="rounded-lg border bg-white px-4 py-3 shadow-sm">
+                        <div class="app-message app-message-{{ message.tags|default:'info' }}">
                             {{ message }}
                         </div>
 

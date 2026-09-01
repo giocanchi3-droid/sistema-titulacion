@@ -9,12 +9,12 @@
     Registrar estudiante
 {% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/crear-acta-profesional.css' %}?v=2">
+{% endblock %}
+
 {% block content %}
 
-<link
-    rel="stylesheet"
-    href="{% static 'css/crear-acta-profesional.css' %}?v=1"
->
 
 <section class="acta-form-page">
 
@@ -300,6 +300,10 @@
                                     {% endif %}
                                 </div>
 
+                                {% if campo.name == "id_banner" or campo.name == "cedula" %}
+                                    <small class="acta-form-help">Presiona Enter para buscar información existente.</small>
+                                {% endif %}
+
                                 {% if campo.help_text %}
 
                                     <small class="acta-form-help">
@@ -421,6 +425,7 @@
 <script
     src="{% static 'js/crear-acta-profesional.js' %}?v=1"
 ></script>
+<script src="{% static 'js/buscar-estudiante.js' %}?v=1"></script>
 <script>
 (function () {
     const select = document.querySelector("[data-programa-select]");

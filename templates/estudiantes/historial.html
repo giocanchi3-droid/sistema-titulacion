@@ -4,7 +4,7 @@
 {% block page_title %}Historial del estudiante{% endblock %}
 
 {% block content %}
-<div class="mx-auto max-w-6xl">
+<div class="app-page-surface mx-auto max-w-6xl">
     <div class="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div><h1 class="text-2xl font-bold">{{ registro.nombres_completos }}</h1><p class="mt-1 text-slate-500">Cédula: {{ registro.cedula }}</p></div>
         <a href="{% url 'estudiantes:detalle' registro.pk %}" class="btn-secondary">Volver al detalle</a>

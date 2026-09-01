@@ -9,12 +9,12 @@
     Inicio
 {% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard-profesional.css' %}?v=2">
+{% endblock %}
+
 {% block content %}
 
-<link
-    rel="stylesheet"
-    href="{% static 'css/dashboard-profesional.css' %}?v=1"
->
 
 {% widthratio procesos_activos total_estudiantes 100 as porcentaje_activos %}
 {% widthratio procesos_aprobados total_estudiantes 100 as porcentaje_aprobados %}

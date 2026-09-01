@@ -9,12 +9,12 @@
     Estudiantes
 {% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/gestion-estudiantes.css' %}?v=2">
+{% endblock %}
+
 {% block content %}
 
-<link
-    rel="stylesheet"
-    href="{% static 'css/gestion-estudiantes.css' %}?v=1"
->
 
 <section class="students-page">
 
@@ -297,6 +297,23 @@
 
         </form>
 
+        <form
+            method="post"
+            action="{% url 'estudiantes:descargar_seleccionados' %}"
+            id="bulk-download-form"
+            class="students-bulk-actions"
+        >
+            {% csrf_token %}
+            <div id="selected-student-ids"></div>
+            <strong><span id="selected-student-count">0</span> estudiantes seleccionados</strong>
+            <select name="formato" aria-label="Formato de descarga" class="students-control">
+                <option value="excel">Excel</option>
+                <option value="pdf">PDF (ZIP)</option>
+                <option value="word">Word (ZIP)</option>
+            </select>
+            <button type="submit" class="students-search-button">Descargar seleccionados</button>
+        </form>
+
         <div class="students-results-summary">
 
             {% if total_filtrados %}
@@ -324,6 +341,7 @@
                 <thead>
 
                     <tr>
+                        <th><input type="checkbox" id="select-visible-students" aria-label="Seleccionar todos los visibles"></th>
                         <th>Estudiante</th>
                         <th>ID Banner</th>
                         <th>Programa</th>
@@ -340,6 +358,10 @@
                     {% for registro in registros %}
 
                         <tr>
+
+                            <td>
+                                <input type="checkbox" class="student-selector" value="{{ registro.pk }}" aria-label="Seleccionar {{ registro.nombres_completos }}">
+                            </td>
 
                             <td>
 
@@ -443,7 +465,7 @@
                         <tr>
 
                             <td
-                                colspan="7"
+                                colspan="8"
                                 class="students-empty-cell"
                             >
 
@@ -542,5 +564,7 @@
     </section>
 
 </section>
+
+<script src="{% static 'js/estudiantes-lista.js' %}?v=1"></script>
 
 {% endblock %}

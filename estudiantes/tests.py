@@ -1,14 +1,17 @@
 import io
+from zipfile import ZipFile
 
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from openpyxl import Workbook
+from openpyxl import load_workbook
 
 from .import_forms import ImportarExcelForm
 from .models import HistorialExpediente, Programa, RegistroTitulacion
 from .views import registrar_cambios
 from .services_excel import convertir_nota, importar_excel
+from .services_exportacion import crear_excel_estudiantes
 
 
 class ImportarExcelTests(TestCase):
@@ -195,6 +198,90 @@ class ImportarExcelTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Importar estudiantes", response.content)
         self.assertIn(b"Procesar matriz", response.content)
+
+
+class ExportacionTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="exportador",
+            password="testpass123",
+        )
+        self.registros = [
+            RegistroTitulacion.objects.create(
+                cedula="0102030405",
+                id_banner="12345",
+                nombres_completos="Juan Pérez",
+                programa="TQ02",
+                programa_desc="TG Desarrollo de Software",
+                estado="APROBADO",
+            ),
+            RegistroTitulacion.objects.create(
+                cedula="0102030406",
+                id_banner="12346",
+                nombres_completos="María López",
+                programa="TQ01",
+                programa_desc="TG Administración OEPS",
+                estado="EN_PROCESO",
+            ),
+        ]
+
+    def test_individual_excel_contains_matrix_headers_and_formatting(self):
+        self.client.force_login(self.user)
+        response = self.client.get(
+            f"/estudiantes/{self.registros[0].pk}/exportar-excel/"
+        )
+        libro = load_workbook(io.BytesIO(response.content))
+        hoja = libro.active
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(hoja[1][0].value, "ID BANNER")
+        self.assertEqual(hoja[2][1].value, "Juan Pérez")
+        self.assertEqual(hoja.auto_filter.ref, hoja.dimensions)
+        self.assertEqual(HistorialExpediente.objects.count(), 0)
+
+    def test_bulk_formats_are_read_only_and_zip_per_student(self):
+        self.client.force_login(self.user)
+        base = {
+            "estudiante_ids": [str(registro.pk) for registro in self.registros],
+        }
+        response = self.client.post(
+            "/estudiantes/descargar-seleccionados/",
+            {**base, "formato": "excel"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            load_workbook(io.BytesIO(response.content)).active.max_row,
+            3,
+        )
+
+        for formato, extension in (("pdf", ".pdf"), ("word", ".docx")):
+            response = self.client.post(
+                "/estudiantes/descargar-seleccionados/",
+                {**base, "formato": formato},
+            )
+            with ZipFile(io.BytesIO(response.content)) as archivo_zip:
+                nombres = archivo_zip.namelist()
+                self.assertEqual(len(nombres), 2)
+                self.assertTrue(all(nombre.endswith(extension) for nombre in nombres))
+        self.assertEqual(HistorialExpediente.objects.count(), 0)
+
+    def test_lookup_by_banner_cedula_missing_and_login(self):
+        self.client.force_login(self.user)
+        for parametro, valor in (("id_banner", "12345"), ("cedula", "0102030405")):
+            response = self.client.get(f"/estudiantes/buscar/?{parametro}={valor}")
+            self.assertEqual(
+                response.json()["estudiante"]["nombres_completos"],
+                "Juan Pérez",
+            )
+        self.assertFalse(
+            self.client.get(
+                "/estudiantes/buscar/?cedula=9999999999"
+            ).json()["encontrado"]
+        )
+        self.client.logout()
+        self.assertEqual(
+            self.client.get("/estudiantes/buscar/?cedula=0102030405").status_code,
+            302,
+        )
 
 
 class AuditoriaTests(TestCase):

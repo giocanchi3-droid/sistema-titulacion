@@ -619,3 +619,35 @@
         justify-content: space-between;
     }
 }
+
+.students-bulk-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 18px 0;
+    border: 1px solid rgba(74, 175, 230, 0.3);
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: #dff4ff;
+    background: rgba(4, 30, 51, 0.72);
+}
+
+.students-bulk-actions strong {
+    margin-right: auto;
+}
+
+.student-selector,
+#select-visible-students {
+    accent-color: #1ba6e5;
+}
+
+@media (max-width: 720px) {
+    .students-bulk-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .students-bulk-actions strong {
+        margin-right: 0;
+    }
+}

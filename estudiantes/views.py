@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import ProgramaForm, RegistroTitulacionForm
 from .models import HistorialExpediente, Programa, RegistroTitulacion
+from .services_exportacion import exportar_masivo
 from .services_excel import exportar_registro_excel
 
 
@@ -588,6 +589,59 @@ def exportar_registro(request, pk):
     respuesta["Content-Disposition"] = (
         f'attachment; filename="estudiante-{registro.cedula}.xlsx"'
     )
+    return respuesta
+
+
+@login_required
+def buscar_estudiante(request):
+    id_banner = request.GET.get("id_banner", "").strip()
+    cedula = request.GET.get("cedula", "").strip()
+    if not id_banner and not cedula:
+        return JsonResponse({"encontrado": False})
+
+    consulta = RegistroTitulacion.objects.all()
+    if cedula:
+        registro = consulta.filter(cedula=cedula).first()
+    else:
+        registro = consulta.filter(id_banner=id_banner).first()
+    if registro is None:
+        return JsonResponse({"encontrado": False})
+
+    campos = {
+        campo: getattr(registro, campo)
+        for campo in RegistroTitulacionForm.Meta.fields
+    }
+    for campo, valor in campos.items():
+        if hasattr(valor, "isoformat"):
+            campos[campo] = valor.isoformat()
+        elif valor is None:
+            campos[campo] = ""
+        else:
+            campos[campo] = str(valor)
+    return JsonResponse({"encontrado": True, "estudiante": campos})
+
+
+@login_required
+def descargar_seleccionados(request):
+    if request.method != "POST":
+        return redirect("estudiantes:lista")
+    formato = request.POST.get("formato", "").lower()
+    if formato not in {"excel", "pdf", "word"}:
+        return JsonResponse({"error": "Formato no válido."}, status=400)
+    ids_recibidos = request.POST.getlist("estudiante_ids")
+    if any(not valor.isdigit() for valor in ids_recibidos):
+        return JsonResponse({"error": "Los identificadores no son válidos."}, status=400)
+    ids = set(ids_recibidos)
+    registros = RegistroTitulacion.objects.filter(pk__in=ids).order_by(
+        "nombres_completos", "cedula"
+    )
+    if len(ids) != registros.count():
+        return JsonResponse({"error": "Uno o más estudiantes no existen."}, status=400)
+    if not registros.exists():
+        return JsonResponse({"error": "Seleccione al menos un estudiante."}, status=400)
+    nombre, contenido, tipo = exportar_masivo(registros, formato)
+    respuesta = HttpResponse(contenido, content_type=tipo)
+    respuesta["Content-Disposition"] = f'attachment; filename="{nombre}"'
     return respuesta
 
 
