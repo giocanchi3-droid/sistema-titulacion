@@ -763,6 +763,8 @@ def guardar_registro(datos, usuario=None):
         if creado or anterior.get(campo, "") != nuevo:
             HistorialExpediente.objects.create(
                 registro=registro,
+                registro_nombre=registro.nombres_completos,
+                registro_cedula=registro.cedula,
                 responsable=responsable,
                 campo=registro._meta.get_field(campo).verbose_name,
                 valor_anterior=anterior.get(campo, ""),

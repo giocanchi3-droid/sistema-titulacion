@@ -395,8 +395,21 @@ class HistorialExpediente(models.Model):
 
     registro = models.ForeignKey(
         RegistroTitulacion,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
         related_name="historial_cambios",
+    )
+
+    registro_nombre = models.CharField(
+        max_length=200,
+        blank=True,
+    )
+
+    registro_cedula = models.CharField(
+        max_length=30,
+        blank=True,
+        db_index=True,
     )
 
     responsable = models.CharField(

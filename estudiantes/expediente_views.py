@@ -130,8 +130,10 @@ def expediente_registro(request, pk):
         registro
     )
 
-    historial = obtener_historial(
-        registro
+    historial = (
+        obtener_historial(registro)
+        if request.user.is_staff
+        else []
     )
 
     contexto = {

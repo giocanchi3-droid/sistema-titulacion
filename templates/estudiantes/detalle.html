@@ -53,6 +53,15 @@
                 Descargar Excel
             </a>
 
+            {% if user.is_staff %}
+                <a
+                    href="{% url 'estudiantes:historial' registro.pk %}"
+                    class="btn-secondary"
+                >
+                    Ver historial de cambios
+                </a>
+            {% endif %}
+
         </div>
 
     </div>

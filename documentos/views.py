@@ -1,4 +1,4 @@
-import logging
+﻿import logging
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -7,6 +7,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 
 from estudiantes.models import RegistroTitulacion
+from estudiantes.services_expediente import construir_requisitos
 
 from .forms import ActaForm
 from .models import Acta
@@ -130,6 +131,109 @@ def crear_acta(request):
 
 
 @login_required
+def generar_acta_desde_expediente(request, registro_pk):
+    """
+    Crea y genera automáticamente el acta oficial
+    desde el expediente digital del estudiante.
+    """
+
+    registro = get_object_or_404(
+        RegistroTitulacion,
+        pk=registro_pk,
+    )
+
+    if request.method != "POST":
+        return redirect(
+            "estudiantes:expediente",
+            pk=registro.pk,
+        )
+
+    avance = construir_requisitos(registro)
+
+    if not avance["puede_generar_acta"]:
+        messages.error(
+            request,
+            "No se puede generar el acta porque "
+            "el expediente tiene requisitos pendientes.",
+        )
+
+        return redirect(
+            "estudiantes:expediente",
+            pk=registro.pk,
+        )
+
+    tipo_acta = registro.modalidad_titulacion
+
+    if tipo_acta not in dict(Acta.TIPOS_ACTA):
+        messages.error(
+            request,
+            "El estudiante no tiene una modalidad de titulación válida.",
+        )
+
+        return redirect(
+            "estudiantes:expediente",
+            pk=registro.pk,
+        )
+
+    acta = Acta.objects.filter(
+        registro=registro,
+        tipo_acta=tipo_acta,
+    ).first()
+
+    if acta:
+        messages.info(
+            request,
+            f"El estudiante ya tiene el acta {acta.numero_acta}.",
+        )
+
+        return redirect(
+            "documentos:detalle_acta",
+            pk=acta.pk,
+        )
+
+    try:
+        acta = Acta.objects.create(
+            registro=registro,
+            tipo_acta=tipo_acta,
+            estado="BORRADOR",
+            creado_por=request.user,
+        )
+
+        generar_archivos_acta(acta)
+
+        messages.success(
+            request,
+            f"Acta {acta.numero_acta} generada correctamente "
+            "con sus documentos oficiales.",
+        )
+
+        return redirect(
+            "documentos:detalle_acta",
+            pk=acta.pk,
+        )
+
+    except Exception:
+        logger.exception(
+            "Error generando acta desde expediente %s",
+            registro.pk,
+        )
+
+        if acta.pk:
+            acta.delete()
+
+        messages.error(
+            request,
+            "No fue posible generar el acta. "
+            "Revise los datos del expediente e inténtelo nuevamente.",
+        )
+
+        return redirect(
+            "estudiantes:expediente",
+            pk=registro.pk,
+        )
+
+
+@login_required
 def detalle_acta(request, pk):
     acta = get_object_or_404(
         Acta.objects.select_related(
@@ -223,13 +327,13 @@ def descargar_documento(request, pk, tipo):
     }
 
     if tipo not in campos:
-        raise Http404("Tipo de documento no válido.")
+        raise Http404("Tipo de documento no vÃ¡lido.")
 
     campo, content_type = campos[tipo]
     archivo = getattr(acta, campo)
 
     if not archivo:
-        raise Http404("El documento todavía no ha sido generado.")
+        raise Http404("El documento todavÃ­a no ha sido generado.")
 
     try:
         url = archivo.url
@@ -529,7 +633,7 @@ def _ga_build_row(acta):
     tipo_texto = (
         str(tipo).strip()
         if tipo
-        else "Acta de titulación"
+        else "Acta de titulaciÃ³n"
     )
 
     codigo_texto = (
@@ -873,7 +977,7 @@ def generar_documentos_oficiales(request, pk):
         messages.error(
             request,
             "No fue posible generar el acta. "
-            "Verifique los datos e inténtelo nuevamente.",
+            "Verifique los datos e intÃ©ntelo nuevamente.",
         )
 
     return redirect(
@@ -1011,7 +1115,7 @@ def generar_documentos(request, pk):
         messages.error(
             request,
             "No fue posible generar los documentos. "
-            "Verifique los datos e inténtelo nuevamente.",
+            "Verifique los datos e intÃ©ntelo nuevamente.",
         )
 
     return redirect(
@@ -1020,3 +1124,7 @@ def generar_documentos(request, pk):
     )
 
 # === GENERACION OFICIAL PUCETEC END ===
+
+
+
+

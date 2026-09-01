@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Historial de {{ registro.nombres_completos }}{% endblock %}
+{% block page_title %}Historial del estudiante{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-6xl">
+    <div class="mb-6 flex flex-wrap items-start justify-between gap-4">
+        <div><h1 class="text-2xl font-bold">{{ registro.nombres_completos }}</h1><p class="mt-1 text-slate-500">Cédula: {{ registro.cedula }}</p></div>
+        <a href="{% url 'estudiantes:detalle' registro.pk %}" class="btn-secondary">Volver al detalle</a>
+    </div>
+    <div class="card overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[850px] border-collapse text-sm">
+                <thead><tr class="bg-slate-100 text-left"><th class="border p-3">Fecha y hora</th><th class="border p-3">Usuario</th><th class="border p-3">Acción</th><th class="border p-3">Campo</th><th class="border p-3">Anterior</th><th class="border p-3">Nuevo</th><th class="border p-3"> </th></tr></thead>
+                <tbody>
+                {% for cambio in historial %}
+                    <tr class="align-top"><td class="border p-3 whitespace-nowrap">{{ cambio.fecha|date:"d/m/Y H:i" }}</td><td class="border p-3">{{ cambio.responsable }}</td><td class="border p-3">{{ cambio.accion }}</td><td class="border p-3">{{ cambio.campo }}</td><td class="border p-3 max-w-xs whitespace-pre-wrap break-words">{{ cambio.valor_anterior|default:"—" }}</td><td class="border p-3 max-w-xs whitespace-pre-wrap break-words">{{ cambio.valor_nuevo|default:"—" }}</td><td class="border p-3">{% if cambio.accion != "ELIMINACION" %}<form method="post" action="{% url 'estudiantes:revertir_cambio' cambio.pk %}">{% csrf_token %}<button type="submit" class="font-semibold text-blue-700">Revertir</button></form>{% else %}—{% endif %}</td></tr>
+                {% empty %}<tr><td colspan="7" class="p-6 text-center text-slate-500">No hay cambios registrados.</td></tr>{% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include "partials/paginacion.html" %}
+    </div>
+</div>
+{% endblock %}

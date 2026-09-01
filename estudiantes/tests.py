@@ -6,7 +6,8 @@ from django.test import TestCase
 from openpyxl import Workbook
 
 from .import_forms import ImportarExcelForm
-from .models import Programa, RegistroTitulacion
+from .models import HistorialExpediente, Programa, RegistroTitulacion
+from .views import registrar_cambios
 from .services_excel import convertir_nota, importar_excel
 
 
@@ -194,6 +195,153 @@ class ImportarExcelTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Importar estudiantes", response.content)
         self.assertIn(b"Procesar matriz", response.content)
+
+
+class AuditoriaTests(TestCase):
+    def setUp(self):
+        self.staff = User.objects.create_user(
+            username="auditor",
+            password="testpass123",
+            is_staff=True,
+        )
+        self.user = User.objects.create_user(
+            username="operador",
+            password="testpass123",
+        )
+        Programa.objects.get_or_create(
+            codigo="TQ02",
+            defaults={"descripcion": "TG Desarrollo de Software"},
+        )
+        self.registro = RegistroTitulacion.objects.create(
+            cedula="0102030405",
+            nombres_completos="Juan Pérez",
+            programa="TQ02",
+            programa_desc="TG Desarrollo de Software",
+            correo_personal="juan@gmail.com",
+            estado="EN_PROCESO",
+        )
+
+    def test_manual_creation_generates_audit_entry(self):
+        self.client.force_login(self.staff)
+        response = self.client.post(
+            "/estudiantes/nuevo/",
+            {
+                "cedula": "0102030406",
+                "nombres_completos": "Ana López",
+                "programa": "TQ02",
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(
+            HistorialExpediente.objects.filter(
+                registro__cedula="0102030406",
+                accion="CREACION",
+                responsable="auditor",
+            ).exists()
+        )
+
+    def test_creation_and_edit_record_each_changed_field(self):
+        anterior = RegistroTitulacion.objects.get(pk=self.registro.pk)
+        self.registro.nombres_completos = "Juan Pérez Actualizado"
+        self.registro.estado = "APROBADO"
+        self.registro.save()
+
+        registrar_cambios(self.registro, anterior, self.staff)
+
+        cambios = HistorialExpediente.objects.filter(registro=self.registro)
+        self.assertEqual(cambios.count(), 2)
+        self.assertSetEqual(
+            set(cambios.values_list("campo", flat=True)),
+            {"NOMBRES COMPLETOS", "ESTADO"},
+        )
+        self.assertTrue(all(cambio.responsable == "auditor" for cambio in cambios))
+
+    def test_import_new_and_existing_records_audit_user_and_fields(self):
+        filas = [
+            ["CEDULA", "NOMBRES COMPLETOS", "PROGRAMA", "ESTADO"],
+            ["0102030406", "Ana López", "TQ02", "REGISTRADO"],
+            ["0102030405", "Juan Pérez", "TQ02", "APROBADO"],
+        ]
+        archivo = ImportarExcelTests()._crear_archivo_excel(filas)
+        importar_excel(archivo, usuario=self.staff)
+
+        self.assertTrue(
+            HistorialExpediente.objects.filter(
+                registro__cedula="0102030406",
+                accion="IMPORTACION",
+                responsable="auditor",
+            ).exists()
+        )
+        self.assertTrue(
+            HistorialExpediente.objects.filter(
+                registro=self.registro,
+                campo="ESTADO",
+                valor_anterior="EN_PROCESO",
+                valor_nuevo="APROBADO",
+                accion="EDICION",
+                responsable="auditor",
+            ).exists()
+        )
+
+    def test_deletion_keeps_audit_snapshot(self):
+        self.client.force_login(self.staff)
+        response = self.client.post(f"/estudiantes/{self.registro.pk}/eliminar/")
+
+        self.assertEqual(response.status_code, 302)
+        cambio = HistorialExpediente.objects.get(accion="ELIMINACION")
+        self.assertIsNone(cambio.registro)
+        self.assertEqual(cambio.registro_nombre, "Juan Pérez")
+        self.assertEqual(cambio.registro_cedula, "0102030405")
+
+    def test_auditoria_filters_and_individual_history(self):
+        anterior = RegistroTitulacion.objects.get(pk=self.registro.pk)
+        self.registro.estado = "APROBADO"
+        self.registro.save()
+        registrar_cambios(self.registro, anterior, self.staff)
+        self.client.force_login(self.staff)
+
+        response = self.client.get("/estudiantes/auditoria/?accion=EDICION&cedula=0102030405")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "ESTADO")
+        self.assertContains(response, "APROBADO")
+        response = self.client.get(f"/estudiantes/{self.registro.pk}/historial/")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Juan Pérez")
+
+    def test_auditoria_requires_staff(self):
+        self.client.force_login(self.user)
+        response = self.client.get("/estudiantes/auditoria/")
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, "/cuentas/login/?next=/estudiantes/auditoria/")
+
+    def test_revert_creates_new_audit_entry(self):
+        anterior = RegistroTitulacion.objects.get(pk=self.registro.pk)
+        self.registro.estado = "APROBADO"
+        self.registro.save()
+        registrar_cambios(self.registro, anterior, self.staff)
+        cambio = HistorialExpediente.objects.get(campo="ESTADO")
+
+        self.client.force_login(self.staff)
+        response = self.client.post(f"/estudiantes/auditoria/{cambio.pk}/revertir/")
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            RegistroTitulacion.objects.get(pk=self.registro.pk).estado,
+            "EN_PROCESO",
+        )
+        self.assertTrue(
+            HistorialExpediente.objects.filter(
+                registro=self.registro,
+                accion="REVERSIÓN",
+                valor_anterior="APROBADO",
+                valor_nuevo="EN_PROCESO",
+                responsable="auditor",
+            ).exists()
+        )
+
+
+class ImportarExcelViewTests(ImportarExcelTests):
 
     def test_importar_excel_get_request_contains_form(self):
         """El formulario debe estar presente en GET."""

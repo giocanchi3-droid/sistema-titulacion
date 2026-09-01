@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Historial de cambios{% endblock %}
+{% block page_title %}Historial de cambios{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-7xl">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold">Historial de cambios</h1>
+        <p class="mt-2 text-slate-500">Auditoría de modificaciones realizadas en los expedientes.</p>
+    </div>
+
+    <form method="get" class="card mb-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div class="lg:col-span-2">
+            <label class="block text-sm font-semibold" for="id_q">Búsqueda general</label>
+            <input id="id_q" name="q" value="{{ filtros.q }}" class="form-control w-full" placeholder="Estudiante, cédula, usuario o valor">
+        </div>
+        <div>
+            <label class="block text-sm font-semibold" for="id_estudiante">Estudiante</label>
+            <input id="id_estudiante" name="estudiante" value="{{ filtros.estudiante }}" class="form-control w-full">
+        </div>
+        <div>
+            <label class="block text-sm font-semibold" for="id_cedula">Cédula</label>
+            <input id="id_cedula" name="cedula" value="{{ filtros.cedula }}" class="form-control w-full">
+        </div>
+        <div>
+            <label class="block text-sm font-semibold" for="id_responsable">Usuario</label>
+            <input id="id_responsable" name="responsable" value="{{ filtros.responsable }}" class="form-control w-full">
+        </div>
+        <div>
+            <label class="block text-sm font-semibold" for="id_accion">Acción</label>
+            <select id="id_accion" name="accion" class="form-control w-full">
+                <option value="">Todas</option>
+                {% for opcion in acciones %}<option value="{{ opcion }}" {% if filtros.accion == opcion %}selected{% endif %}>{{ opcion }}</option>{% endfor %}
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-semibold" for="id_campo">Campo</label>
+            <select id="id_campo" name="campo" class="form-control w-full">
+                <option value="">Todos</option>
+                {% for opcion in campos %}<option value="{{ opcion }}" {% if filtros.campo == opcion %}selected{% endif %}>{{ opcion }}</option>{% endfor %}
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-semibold" for="id_fecha_desde">Desde</label>
+            <input id="id_fecha_desde" type="date" name="fecha_desde" value="{{ filtros.fecha_desde }}" class="form-control w-full">
+        </div>
+        <div>
+            <label class="block text-sm font-semibold" for="id_fecha_hasta">Hasta</label>
+            <input id="id_fecha_hasta" type="date" name="fecha_hasta" value="{{ filtros.fecha_hasta }}" class="form-control w-full">
+        </div>
+        <div class="flex items-end gap-2 md:col-span-2 lg:col-span-4">
+            <button type="submit" class="btn-primary">Filtrar</button>
+            <a href="{% url 'estudiantes:auditoria' %}" class="btn-secondary">Limpiar</a>
+        </div>
+    </form>
+
+    <div class="card overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[1050px] border-collapse text-sm">
+                <thead><tr class="bg-slate-100 text-left">
+                    <th class="border p-3">Fecha y hora</th><th class="border p-3">Usuario</th><th class="border p-3">Estudiante</th><th class="border p-3">Cédula</th><th class="border p-3">Acción</th><th class="border p-3">Campo</th><th class="border p-3">Anterior</th><th class="border p-3">Nuevo</th><th class="border p-3"> </th>
+                </tr></thead>
+                <tbody>
+                {% for cambio in historial %}
+                    <tr class="align-top">
+                        <td class="border p-3 whitespace-nowrap">{{ cambio.fecha|date:"d/m/Y H:i" }}</td>
+                        <td class="border p-3">{{ cambio.responsable }}</td>
+                        <td class="border p-3 max-w-xs break-words">{{ cambio.registro_nombre|default:"—" }}</td>
+                        <td class="border p-3">{{ cambio.registro_cedula|default:"—" }}</td>
+                        <td class="border p-3">{{ cambio.accion }}</td>
+                        <td class="border p-3">{{ cambio.campo|default:"—" }}</td>
+                        <td class="border p-3 max-w-xs whitespace-pre-wrap break-words">{{ cambio.valor_anterior|default:"—" }}</td>
+                        <td class="border p-3 max-w-xs whitespace-pre-wrap break-words">{{ cambio.valor_nuevo|default:"—" }}</td>
+                        <td class="border p-3">
+                            {% if cambio.registro and cambio.accion != "ELIMINACION" %}
+                                <form method="post" action="{% url 'estudiantes:revertir_cambio' cambio.pk %}">{% csrf_token %}<button type="submit" class="font-semibold text-blue-700" onclick="return confirm('¿Revertir este cambio?')">Revertir</button></form>
+                            {% else %}—{% endif %}
+                        </td>
+                    </tr>
+                {% empty %}<tr><td colspan="9" class="p-6 text-center text-slate-500">No hay cambios que mostrar.</td></tr>{% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include "partials/paginacion.html" %}
+    </div>
+</div>
+{% endblock %}

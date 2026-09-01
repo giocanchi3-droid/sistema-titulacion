@@ -1,6 +1,7 @@
 ﻿from django.contrib import admin
 
 from .models import HistorialExpediente, Programa, RegistroTitulacion
+from .views import registrar_cambios, registrar_eliminacion
 
 
 @admin.register(Programa)
@@ -15,6 +16,7 @@ class HistorialExpedienteAdmin(admin.ModelAdmin):
     list_display = (
         "fecha",
         "registro",
+        "registro_cedula",
         "responsable",
         "campo",
         "accion",
@@ -30,6 +32,8 @@ class HistorialExpedienteAdmin(admin.ModelAdmin):
     )
     readonly_fields = (
         "registro",
+        "registro_nombre",
+        "registro_cedula",
         "responsable",
         "campo",
         "valor_anterior",
@@ -38,6 +42,12 @@ class HistorialExpedienteAdmin(admin.ModelAdmin):
         "observacion",
         "fecha",
     )
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 @admin.register(RegistroTitulacion)
@@ -165,3 +175,19 @@ class RegistroTitulacionAdmin(admin.ModelAdmin):
             },
         ),
     )
+
+    def save_model(self, request, obj, form, change):
+        anterior = None
+        if change:
+            anterior = RegistroTitulacion.objects.get(pk=obj.pk)
+        super().save_model(request, obj, form, change)
+        registrar_cambios(
+            obj,
+            anterior or RegistroTitulacion(),
+            request.user,
+            accion="EDICION" if change else "CREACION",
+        )
+
+    def delete_model(self, request, obj):
+        registrar_eliminacion(obj, request.user)
+        super().delete_model(request, obj)

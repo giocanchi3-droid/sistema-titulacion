@@ -100,12 +100,20 @@
 
             {% if avance.puede_generar_acta %}
 
-                <a
-                    href="{% url 'documentos:crear_acta' %}?registro={{ registro.pk }}"
-                    class="expediente-button expediente-button-primary"
+                <form
+                    method="post"
+                    action="{% url 'documentos:generar_acta_desde_expediente' registro.pk %}"
+                    style="display: inline;"
                 >
-                    Generar acta
-                </a>
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="expediente-button expediente-button-primary"
+                    >
+                        Generar acta
+                    </button>
+                </form>
 
             {% else %}
 
@@ -829,4 +837,5 @@
 </div>
 
 {% endblock %}
+
 

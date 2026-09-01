@@ -149,6 +149,15 @@
 
             {% if user.is_staff %}
                 <a
+                    href="{% url 'estudiantes:auditoria' %}"
+                    class="menu-link"
+                >
+                    <span class="sidebar-text">Historial de cambios</span>
+                </a>
+            {% endif %}
+
+            {% if user.is_staff %}
+                <a
                     href="/admin/"
                     class="menu-link"
                 >

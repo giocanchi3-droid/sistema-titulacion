@@ -1,4 +1,4 @@
-from .views_oficial import (
+﻿from .views_oficial import (
     generar_oficial,
     generar_pdf_memoria,
     generar_word_memoria,
@@ -12,6 +12,13 @@ app_name = "documentos"
 
 
 urlpatterns = [
+
+    path(
+        "expediente/<int:registro_pk>/generar-acta/",
+        views.generar_acta_desde_expediente,
+        name="generar_acta_desde_expediente",
+    ),
+
 
     # GENERADOR OFICIAL PUCE TEC - PRIORIDAD
     path(
@@ -93,5 +100,6 @@ urlpatterns = [
         name="eliminar_acta",
     ),
 ]
+
 
 

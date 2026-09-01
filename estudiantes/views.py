@@ -1,8 +1,11 @@
 ﻿from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
+from django.utils.dateparse import parse_date
+from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -156,12 +159,146 @@ def registrar_cambios(registro, anterior, usuario, accion="EDICION"):
         if viejo != nuevo:
             HistorialExpediente.objects.create(
                 registro=registro,
+                registro_nombre=registro.nombres_completos,
+                registro_cedula=registro.cedula,
                 responsable=responsable,
                 campo=registro._meta.get_field(campo).verbose_name,
                 valor_anterior=viejo,
                 valor_nuevo=nuevo,
                 accion=accion,
             )
+
+
+def registrar_eliminacion(registro, usuario):
+    responsable = getattr(usuario, "username", None) or "Sistema"
+    HistorialExpediente.objects.create(
+        registro=registro,
+        registro_nombre=registro.nombres_completos,
+        registro_cedula=registro.cedula,
+        responsable=responsable,
+        campo="Registro completo",
+        valor_anterior=f"{registro.nombres_completos} ({registro.cedula})",
+        valor_nuevo="",
+        accion="ELIMINACION",
+        observacion="Registro de estudiante eliminado.",
+    )
+
+
+def usuario_puede_auditar(usuario):
+    return usuario.is_authenticated and usuario.is_staff
+
+
+@user_passes_test(usuario_puede_auditar)
+def auditoria(request):
+    historial = HistorialExpediente.objects.all()
+    filtros = {
+        clave: request.GET.get(clave, "").strip()
+        for clave in (
+            "q", "estudiante", "cedula", "responsable", "accion",
+            "campo", "fecha_desde", "fecha_hasta",
+        )
+    }
+    if filtros["q"]:
+        historial = historial.filter(
+            Q(registro_nombre__icontains=filtros["q"])
+            | Q(registro_cedula__icontains=filtros["q"])
+            | Q(responsable__icontains=filtros["q"])
+            | Q(campo__icontains=filtros["q"])
+            | Q(valor_anterior__icontains=filtros["q"])
+            | Q(valor_nuevo__icontains=filtros["q"])
+            | Q(accion__icontains=filtros["q"])
+        )
+    if filtros["estudiante"]:
+        historial = historial.filter(
+            registro_nombre__icontains=filtros["estudiante"]
+        )
+    if filtros["cedula"]:
+        historial = historial.filter(
+            registro_cedula__icontains=filtros["cedula"]
+        )
+    if filtros["responsable"]:
+        historial = historial.filter(
+            responsable__icontains=filtros["responsable"]
+        )
+    if filtros["accion"]:
+        historial = historial.filter(accion=filtros["accion"])
+    if filtros["campo"]:
+        historial = historial.filter(campo=filtros["campo"])
+    fecha_desde = parse_date(filtros["fecha_desde"])
+    fecha_hasta = parse_date(filtros["fecha_hasta"])
+    if fecha_desde:
+        historial = historial.filter(fecha__date__gte=fecha_desde)
+    if fecha_hasta:
+        historial = historial.filter(fecha__date__lte=fecha_hasta)
+
+    pagina = Paginator(historial.order_by("-fecha"), 25).get_page(
+        request.GET.get("page")
+    )
+    parametros = request.GET.copy()
+    parametros.pop("page", None)
+    return render(request, "estudiantes/auditoria.html", {
+        "historial": pagina,
+        "page_obj": pagina,
+        "querystring": parametros.urlencode(),
+        "filtros": filtros,
+        "acciones": HistorialExpediente.objects.values_list(
+            "accion", flat=True
+        ).distinct().order_by("accion"),
+        "campos": HistorialExpediente.objects.values_list(
+            "campo", flat=True
+        ).distinct().order_by("campo"),
+    })
+
+
+@user_passes_test(usuario_puede_auditar)
+def historial_registro(request, pk):
+    registro = get_object_or_404(RegistroTitulacion, pk=pk)
+    historial = registro.historial_cambios.all().order_by("-fecha")
+    pagina = Paginator(historial, 25).get_page(request.GET.get("page"))
+    return render(request, "estudiantes/historial.html", {
+        "registro": registro,
+        "historial": pagina,
+        "page_obj": pagina,
+    })
+
+
+@require_POST
+@user_passes_test(usuario_puede_auditar)
+def revertir_cambio(request, pk):
+    cambio = get_object_or_404(HistorialExpediente, pk=pk)
+    if cambio.registro is None or cambio.accion == "ELIMINACION":
+        messages.error(request, "Este cambio no puede revertirse.")
+        return redirect("estudiantes:auditoria")
+
+    campo = next(
+        (
+            nombre for nombre in RegistroTitulacionForm.Meta.fields
+            if RegistroTitulacion._meta.get_field(nombre).verbose_name
+            == cambio.campo
+        ),
+        None,
+    )
+    if campo is None:
+        messages.error(request, "El campo de este cambio no puede revertirse.")
+        return redirect("estudiantes:auditoria")
+
+    registro = cambio.registro
+    anterior = RegistroTitulacion.objects.get(pk=registro.pk)
+    field = RegistroTitulacion._meta.get_field(campo)
+    try:
+        valor = cambio.valor_anterior
+        if valor == "":
+            valor = None if field.null else ""
+        setattr(registro, campo, valor)
+        registro.full_clean()
+        registro.save()
+    except (TypeError, ValueError, ValidationError):
+        messages.error(request, "El valor anterior no es válido para revertirlo.")
+        return redirect("estudiantes:auditoria")
+
+    registrar_cambios(registro, anterior, request.user, accion="REVERSIÓN")
+    messages.success(request, "El cambio fue revertido y quedó registrado.")
+    return redirect("estudiantes:historial", pk=registro.pk)
 
 
 def opciones_programas():
@@ -462,6 +599,7 @@ def eliminar_registro(request, pk):
     )
 
     if request.method == "POST":
+        registrar_eliminacion(registro, request.user)
         registro.delete()
 
         messages.success(
