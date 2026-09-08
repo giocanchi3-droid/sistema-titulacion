@@ -6,9 +6,11 @@ from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.utils.dateparse import parse_date
 from django.contrib.auth.decorators import user_passes_test
+from django.core.exceptions import PermissionDenied
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, redirect, render
 
+from core.permissions import is_full_operator, reject_unauthorized_fields
 from .forms import ProgramaForm, RegistroTitulacionForm
 from .models import HistorialExpediente, Programa, RegistroTitulacion
 from .services_exportacion import exportar_masivo
@@ -186,7 +188,7 @@ def registrar_eliminacion(registro, usuario):
 
 
 def usuario_puede_auditar(usuario):
-    return usuario.is_authenticated and usuario.is_staff
+    return is_full_operator(usuario)
 
 
 @user_passes_test(usuario_puede_auditar)
@@ -441,9 +443,12 @@ def lista_registros(request):
 
 @login_required
 def crear_registro(request):
+    if not is_full_operator(request.user):
+        raise PermissionDenied
     if request.method == "POST":
         form = RegistroTitulacionForm(
             request.POST,
+            user=request.user,
             programas=opciones_programas(),
         )
 
@@ -468,7 +473,10 @@ def crear_registro(request):
                 pk=registro.pk,
             )
     else:
-        form = RegistroTitulacionForm(programas=opciones_programas())
+        form = RegistroTitulacionForm(
+            user=request.user,
+            programas=opciones_programas(),
+        )
 
     contexto = {
         "form": form,
@@ -488,6 +496,8 @@ def crear_registro(request):
 @login_required
 @require_POST
 def crear_programa(request):
+    if not is_full_operator(request.user):
+        raise PermissionDenied
     form = ProgramaForm(request.POST)
     if not form.is_valid():
         return JsonResponse(
@@ -514,9 +524,15 @@ def editar_registro(request, pk):
     )
 
     if request.method == "POST":
+        reject_unauthorized_fields(
+            request.user,
+            RegistroTitulacion,
+            set(request.POST) & set(RegistroTitulacionForm.Meta.fields),
+        )
         form = RegistroTitulacionForm(
             request.POST,
             instance=registro,
+            user=request.user,
             programas=opciones_programas(),
         )
 
@@ -538,6 +554,7 @@ def editar_registro(request, pk):
     else:
         form = RegistroTitulacionForm(
             instance=registro,
+            user=request.user,
             programas=opciones_programas(),
         )
 
@@ -647,6 +664,8 @@ def descargar_seleccionados(request):
 
 @login_required
 def eliminar_registro(request, pk):
+    if not is_full_operator(request.user):
+        raise PermissionDenied
     registro = get_object_or_404(
         RegistroTitulacion,
         pk=pk,

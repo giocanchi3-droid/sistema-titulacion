@@ -10,10 +10,11 @@
     width: min(88vw, 320px);
     flex: none;
     min-height: 100vh;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     transform: translateX(-100%);
     box-shadow: 14px 0 32px rgba(15, 23, 42, 0.22);
-    transition: transform 0.22s ease;
+    transition: transform 0.22s ease, width 0.22s ease, min-width 0.22s ease;
 }
 
 .app-sidebar.open {
@@ -44,9 +45,9 @@
 }
 
 .sidebar-toggle {
-    position: fixed;
-    top: 16px;
-    left: 16px;
+    position: absolute;
+    top: 50%;
+    left: 18px;
     z-index: 50;
     width: 46px;
     height: 46px;
@@ -71,6 +72,7 @@
     inset: 0;
     z-index: 20;
     background: rgba(15, 23, 42, 0.48);
+    cursor: pointer;
 }
 
 .sidebar-overlay.show {
@@ -98,4 +100,12 @@
         padding-left: 78px !important;
     }
 
+}
+
+.app-sidebar.is-collapsed {
+    width: 0 !important;
+    min-width: 0 !important;
+    transform: translateX(-100%);
+    border-right-width: 0 !important;
+    pointer-events: none;
 }

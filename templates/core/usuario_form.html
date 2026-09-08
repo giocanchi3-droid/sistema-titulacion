@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% block title %}{{ titulo }}{% endblock %}
+{% block page_title %}{{ titulo }}{% endblock %}
+{% block content %}<section class="app-page-surface mx-auto max-w-2xl"><form method="post" class="space-y-4">{% csrf_token %}{{ form.as_p }}<button class="btn-primary" type="submit">Guardar</button><a class="btn-secondary" href="{% url 'core:usuarios' %}">Cancelar</a></form></section>{% endblock %}

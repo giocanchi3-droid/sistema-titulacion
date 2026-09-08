@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -26,11 +26,6 @@
     rel="stylesheet"
     href="{% static 'css/puce-dark-theme.css' %}?v=restaurado1"
 >
-<link
-    rel="stylesheet"
-    href="{% static 'css/escala-ui.css' %}?v=20260822-105"
->
-
     <!-- Fondo PUCE definitivo -->
     <link
         rel="stylesheet"
@@ -44,7 +39,7 @@
 
     <link rel="stylesheet" href="{% static 'css/legibilidad-global.css' %}?v=20260822-balanced">
 
-    <link rel="stylesheet" href="{% static 'css/menu-responsive.css' %}?v=20260822-menu2">
+    <link rel="stylesheet" href="{% static 'css/menu-responsive.css' %}?v=20260908-layout4">
 
     <!-- Opacidad definitiva de paneles internos -->
     
@@ -69,19 +64,21 @@
         href="{% static 'css/frontend-global.css' %}?v=2"
     >
 
+    <link
+        rel="stylesheet"
+        href="{% static 'css/ux-responsive.css' %}?v=3"
+    >
+
 
     <!-- Vista previa oficial de actas -->
     </head>
 
-<body class="{% if request.resolver_match.url_name == 'login' %}login-page{% else %}app-page{% endif %} bg-slate-100 text-slate-800 {% if user.is_authenticated %}app-authenticated{% else %}app-login{% endif %}">
-
-{% if user.is_authenticated %}
-
-<div class="app-shell min-h-screen lg:flex">
+<body class="{% if request.resolver_match.url_name == 'login' %}login-page{% else %}app-page{% endif %} bg-slate-100 text-slate-800 {% if user.is_authenticated %}app-authenticated{% else %}app-login{% endif %}">{% if user.is_authenticated %}<div class="app-shell min-h-screen lg:flex">
 
     <aside
         id="appSidebar"
         class="app-sidebar bg-slate-900 text-white lg:w-72"
+        aria-hidden="true"
     >
 
         <div class="border-b border-slate-700 p-6">
@@ -127,12 +124,14 @@
                 <span class="sidebar-text">Estudiantes</span>
             </a>
 
-            <a
-                href="{% url 'estudiantes:crear' %}"
-                class="menu-link {% if request.resolver_match.url_name == 'crear' %}is-active{% endif %}"
-            >
-                <span class="sidebar-text">Registrar estudiante</span>
-            </a>
+            {% if user.is_superuser %}
+                <a
+                    href="{% url 'estudiantes:crear' %}"
+                    class="menu-link {% if request.resolver_match.url_name == 'crear' %}is-active{% endif %}"
+                >
+                    <span class="sidebar-text">Registrar estudiante</span>
+                </a>
+            {% endif %}
 
 
             <a
@@ -142,22 +141,26 @@
                 <span class="sidebar-text">Actas de titulación</span>
             </a>
 
-            <a
-                href="{% url 'documentos:crear_acta' %}"
-                class="menu-link {% if request.resolver_match.url_name == 'crear_acta' %}is-active{% endif %}"
-            >
-                <span class="sidebar-text">Crear acta</span>
-            </a>
+            {% if user.is_superuser %}
+                <a
+                    href="{% url 'documentos:crear_acta' %}"
+                    class="menu-link {% if request.resolver_match.url_name == 'crear_acta' %}is-active{% endif %}"
+                >
+                    <span class="sidebar-text">Crear acta</span>
+                </a>
+            {% endif %}
 
 
-            <a
-                href="{% url 'estudiantes:importar' %}"
-                class="menu-link {% if request.resolver_match.url_name == 'importar' or request.resolver_match.url_name == 'importar_excel' %}is-active{% endif %}"
-            >
-                <span class="sidebar-text">Importar estudiantes</span>
-            </a>
+            {% if user.is_superuser %}
+                <a
+                    href="{% url 'estudiantes:importar' %}"
+                    class="menu-link {% if request.resolver_match.url_name == 'importar' or request.resolver_match.url_name == 'importar_excel' %}is-active{% endif %}"
+                >
+                    <span class="sidebar-text">Importar estudiantes</span>
+                </a>
+            {% endif %}
 
-            {% if user.is_staff %}
+            {% if user.is_superuser %}
                 <a
                     href="{% url 'estudiantes:auditoria' %}"
                     class="menu-link {% if request.resolver_match.url_name == 'auditoria' %}is-active{% endif %}"
@@ -166,12 +169,20 @@
                 </a>
             {% endif %}
 
-            {% if user.is_staff %}
+            {% if user.is_superuser %}
                 <a
-                    href="/admin/"
-                    class="menu-link"
+                    href="{% url 'core:usuarios' %}"
+                    class="menu-link {% if request.resolver_match.url_name == 'usuarios' or request.resolver_match.url_name == 'usuario_nuevo' or request.resolver_match.url_name == 'usuario_editar' or request.resolver_match.url_name == 'permisos_usuario' %}is-active{% endif %}"
+                    {% if request.resolver_match.url_name == 'usuarios' or request.resolver_match.url_name == 'usuario_nuevo' or request.resolver_match.url_name == 'usuario_editar' or request.resolver_match.url_name == 'permisos_usuario' %}aria-current="page"{% endif %}
                 >
-                    <span class="sidebar-text">Administración del sistema</span>
+                    <span class="sidebar-text">Administración: usuarios y permisos</span>
+                </a>
+                <a
+                    href="{% url 'core:backups' %}"
+                    class="menu-link {% if request.resolver_match.url_name == 'backups' or request.resolver_match.url_name == 'descargar_backup' %}is-active{% endif %}"
+                    {% if request.resolver_match.url_name == 'backups' or request.resolver_match.url_name == 'descargar_backup' %}aria-current="page"{% endif %}
+                >
+                    <span class="sidebar-text">Backups</span>
                 </a>
             {% endif %}
 
@@ -214,21 +225,28 @@
                 type="button"
                 aria-controls="appSidebar"
                 aria-expanded="false"
-                aria-label="Abrir menú"
-                title="Abrir menú"
+                aria-label="Colapsar menú"
+                title="Colapsar menú"
             >
-                <span aria-hidden="true">&#9776;</span>
+                <span aria-hidden="true">☰</span>
             </button>
 
-            <p class="text-sm text-slate-500">
-                Automatización del proceso de titulación
-            </p>
+            <div class="app-header-brand" aria-label="Sistema de Titulación PUCE TEC">
+                <span>PUCE TEC</span>
+                <strong>Sistema de Titulación</strong>
+            </div>
 
-            <h2 class="font-semibold">
+            <div class="app-header-context">
+                <p class="text-sm text-slate-500">
+                Automatización del proceso de titulación
+                </p>
+
+                <h2 class="font-semibold">
                 {% block page_title %}
                     PUCETEC
                 {% endblock %}
-            </h2>
+                </h2>
+            </div>
 
         </header>
 
@@ -268,10 +286,7 @@
 
 
 <script
-    src="{% static 'js/app.js' %}?v=20260822-menu2"
-></script>
-<script
-    src="{% static 'js/escala-ui.js' %}?v=restaurado1"
+    src="{% static 'js/app.js' %}?v=20260908-menu4"
 ></script>
 
     <!-- Corrección automática de paneles transparentes -->

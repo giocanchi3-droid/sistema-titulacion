@@ -216,6 +216,7 @@
 
         <aside class="space-y-6">
 
+            {% if puede_administrar_actas %}
             <section class="card">
 
                 <h2 class="text-lg font-bold">
@@ -250,8 +251,9 @@
                 </dl>
 
             </section>
+            {% endif %}
 
-
+            {% if puede_administrar_actas %}
             <section class="card">
 
                 <h2 class="text-lg font-bold">
@@ -297,6 +299,7 @@
 
 
             </section>
+            {% endif %}
 
 
             <section class="card">

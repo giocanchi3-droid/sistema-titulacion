@@ -1,26 +1,39 @@
 ﻿from django import forms
+
+from core.permissions import allowed_edit_fields
 from .models import Programa, RegistroTitulacion
 
 
 class RegistroTitulacionForm(forms.ModelForm):
 
-    def __init__(self, *args, programas=None, **kwargs):
+    def __init__(self, *args, programas=None, user=None, **kwargs):
         super().__init__(*args, **kwargs)
+        self.user = user
+        self.allowed_fields = (
+            allowed_edit_fields(user, RegistroTitulacion)
+            if user else set(self.fields)
+        )
+        if user and not user.is_superuser:
+            for name in list(self.fields):
+                if name not in self.allowed_fields:
+                    del self.fields[name]
         self.programas_catalogo = list(
             programas if programas is not None
             else Programa.objects.filter(activo=True)
         )
-        self.fields["programa"].widget = forms.Select(
-            choices=[
-                (programa.codigo, str(programa))
-                for programa in self.programas_catalogo
-            ],
-            attrs={"class": "form-control", "data-programa-select": "true"},
-        )
-        self.fields["programa_desc"].widget.attrs.update({
-            "readonly": "readonly",
-            "data-programa-description": "true",
-        })
+        if "programa" in self.fields:
+            self.fields["programa"].widget = forms.Select(
+                choices=[
+                    (programa.codigo, str(programa))
+                    for programa in self.programas_catalogo
+                ],
+                attrs={"class": "form-control", "data-programa-select": "true"},
+            )
+        if "programa_desc" in self.fields:
+            self.fields["programa_desc"].widget.attrs.update({
+                "readonly": "readonly",
+                "data-programa-description": "true",
+            })
 
     def clean_programa(self):
         codigo = self.cleaned_data["programa"].strip().upper()
@@ -36,6 +49,12 @@ class RegistroTitulacionForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+        if self.user and not self.user.is_superuser:
+            submitted = set(self.data) & set(self.Meta.fields)
+            if submitted - self.allowed_fields:
+                raise forms.ValidationError(
+                    "No tiene permiso para modificar esos campos."
+                )
         codigo = cleaned_data.get("programa")
         if codigo:
             programa = Programa.objects.get(codigo=codigo, activo=True)

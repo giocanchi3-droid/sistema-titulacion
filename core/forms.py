@@ -1,5 +1,30 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm
+
+
+User = get_user_model()
+
+
+class UsuarioForm(forms.ModelForm):
+    password = forms.CharField(
+        label="Contraseña",
+        widget=forms.PasswordInput,
+        required=False,
+    )
+
+    class Meta:
+        model = User
+        fields = ["username", "first_name", "last_name", "email", "is_active"]
+
+    def save(self, commit=True):
+        usuario = super().save(commit=False)
+        password = self.cleaned_data.get("password")
+        if password:
+            usuario.set_password(password)
+        if commit:
+            usuario.save()
+        return usuario
 
 
 class LoginForm(AuthenticationForm):

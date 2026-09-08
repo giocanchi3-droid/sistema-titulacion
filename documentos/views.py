@@ -1,20 +1,48 @@
 ﻿import logging
+from io import BytesIO
+from zipfile import ZIP_DEFLATED, ZipFile
 
 from django.contrib import messages
+from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 
+from core.decorators import superuser_required
+from core.models import FieldPermission
+from core.permissions import reject_unauthorized_fields
+from estudiantes.models import HistorialExpediente
 from estudiantes.models import RegistroTitulacion
 from estudiantes.services_expediente import construir_requisitos
 
 from .forms import ActaForm
 from .models import Acta
 from .services import generar_archivos_acta
+from .acta_formato_oficial import crear_pdf, crear_word
 
 
 logger = logging.getLogger(__name__)
+
+
+def _registrar_cambios_acta(acta, anterior, usuario):
+    responsable = getattr(usuario, "username", None) or "Sistema"
+    for campo in ActaForm.Meta.fields:
+        viejo = str(getattr(anterior, campo, "") or "")
+        nuevo = str(getattr(acta, campo, "") or "")
+        if viejo != nuevo:
+            HistorialExpediente.objects.create(
+                registro=acta.registro,
+                registro_nombre=acta.registro.nombres_completos,
+                registro_cedula=acta.registro.cedula,
+                responsable=responsable,
+                campo=f"Acta: {acta._meta.get_field(campo).verbose_name}",
+                valor_anterior=viejo,
+                valor_nuevo=nuevo,
+                accion="EDICION_ACTA",
+            )
 
 
 @login_required
@@ -73,6 +101,8 @@ def lista_actas(request):
 
 @login_required
 def crear_acta(request):
+    if FieldPermission.objects.filter(user=request.user).exists():
+        raise PermissionDenied
     registro_id = request.GET.get(
         "registro"
     )
@@ -132,6 +162,7 @@ def crear_acta(request):
 
 
 @login_required
+@superuser_required
 def generar_acta_desde_expediente(request, registro_pk):
     """
     Crea y genera automáticamente el acta oficial
@@ -250,6 +281,7 @@ def detalle_acta(request, pk):
         {
             "acta": acta,
             "registro": acta.registro,
+            "puede_administrar_actas": request.user.is_superuser,
         },
     )
 
@@ -262,13 +294,21 @@ def editar_acta(request, pk):
     )
 
     if request.method == "POST":
+        reject_unauthorized_fields(
+            request.user,
+            Acta,
+            set(request.POST) & set(ActaForm.Meta.fields),
+        )
         form = ActaForm(
             request.POST,
             instance=acta,
+            user=request.user,
         )
 
         if form.is_valid():
+            anterior = Acta.objects.get(pk=acta.pk)
             form.save()
+            _registrar_cambios_acta(acta, anterior, request.user)
 
             messages.success(
                 request,
@@ -282,6 +322,7 @@ def editar_acta(request, pk):
     else:
         form = ActaForm(
             instance=acta,
+            user=request.user,
         )
 
     return render(
@@ -297,6 +338,7 @@ def editar_acta(request, pk):
 
 
 @login_required
+@superuser_required
 def generar_acta(request, pk):
     acta = get_object_or_404(
         Acta,
@@ -345,6 +387,7 @@ def descargar_documento(request, pk, tipo):
 
 
 @login_required
+@superuser_required
 def aprobar_acta(request, pk):
     acta = get_object_or_404(
         Acta,
@@ -378,6 +421,7 @@ def aprobar_acta(request, pk):
 
 
 @login_required
+@superuser_required
 def anular_acta(request, pk):
     acta = get_object_or_404(
         Acta,
@@ -405,6 +449,7 @@ def anular_acta(request, pk):
 
 
 @login_required
+@superuser_required
 def eliminar_acta(request, pk):
     acta = get_object_or_404(
         Acta,
@@ -645,6 +690,7 @@ def _ga_build_row(acta):
 
     return {
         "pk": acta.pk,
+        "pk": acta.pk,
         "codigo": codigo_texto,
         "estudiante": estudiante_texto,
         "inicial": estudiante_texto[:1].upper(),
@@ -845,6 +891,35 @@ def lista_actas(request):
         "documentos/lista_actas.html",
         contexto,
     )
+
+
+@_ga_login_required
+@require_POST
+def descargar_seleccionadas(request):
+    formato = request.POST.get("formato", "").lower()
+    if formato not in {"pdf", "word"}:
+        return HttpResponse("Formato no válido.", status=400)
+    ids = request.POST.getlist("acta_ids")
+    if not ids or any(not value.isdigit() for value in ids):
+        return HttpResponse("Seleccione actas válidas.", status=400)
+    actas = list(_GAActa.objects.select_related("registro").filter(pk__in=set(ids)))
+    if len(actas) != len(set(ids)):
+        return HttpResponse("Una o más actas no existen.", status=400)
+    logo = settings.BASE_DIR / "static" / "img" / "logo-pucetec-oficial.png"
+    if not logo.exists():
+        return HttpResponse("No se encontró el logo PUCE TEC.", status=500)
+    archivo = BytesIO()
+    extension = "pdf" if formato == "pdf" else "docx"
+    with ZipFile(archivo, "w", ZIP_DEFLATED) as zip_file:
+        for acta in actas:
+            contenido = crear_pdf(acta, logo) if formato == "pdf" else crear_word(acta, logo)
+            zip_file.writestr(
+                f"{_ga_slugify(acta.numero_acta or f'acta-{acta.pk}')}.{extension}",
+                contenido,
+            )
+    respuesta = HttpResponse(archivo.getvalue(), content_type="application/zip")
+    respuesta["Content-Disposition"] = f'attachment; filename="actas_seleccionadas_{formato}.zip"'
+    return respuesta
 
 
 # GESTION_ACTAS_SAFE_END

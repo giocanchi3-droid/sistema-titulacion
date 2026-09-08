@@ -57,6 +57,11 @@ urlpatterns = [
         views.lista_actas,
         name="lista_actas",
     ),
+    path(
+        "descargar-seleccionadas/",
+        views.descargar_seleccionadas,
+        name="descargar_seleccionadas",
+    ),
 
     path(
         "nueva/",

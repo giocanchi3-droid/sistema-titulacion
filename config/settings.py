@@ -97,7 +97,7 @@ else:
             ),
             "PASSWORD": config(
                 "DB_PASSWORD",
-                default="gio2006",
+                default="",
             ),
             "HOST": config(
                 "DB_HOST",

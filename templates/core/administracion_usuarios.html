@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Administracion de usuarios{% endblock %}
+{% block page_title %}Administracion{% endblock %}
+{% block content %}
+<section class="app-page-surface mx-auto max-w-6xl">
+  <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+    <div><h1 class="text-2xl font-bold">Usuarios y permisos</h1><p class="text-slate-500">Autorizacion real por campo.</p></div>
+    <div class="flex gap-2"><a class="btn-secondary" href="{% url 'core:backups' %}">Backups</a><a class="btn-primary" href="{% url 'core:usuario_nuevo' %}">Crear usuario</a></div>
+  </div>
+  <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b"><th class="p-3">Usuario</th><th class="p-3">Rol</th><th class="p-3">Estado</th><th class="p-3">Permisos</th><th class="p-3">Acciones</th></tr></thead><tbody>
+  {% for usuario in usuarios %}<tr class="border-b"><td class="p-3 font-semibold">{{ usuario.username }}</td><td class="p-3">{% if usuario.is_superuser %}Superusuario{% else %}Usuario limitado{% endif %}</td><td class="p-3">{% if usuario.is_active %}Activo{% else %}Inactivo{% endif %}</td><td class="p-3">{{ usuario.field_permissions.count }}</td><td class="p-3"><a class="btn-secondary" href="{% url 'core:usuario_editar' usuario.pk %}">Editar</a> <a class="btn-secondary" href="{% url 'core:permisos_usuario' usuario.pk %}">Permisos</a></td></tr>{% empty %}<tr><td class="p-3" colspan="5">No hay usuarios.</td></tr>{% endfor %}
+  </tbody></table></div>
+</section>
+{% endblock %}

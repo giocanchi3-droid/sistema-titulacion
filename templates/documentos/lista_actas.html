@@ -254,6 +254,16 @@
 
         </div>
 
+        <form method="post" action="{% url 'documentos:descargar_seleccionadas' %}" class="mb-4 flex flex-wrap items-center gap-2">
+            {% csrf_token %}
+            <label class="flex items-center gap-2"><input id="actas-select-all" type="checkbox"> Seleccionar todas</label>
+            <select name="formato" class="ga-control" required>
+                <option value="pdf">PDF</option>
+                <option value="word">Word</option>
+            </select>
+            <button type="submit" class="ga-search-button">Descargar seleccionadas</button>
+        </form>
+
         <div class="ga-table-wrapper">
 
             <table class="ga-table">
@@ -261,6 +271,7 @@
                 <thead>
 
                     <tr>
+                        <th>Seleccionar</th>
                         <th>Acta</th>
                         <th>Estudiante</th>
                         <th>Cédula</th>
@@ -280,6 +291,8 @@
                             data-ga-row
                             data-ga-status="{{ fila.estado_normalizado }}"
                         >
+
+                            <td><input class="acta-checkbox" type="checkbox" name="acta_ids" value="{{ fila.pk }}" form="actas-bulk-form"></td>
 
                             <td>
 
@@ -493,6 +506,13 @@
     </section>
 
 </section>
+
+<script>
+    document.querySelector("form[action*='descargar-seleccionadas']").id = "actas-bulk-form";
+    document.getElementById("actas-select-all").addEventListener("change", function () {
+        document.querySelectorAll(".acta-checkbox").forEach(function (checkbox) { checkbox.checked = this.checked; }, this);
+    });
+</script>
 
 {% endblock %}
 

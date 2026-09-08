@@ -2,12 +2,16 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
+from core.models import FieldPermission
 from .import_forms import ImportarExcelForm
 from .services_excel import importar_excel
 
 
 @login_required
 def importar_registros_excel(request):
+    if FieldPermission.objects.filter(user=request.user).exists():
+        from django.core.exceptions import PermissionDenied
+        raise PermissionDenied
     resultado = None
 
     if request.method == "POST":
