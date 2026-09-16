@@ -14,9 +14,11 @@ class RegistroTitulacionForm(forms.ModelForm):
             if user else set(self.fields)
         )
         if user and not user.is_superuser:
-            for name in list(self.fields):
+            for name, field in self.fields.items():
                 if name not in self.allowed_fields:
-                    del self.fields[name]
+                    field.disabled = True
+                    field.widget.attrs["class"] = "form-control field-readonly"
+                    field.widget.attrs["aria-readonly"] = "true"
         self.programas_catalogo = list(
             programas if programas is not None
             else Programa.objects.filter(activo=True)

@@ -1,14 +1,19 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Administracion de usuarios{% endblock %}
 {% block page_title %}Administracion{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/admin-permisos.css' %}">{% endblock %}
 {% block content %}
-<section class="app-page-surface mx-auto max-w-6xl">
-  <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
-    <div><h1 class="text-2xl font-bold">Usuarios y permisos</h1><p class="text-slate-500">Autorizacion real por campo.</p></div>
-    <div class="flex gap-2"><a class="btn-secondary" href="{% url 'core:backups' %}">Backups</a><a class="btn-primary" href="{% url 'core:usuario_nuevo' %}">Crear usuario</a></div>
+<section class="permissions-page">
+  <header class="permissions-header"><div><span class="permissions-eyebrow">Control institucional</span><h1>Usuarios y permisos</h1><p>Administra cuentas y autoriza campos de edición.</p></div><div class="permissions-actions"><a class="btn-secondary" href="{% url 'core:backups' %}">Backups</a><a class="btn-primary" href="{% url 'core:usuario_nuevo' %}">Crear usuario</a></div></header>
+  <div class="permission-fields">
+    {% for usuario in usuarios %}
+      <article class="permission-model" data-model="user-{{ usuario.pk }}">
+        <header class="permission-model-header"><div><h2>{{ usuario.username }}</h2><span class="permissions-eyebrow">{% if usuario.is_superuser %}Superusuario{% else %}Usuario limitado{% endif %}</span></div><strong>{% if usuario.is_active %}Activo{% else %}Inactivo{% endif %}</strong></header>
+        <p>{% if usuario.is_superuser %}Acceso completo a módulos y administración.{% else %}{{ usuario.field_permissions.count }} campos autorizados para edición.{% endif %}</p>
+        <div class="permissions-actions"><a class="btn-secondary" href="{% url 'core:usuario_editar' usuario.pk %}">Editar usuario</a>{% if not usuario.is_superuser %}<a class="btn-secondary" href="{% url 'core:permisos_usuario' usuario.pk %}">Administrar permisos</a>{% endif %}{% if usuario != request.user %}<form method="post" action="{% url 'core:usuario_eliminar' usuario.pk %}" onsubmit="return confirm('¿Eliminar este usuario? Esta acción no se puede deshacer.');">{% csrf_token %}<button class="btn-secondary" type="submit">Eliminar</button></form>{% endif %}</div>
+      </article>
+    {% empty %}<p>No hay usuarios registrados.</p>{% endfor %}
   </div>
-  <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b"><th class="p-3">Usuario</th><th class="p-3">Rol</th><th class="p-3">Estado</th><th class="p-3">Permisos</th><th class="p-3">Acciones</th></tr></thead><tbody>
-  {% for usuario in usuarios %}<tr class="border-b"><td class="p-3 font-semibold">{{ usuario.username }}</td><td class="p-3">{% if usuario.is_superuser %}Superusuario{% else %}Usuario limitado{% endif %}</td><td class="p-3">{% if usuario.is_active %}Activo{% else %}Inactivo{% endif %}</td><td class="p-3">{{ usuario.field_permissions.count }}</td><td class="p-3"><a class="btn-secondary" href="{% url 'core:usuario_editar' usuario.pk %}">Editar</a> <a class="btn-secondary" href="{% url 'core:permisos_usuario' usuario.pk %}">Permisos</a></td></tr>{% empty %}<tr><td class="p-3" colspan="5">No hay usuarios.</td></tr>{% endfor %}
-  </tbody></table></div>
 </section>
 {% endblock %}

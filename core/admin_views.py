@@ -24,6 +24,69 @@ def _campos(modelo):
     ]
 
 
+CATEGORIAS_ESTUDIANTE = [
+    ("Información personal e institucional", {
+        "id_banner", "nombres_completos", "cedula", "celular",
+        "correo_personal", "correo_instituc", "sede", "programa", "programa_desc",
+    }),
+    ("Información académica", {
+        "numero_cohorte", "periodo_ingreso", "nivel2", "modalidad_titulacion",
+        "matricula_uic", "periodo_titulacion_senescyt", "estado", "cumplimiento_idioma",
+    }),
+    ("Prácticas y servicio comunitario", {
+        "materia_practicas_pre_profesionales", "horas_240",
+        "materia_servicio_comunitario", "horas_120",
+    }),
+    ("Tutor y proyecto", {"nombres_completos_tutor", "id_tutor", "tema"}),
+    ("Tribunal", {
+        "primer_miembro_tribunal", "primer_miembro_id_docente",
+        "segundo_miembro_tribunal", "segundo_miembro_id_docente",
+        "tercer_miembro_tribunal", "tercer_miembro_id_docente",
+        "cuarto_miembro_tribunal", "cuarto_miembro_id_docente",
+    }),
+    ("Calificaciones", {
+        "proyecto_escrito", "defensa_oral", "nota_final",
+        "examen_teorico_complexivo", "examen_teorico_practico", "nota_final2",
+    }),
+    ("Observaciones y seguimiento", {
+        "observacion_puce_tec", "observaciones_secretaria_general",
+        "nueva_observacion_puce_tec", "estado_envio_registro", "fecha_grado",
+        "observacion_secretaria",
+    }),
+]
+
+CATEGORIAS_ACTA = [
+    ("Datos del acta", {"registro", "numero_acta", "tipo_acta", "estado", "observaciones"}),
+    ("Documentos y seguimiento", {
+        "archivo_word", "archivo_pdf", "creado_por", "fecha_creacion",
+        "fecha_generacion", "fecha_actualizacion",
+    }),
+]
+
+
+def _grupos_campos(modelo, titulo, categorias, existentes):
+    campos = dict(_campos(modelo))
+    grupos = []
+    usados = set()
+    for categoria, nombres in categorias:
+        items = [(nombre, campos[nombre]) for nombre in campos if nombre in nombres]
+        if items:
+            grupos.append({
+                "titulo": categoria,
+                "campos": items,
+                "seleccionados": {nombre for nombre, _ in items if nombre in existentes},
+            })
+            usados.update(nombre for nombre, _ in items)
+    restantes = [(nombre, etiqueta) for nombre, etiqueta in campos.items() if nombre not in usados]
+    if restantes:
+        grupos.append({
+            "titulo": "Otros campos",
+            "campos": restantes,
+            "seleccionados": {nombre for nombre, _ in restantes if nombre in existentes},
+        })
+    return {"titulo": titulo, "modelo": permission_model_name(modelo), "secciones": grupos}
+
+
 @superuser_required
 def usuarios(request):
     return render(request, "core/administracion_usuarios.html", {
@@ -58,6 +121,18 @@ def usuario_editar(request, pk):
 
 
 @superuser_required
+def usuario_eliminar(request, pk):
+    usuario = get_object_or_404(User, pk=pk)
+    if usuario == request.user:
+        messages.error(request, "No puede eliminar su propio usuario.")
+        return redirect("core:usuarios")
+    if request.method == "POST":
+        usuario.delete()
+        messages.success(request, "Usuario eliminado correctamente.")
+    return redirect("core:usuarios")
+
+
+@superuser_required
 def permisos_usuario(request, pk):
     usuario = get_object_or_404(User, pk=pk)
     modelos = [(RegistroTitulacion, "Información del estudiante"), (Acta, "Actas")]
@@ -76,10 +151,10 @@ def permisos_usuario(request, pk):
     return render(request, "core/permisos_usuario.html", {
         "usuario": usuario,
         "grupos_campos": [
-            (
+            _grupos_campos(
+                modelo,
                 titulo,
-                permission_model_name(modelo),
-                _campos(modelo),
+                CATEGORIAS_ESTUDIANTE if modelo is RegistroTitulacion else CATEGORIAS_ACTA,
                 {field for model_name, field in existentes if model_name == permission_model_name(modelo)},
             )
             for modelo, titulo in modelos

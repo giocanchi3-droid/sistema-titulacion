@@ -10,9 +10,7 @@ def permission_model_name(model):
 def is_full_operator(user):
     if not user or not user.is_authenticated or not user.is_active:
         return False
-    if user.is_superuser:
-        return True
-    return user.is_staff and not FieldPermission.objects.filter(user=user).exists()
+    return user.is_superuser
 
 
 def user_can_edit_field(user, model, field):

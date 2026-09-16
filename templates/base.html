@@ -124,14 +124,12 @@
                 <span class="sidebar-text">Estudiantes</span>
             </a>
 
-            {% if user.is_superuser %}
-                <a
-                    href="{% url 'estudiantes:crear' %}"
-                    class="menu-link {% if request.resolver_match.url_name == 'crear' %}is-active{% endif %}"
-                >
-                    <span class="sidebar-text">Registrar estudiante</span>
-                </a>
-            {% endif %}
+            <a
+                href="{% url 'estudiantes:crear' %}"
+                class="menu-link {% if request.resolver_match.url_name == 'crear' %}is-active{% endif %}"
+            >
+                <span class="sidebar-text">Registrar estudiante</span>
+            </a>
 
 
             <a

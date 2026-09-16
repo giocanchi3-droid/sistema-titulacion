@@ -443,8 +443,6 @@ def lista_registros(request):
 
 @login_required
 def crear_registro(request):
-    if not is_full_operator(request.user):
-        raise PermissionDenied
     if request.method == "POST":
         form = RegistroTitulacionForm(
             request.POST,

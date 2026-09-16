@@ -100,9 +100,8 @@ def lista_actas(request):
 
 
 @login_required
+@superuser_required
 def crear_acta(request):
-    if FieldPermission.objects.filter(user=request.user).exists():
-        raise PermissionDenied
     registro_id = request.GET.get(
         "registro"
     )

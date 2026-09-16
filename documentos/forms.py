@@ -38,9 +38,11 @@ class ActaForm(forms.ModelForm):
             if user else set(self.fields)
         )
         if user and not user.is_superuser:
-            for name in list(self.fields):
+            for name, field in self.fields.items():
                 if name not in self.allowed_fields:
-                    del self.fields[name]
+                    field.disabled = True
+                    field.widget.attrs["class"] = "field-readonly"
+                    field.widget.attrs["aria-readonly"] = "true"
 
         if not self.instance.pk:
             self.fields["estado"].initial = "BORRADOR"

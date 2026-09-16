@@ -1,4 +1,39 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Permisos de {{ usuario.username }}{% endblock %}
-{% block page_title %}Permisos granulares{% endblock %}
-{% block content %}<section class="app-page-surface mx-auto max-w-5xl"><h1 class="mb-2 text-2xl font-bold">{{ usuario.username }}</h1><p class="mb-6 text-slate-500">Seleccione exactamente los campos que puede modificar.</p><form method="post">{% csrf_token %}{% for titulo, modelo, campos, existentes in grupos_campos %}<fieldset class="mb-6 rounded-lg border p-4"><legend class="px-2 text-lg font-semibold">{{ titulo }}</legend><div class="grid gap-3 md:grid-cols-2">{% for nombre, etiqueta in campos %}<label class="flex items-center gap-2"><input type="checkbox" name="{{ modelo }}" value="{{ nombre }}" {% if modelo in existentes and nombre in existentes %}checked{% endif %}><span>{{ etiqueta }} <small class="text-slate-400">({{ nombre }})</small></span></label>{% endfor %}</div></fieldset>{% endfor %}<button class="btn-primary" type="submit">Guardar permisos</button> <a class="btn-secondary" href="{% url 'core:usuarios' %}">Cancelar</a></form></section>{% endblock %}
+{% block page_title %}Administrar permisos{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/admin-permisos.css' %}">{% endblock %}
+{% block content %}
+<section class="permissions-page">
+	<header class="permissions-header"><div><span class="permissions-eyebrow">Administración de acceso</span><h1>Permisos de {{ usuario.username }}</h1><p>Los permisos autorizan edición de campos. La navegación se mantiene separada.</p></div><a class="btn-secondary" href="{% url 'core:usuarios' %}">Volver a usuarios</a></header>
+	<div class="permissions-summary"><div><strong id="permissions-total">0</strong><span>campos autorizados</span></div>{% for grupo in grupos_campos %}<div><strong data-model-count="{{ grupo.modelo }}">0</strong><span>{{ grupo.titulo }}</span></div>{% endfor %}</div>
+	<form method="post" id="permissions-form">{% csrf_token %}
+		<div class="permissions-toolbar"><label for="field-search">Buscar campo</label><input id="field-search" type="search" placeholder="Nombre o etiqueta..." autocomplete="off"></div>
+		{% for grupo in grupos_campos %}<section class="permission-model" data-model="{{ grupo.modelo }}"><header class="permission-model-header"><div><span class="permissions-eyebrow">Modelo</span><h2>{{ grupo.titulo }}</h2></div><strong><span data-model-count="{{ grupo.modelo }}">0</span> seleccionados</strong></header>
+			{% for seccion in grupo.secciones %}<fieldset class="permission-section" data-permission-section><legend>{{ seccion.titulo }}</legend><div class="permission-section-tools"><span><b data-section-count>0</b> campos</span><button type="button" class="permission-action" data-select-section>Seleccionar todos</button><button type="button" class="permission-action" data-clear-section>Limpiar</button></div><div class="permission-fields">
+				{% for nombre, etiqueta in seccion.campos %}<label class="permission-field" data-permission-field data-search="{{ nombre }} {{ etiqueta }}"><input type="checkbox" name="{{ grupo.modelo }}" value="{{ nombre }}" {% if nombre in seccion.seleccionados %}checked{% endif %}><span><strong>{{ etiqueta }}</strong><small>{{ nombre }}</small></span></label>{% endfor %}
+			</div></fieldset>{% endfor %}
+		</section>{% endfor %}
+		<footer class="permissions-actions"><a class="btn-secondary" href="{% url 'core:usuarios' %}">Cancelar</a><button class="btn-primary" type="submit">Guardar permisos</button></footer>
+	</form>
+</section>
+<script>
+(function () {
+	const form = document.querySelector("#permissions-form"); if (!form) return;
+	const search = document.querySelector("#field-search"); const total = document.querySelector("#permissions-total");
+	function updateCounts() {
+		let totalSelected = 0;
+		document.querySelectorAll("[data-permission-section]").forEach(function (section) { const selected = section.querySelectorAll("input:checked").length; section.querySelector("[data-section-count]").textContent = selected; totalSelected += selected; });
+		total.textContent = totalSelected;
+		document.querySelectorAll("[data-model]").forEach(function (model) { const count = model.querySelectorAll("input:checked").length; document.querySelectorAll('[data-model-count="' + model.dataset.model + '"]').forEach(function (node) { node.textContent = count; }); });
+	}
+	document.querySelectorAll("[data-permission-section]").forEach(function (section) {
+		section.querySelectorAll("input").forEach(function (input) { input.addEventListener("change", updateCounts); });
+		section.querySelector("[data-select-section]").addEventListener("click", function () { section.querySelectorAll("[data-permission-field]:not([hidden]) input").forEach(function (input) { input.checked = true; }); updateCounts(); });
+		section.querySelector("[data-clear-section]").addEventListener("click", function () { section.querySelectorAll("input").forEach(function (input) { input.checked = false; }); updateCounts(); });
+	});
+	search.addEventListener("input", function () { const query = search.value.trim().toLowerCase(); document.querySelectorAll("[data-permission-field]").forEach(function (field) { field.hidden = query && !field.dataset.search.toLowerCase().includes(query); }); });
+	form.addEventListener("submit", function (event) { if (!window.confirm("¿Desea guardar los permisos seleccionados?")) event.preventDefault(); }); updateCounts();
+}());
+</script>
+{% endblock %}

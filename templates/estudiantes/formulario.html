@@ -269,6 +269,9 @@
                                 </label>
 
                                 <div class="acta-form-control-wrapper">
+                                    {% if campo.field.disabled %}
+                                        <span class="field-readonly-label">Solo lectura</span>
+                                    {% endif %}
                                     {% if campo.name == "programa" %}
                                         <select
                                             name="programa"
@@ -276,6 +279,7 @@
                                             class="form-control"
                                             required
                                             data-programa-select
+                                            {% if campo.field.disabled %}disabled aria-readonly="true"{% endif %}
                                         >
                                             <option value="">Seleccione un programa</option>
                                             {% for programa in programas_catalogo %}
