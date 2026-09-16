@@ -332,6 +332,7 @@ def editar_acta(request, pk):
             "acta": acta,
             "titulo": "Editar acta",
             "texto_boton": "Guardar cambios",
+            "es_creacion": False,
         },
     )
 

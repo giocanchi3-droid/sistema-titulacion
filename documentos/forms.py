@@ -33,6 +33,8 @@ class ActaForm(forms.ModelForm):
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.user = user
+        if self.instance.pk:
+            self.fields.pop("estado", None)
         self.allowed_fields = (
             allowed_edit_fields(user, Acta)
             if user else set(self.fields)
